@@ -25,6 +25,8 @@ import { Logo } from "@/components/Logo";
 import { ProductCard } from "@/components/ProductCard";
 import { Counter } from "@/components/Counter";
 import { CountdownTimer } from "@/components/CountdownTimer";
+import { TypewriterText } from "@/components/TypewriterText";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { categories, products } from "@/data/products";
 
 const trustItems = [
@@ -94,13 +96,18 @@ const Index = () => {
           </div>
           <p className="text-xs md:text-sm tracking-[0.5em] text-primary mb-5">SCIENCE IN MOTION</p>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]">
-            FUEL <span className="text-gradient-red">EVOLVED</span>
+            FUEL{" "}
+            <span className="text-gradient-red">
+              <TypewriterText text="EVOLVED" speed={120} delay={400} />
+            </span>
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-white/75 max-w-2xl mx-auto">
-            Performance-focused nutrition engineered for athletes who train with intent.
-            Lab-tested, transparently dosed, made for evolution.
+          <p className="mt-6 text-lg md:text-xl text-white max-w-2xl mx-auto overflow-hidden">
+            <span className="inline-block animate-[fade-in_1.2s_ease-out_0.8s_both]">
+              Performance-focused nutrition engineered for athletes who train with intent.
+              Lab-tested, transparently dosed, made for evolution.
+            </span>
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-[fade-in_1s_ease-out_1s_both]">
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-base h-12 px-8 shadow-glow">
               <Link to="/products">Shop Now <ChevronRight className="ml-1 h-4 w-4" /></Link>
             </Button>
@@ -108,7 +115,7 @@ const Index = () => {
               <Link to="/ingredients">Explore Science</Link>
             </Button>
           </div>
-          <div className="mt-10 inline-flex items-center gap-3 text-sm text-white/70">
+          <div className="mt-10 inline-flex items-center gap-3 text-sm text-white/70 animate-[fade-in_1s_ease-out_1.2s_both]">
             <div className="flex -space-x-2">
               {[11, 47, 15, 32].map((i) => (
                 <img key={i} src={`https://i.pravatar.cc/40?img=${i}`} className="h-8 w-8 rounded-full border-2 border-[hsl(var(--ink))]" alt="" />
@@ -135,28 +142,29 @@ const Index = () => {
       <section className="py-24 relative">
         <div className="absolute inset-0 bg-grid-dark opacity-40" />
         <div className="container relative">
-          <div className="text-center max-w-2xl mx-auto mb-14">
+          <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
             <p className="text-xs tracking-[0.4em] text-primary mb-3">BUILD YOUR STACK</p>
-            <h2 className="text-3xl md:text-5xl font-bold">Engineered for every goal</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">Engineered for every goal</h2>
             <p className="mt-4 text-white/65">Choose the category that matches your mission. Every product is dosed for results, not marketing.</p>
-          </div>
+          </ScrollReveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {categories.map((c, i) => {
               const Icon = [Dumbbell, Zap, HeartPulse, Leaf][i];
               return (
-                <Link
-                  key={c.name}
-                  to={`/products?cat=${c.name}`}
-                  className="group relative bg-[hsl(var(--card))] border border-white/10 rounded-xl p-7 hover-lift overflow-hidden"
-                >
-                  <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary/10 blur-3xl group-hover:bg-primary/30 transition-colors" />
-                  <Icon className="h-8 w-8 text-primary" />
-                  <h3 className="mt-5 text-xl font-bold">{c.name}</h3>
-                  <p className="mt-2 text-sm text-white/60">{c.description}</p>
-                  <div className="mt-6 inline-flex items-center text-sm text-primary">
-                    Explore <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </Link>
+                <ScrollReveal key={c.name} delay={i * 100}>
+                  <Link
+                    to={`/products?cat=${c.name}`}
+                    className="group relative bg-[hsl(var(--card))] border border-white/10 rounded-xl p-7 hover-lift overflow-hidden block"
+                  >
+                    <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary/10 blur-3xl group-hover:bg-primary/30 transition-colors" />
+                    <Icon className="h-8 w-8 text-primary" />
+                    <h3 className="mt-5 text-xl font-bold text-white">{c.name}</h3>
+                    <p className="mt-2 text-sm text-white/60">{c.description}</p>
+                    <div className="mt-6 inline-flex items-center text-sm text-primary">
+                      Explore <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
+                </ScrollReveal>
               );
             })}
           </div>
@@ -167,16 +175,20 @@ const Index = () => {
       <section className="py-24 bg-black/40 border-y border-white/10">
         <div className="container">
           <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
-            <div>
+            <ScrollReveal direction="left">
               <p className="text-xs tracking-[0.4em] text-primary mb-3">FEATURED PRODUCTS</p>
-              <h2 className="text-3xl md:text-5xl font-bold max-w-xl">Top-rated by 15,000+ athletes</h2>
-            </div>
-            <Button asChild variant="outline" className="border-white/20 bg-transparent hover:bg-white/10">
+              <h2 className="text-3xl md:text-5xl font-bold max-w-xl text-white">Top-rated by 15,000+ athletes</h2>
+            </ScrollReveal>
+            <Button asChild variant="outline" className="border-white/20 bg-transparent hover:bg-white/10 text-white">
               <Link to="/products">View all products <ChevronRight className="ml-1 h-4 w-4" /></Link>
             </Button>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featured.map((p) => <ProductCard key={p.id} p={p} />)}
+            {featured.map((p, i) => (
+              <ScrollReveal key={p.id} delay={i * 80}>
+                <ProductCard p={p} />
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
@@ -191,13 +203,15 @@ const Index = () => {
             { v: 4.9, s: "/5", l: "Avg. rating", float: true },
             { v: 0, s: "%", l: "Amino spiking" },
           ].map((stat, i) => (
-            <div key={i} className="border border-white/10 rounded-xl p-8 bg-card/50 backdrop-blur">
-              <div className="text-4xl md:text-5xl font-bold text-gradient-red">
-                {stat.float ? "4.9" : <Counter to={stat.v} suffix={stat.s} />}
-                {stat.float && stat.s}
+            <ScrollReveal key={i} delay={i * 100}>
+              <div className="border border-white/10 rounded-xl p-8 bg-card/50 backdrop-blur">
+                <div className="text-4xl md:text-5xl font-bold text-gradient-red">
+                  {stat.float ? "4.9" : <Counter to={stat.v} suffix={stat.s} />}
+                  {stat.float && stat.s}
+                </div>
+                <p className="mt-3 text-sm text-white/60 uppercase tracking-widest">{stat.l}</p>
               </div>
-              <p className="mt-3 text-sm text-white/60 uppercase tracking-widest">{stat.l}</p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>
@@ -205,58 +219,62 @@ const Index = () => {
       {/* COMPARISON */}
       <section className="py-24 bg-black/40 border-y border-white/10">
         <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <ScrollReveal className="text-center max-w-2xl mx-auto mb-12">
             <p className="text-xs tracking-[0.4em] text-primary mb-3">THE DIFFERENCE</p>
-            <h2 className="text-3xl md:text-5xl font-bold">Ergogenic vs. The Rest</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">Ergogenic vs. The Rest</h2>
             <p className="mt-4 text-white/65">We built Ergogenic to fix what the supplement industry got wrong.</p>
-          </div>
-          <div className="overflow-hidden rounded-xl border border-white/10">
-            <table className="w-full text-left">
-              <thead className="bg-white/5">
-                <tr>
-                  <th className="p-5 font-semibold">Feature</th>
-                  <th className="p-5 font-semibold text-primary">Ergogenic</th>
-                  <th className="p-5 font-semibold text-white/60">Typical brands</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10">
-                {[
-                  ["Transparent ingredient panel", true, false],
-                  ["Clinical dosing on every active", true, false],
-                  ["Zero amino spiking guarantee", true, false],
-                  ["Independent third-party lab tested", true, false],
-                  ["No proprietary blends", true, false],
-                  ["FSSAI Approved", true, true],
-                ].map(([feat, a, b], i) => (
-                  <tr key={i} className="hover:bg-white/5">
-                    <td className="p-5">{feat as string}</td>
-                    <td className="p-5">{a ? <CheckCircle2 className="h-5 w-5 text-primary" /> : <X className="h-5 w-5 text-white/40" />}</td>
-                    <td className="p-5">{b ? <CheckCircle2 className="h-5 w-5 text-white/40" /> : <X className="h-5 w-5 text-white/40" />}</td>
+          </ScrollReveal>
+          <ScrollReveal>
+            <div className="overflow-hidden rounded-xl border border-white/10">
+              <table className="w-full text-left">
+                <thead className="bg-white/5">
+                  <tr>
+                    <th className="p-5 font-semibold text-white">Feature</th>
+                    <th className="p-5 font-semibold text-primary">Ergogenic</th>
+                    <th className="p-5 font-semibold text-white/60">Typical brands</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-white/10">
+                  {[
+                    ["Transparent ingredient panel", true, false],
+                    ["Clinical dosing on every active", true, false],
+                    ["Zero amino spiking guarantee", true, false],
+                    ["Independent third-party lab tested", true, false],
+                    ["No proprietary blends", true, false],
+                    ["FSSAI Approved", true, true],
+                  ].map(([feat, a, b], i) => (
+                    <tr key={i} className="hover:bg-white/5">
+                      <td className="p-5 text-white">{feat as string}</td>
+                      <td className="p-5">{a ? <CheckCircle2 className="h-5 w-5 text-primary" /> : <X className="h-5 w-5 text-white/40" />}</td>
+                      <td className="p-5">{b ? <CheckCircle2 className="h-5 w-5 text-white/40" /> : <X className="h-5 w-5 text-white/40" />}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* INGREDIENTS */}
       <section className="py-24">
         <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-14">
+          <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
             <p className="text-xs tracking-[0.4em] text-primary mb-3">TECH ARSENAL</p>
-            <h2 className="text-3xl md:text-5xl font-bold">The science behind every scoop</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">The science behind every scoop</h2>
             <p className="mt-4 text-white/65">A closer look at the ingredients powering our formulations.</p>
-          </div>
+          </ScrollReveal>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {ingredients.map((ing) => (
-              <div key={ing.name} className="bg-card border border-white/10 rounded-xl p-6 hover-lift">
-                <div className="h-12 w-12 rounded-lg bg-primary/15 grid place-items-center text-primary">
-                  <ing.icon className="h-6 w-6" />
+            {ingredients.map((ing, i) => (
+              <ScrollReveal key={ing.name} delay={i * 80}>
+                <div className="bg-card border border-white/10 rounded-xl p-6 hover-lift h-full">
+                  <div className="h-12 w-12 rounded-lg bg-primary/15 grid place-items-center text-primary">
+                    <ing.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-5 font-semibold text-lg text-white">{ing.name}</h3>
+                  <p className="mt-2 text-sm text-white/65 leading-relaxed">{ing.desc}</p>
                 </div>
-                <h3 className="mt-5 font-semibold text-lg">{ing.name}</h3>
-                <p className="mt-2 text-sm text-white/65 leading-relaxed">{ing.desc}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -264,11 +282,11 @@ const Index = () => {
 
       {/* TESTIMONIALS */}
       <section className="py-24 bg-black/40 border-y border-white/10 overflow-hidden">
-        <div className="container mb-12 text-center">
+        <ScrollReveal className="container mb-12 text-center">
           <p className="text-xs tracking-[0.4em] text-primary mb-3">SUCCESS STORIES</p>
-          <h2 className="text-3xl md:text-5xl font-bold">Hear From Our Success Stories</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-white">Hear From Our Success Stories</h2>
           <p className="mt-4 text-white/65 max-w-2xl mx-auto">Real people. Real performance. Real transformation.</p>
-        </div>
+        </ScrollReveal>
         {[row1, row2].map((row, idx) => (
           <div key={idx} className="overflow-hidden mb-6">
             <div className={`flex gap-5 ${idx === 0 ? "marquee" : "marquee marquee-rev"}`}>
@@ -277,7 +295,7 @@ const Index = () => {
                   <div className="flex items-center gap-3">
                     <img src={t.img} alt={t.name} className="h-12 w-12 rounded-full" />
                     <div>
-                      <p className="font-semibold">{t.name}</p>
+                      <p className="font-semibold text-white">{t.name}</p>
                       <p className="text-xs text-white/60">{t.role}</p>
                     </div>
                   </div>
@@ -286,7 +304,7 @@ const Index = () => {
                       <Star key={j} className="h-4 w-4 fill-primary text-primary" />
                     ))}
                   </div>
-                  <p className="text-sm text-white/75 leading-relaxed">"{t.text}"</p>
+                  <p className="text-sm text-white/80 leading-relaxed">"{t.text}"</p>
                 </div>
               ))}
             </div>
@@ -297,21 +315,23 @@ const Index = () => {
       {/* CERTIFICATIONS */}
       <section className="py-24">
         <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <ScrollReveal className="text-center max-w-2xl mx-auto mb-12">
             <p className="text-xs tracking-[0.4em] text-primary mb-3">CERTIFICATIONS</p>
-            <h2 className="text-3xl md:text-5xl font-bold">Verified at every step</h2>
-          </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">Verified at every step</h2>
+          </ScrollReveal>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {[
               { i: ShieldCheck, t: "Lab Tested" },
               { i: CheckCircle2, t: "FSSAI Approved" },
               { i: Beaker, t: "Quality Verified" },
               { i: Sparkles, t: "Zero Spiking" },
-            ].map(({ i: Icon, t }) => (
-              <div key={t} className="bg-card border border-white/10 rounded-xl p-8 text-center">
-                <Icon className="h-10 w-10 text-primary mx-auto" />
-                <p className="mt-4 font-semibold">{t}</p>
-              </div>
+            ].map(({ i: Icon, t }, idx) => (
+              <ScrollReveal key={t} delay={idx * 80}>
+                <div className="bg-card border border-white/10 rounded-xl p-8 text-center">
+                  <Icon className="h-10 w-10 text-primary mx-auto" />
+                  <p className="mt-4 font-semibold text-white">{t}</p>
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -319,10 +339,10 @@ const Index = () => {
 
       {/* EXPERTS */}
       <section className="py-24 bg-black/40 border-y border-white/10 overflow-hidden">
-        <div className="container mb-10">
+        <ScrollReveal className="container mb-10">
           <p className="text-xs tracking-[0.4em] text-primary mb-3">MEET OUR EXPERTS</p>
-          <h2 className="text-3xl md:text-5xl font-bold max-w-xl">The minds behind the formulas</h2>
-        </div>
+          <h2 className="text-3xl md:text-5xl font-bold max-w-xl text-white">The minds behind the formulas</h2>
+        </ScrollReveal>
         <div className="overflow-x-auto pb-4">
           <div className="container flex gap-5 min-w-max">
             {experts.map((e) => (
@@ -330,7 +350,7 @@ const Index = () => {
                 <div className="h-12 w-12 rounded-full bg-primary/20 grid place-items-center text-primary font-bold">
                   {e.name.split(" ").map((s) => s[0]).join("").slice(0, 2)}
                 </div>
-                <p className="mt-5 font-semibold">{e.name}</p>
+                <p className="mt-5 font-semibold text-white">{e.name}</p>
                 <p className="text-xs text-primary uppercase tracking-widest mt-1">{e.role}</p>
                 <p className="mt-3 text-sm text-white/65">{e.desc}</p>
               </div>
@@ -357,24 +377,24 @@ const Index = () => {
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-transparent to-primary/30" />
         <div className="absolute inset-0 bg-grid-dark opacity-40" />
-        <div className="container relative text-center">
+        <ScrollReveal className="container relative text-center">
           <p className="text-xs tracking-[0.4em] text-primary mb-3">LIMITED TIME</p>
-          <h2 className="text-3xl md:text-5xl font-bold">Limited batch pricing available</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-white">Limited batch pricing available</h2>
           <p className="mt-4 text-white/70 max-w-xl mx-auto">Save up to 25% on flagship products. Offer ends in:</p>
           <div className="mt-10"><CountdownTimer /></div>
           <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 h-12 px-8 shadow-glow">
             <Link to="/products">Claim Offer</Link>
           </Button>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* FAQ */}
       <section className="py-24 bg-black/40 border-y border-white/10">
         <div className="container max-w-3xl">
-          <div className="text-center mb-12">
+          <ScrollReveal className="text-center mb-12">
             <p className="text-xs tracking-[0.4em] text-primary mb-3">FAQ</p>
-            <h2 className="text-3xl md:text-5xl font-bold">Questions, answered</h2>
-          </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">Questions, answered</h2>
+          </ScrollReveal>
           <Accordion type="single" collapsible className="space-y-3">
             {[
               { q: "Are your products safe and tested?", a: "Yes. Every batch is tested at independent third-party labs and is FSSAI approved. We publish lab reports on request." },
@@ -385,8 +405,8 @@ const Index = () => {
               { q: "Do you offer COD?", a: "Yes — UPI, all major cards, net banking and cash on delivery are supported across India." },
             ].map((f, i) => (
               <AccordionItem key={i} value={`f${i}`} className="bg-card border border-white/10 rounded-xl px-5">
-                <AccordionTrigger className="text-left font-semibold">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-white/70">{f.a}</AccordionContent>
+                <AccordionTrigger className="text-left font-semibold text-white">{f.q}</AccordionTrigger>
+                <AccordionContent className="text-white/75">{f.a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -396,9 +416,9 @@ const Index = () => {
       {/* FINAL CTA */}
       <section className="py-28 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.2),transparent_60%)]" />
-        <div className="container relative text-center max-w-3xl">
+        <ScrollReveal className="container relative text-center max-w-3xl">
           <Logo className="h-9 mx-auto mb-6 opacity-90" />
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
             Train harder. <span className="text-gradient-red">Recover smarter.</span>
           </h2>
           <p className="mt-5 text-white/70 text-lg">
@@ -412,7 +432,7 @@ const Index = () => {
             <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> Lab tested</span>
             <span className="flex items-center gap-2"><Sparkles className="h-4 w-4" /> Zero spiking</span>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, ShoppingBag, X } from "lucide-react";
+import { Menu, Moon, ShoppingBag, Sun, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,13 @@ const links = [
 export const SiteHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [dark, setDark] = useState(() => {
+    if (typeof window !== "undefined") {
+      return document.documentElement.classList.contains("dark") ||
+        localStorage.getItem("theme") !== "light";
+    }
+    return true;
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -26,12 +33,22 @@ export const SiteHeader = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [dark]);
+
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
-          ? "bg-[hsl(var(--ink))]/90 backdrop-blur-md border-b border-white/10"
+          ? "bg-[hsl(var(--ink))]/95 backdrop-blur-md border-b border-white/10 shadow-[0_2px_20px_hsl(0_0%_0%/0.5)]"
           : "bg-transparent"
       )}
     >
@@ -57,6 +74,13 @@ export const SiteHeader = () => {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setDark((v) => !v)}
+            className="h-9 w-9 rounded-full border border-white/15 grid place-items-center text-white hover:border-primary hover:text-primary transition-colors"
+            aria-label="Toggle theme"
+          >
+            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/10">
             <Link to="/cart" aria-label="Cart">
               <ShoppingBag className="h-5 w-5" />
