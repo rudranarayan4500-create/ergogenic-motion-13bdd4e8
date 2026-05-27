@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
@@ -5,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
+  const [busy, setBusy] = useState(false);
   return (
     <>
       <PageHero eyebrow="Contact" title="Talk to our team" subtitle="Questions about products, orders or stacking advice — we usually reply within a few hours." />
@@ -32,31 +35,41 @@ const Contact = () => {
           </div>
           <form
             className="lg:col-span-2 p-8 bg-card border border-white/10 rounded-xl space-y-5"
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              toast({ title: "Message sent", description: "We'll get back to you shortly." });
-              (e.target as HTMLFormElement).reset();
+              setBusy(true);
+              const form = e.currentTarget;
+              const fd = new FormData(form);
+              const { error } = await supabase.from("contact_messages").insert({
+                name: fd.get("name") as string,
+                email: fd.get("email") as string,
+                subject: fd.get("subject") as string,
+                message: fd.get("message") as string,
+              });
+              setBusy(false);
+              if (error) toast({ title: "Failed to send", description: error.message, variant: "destructive" });
+              else { toast({ title: "Message sent", description: "We'll get back to you shortly." }); form.reset(); }
             }}
           >
             <div className="grid md:grid-cols-2 gap-5">
               <div>
                 <Label>Name</Label>
-                <Input required className="mt-1.5 bg-background border-white/15" placeholder="Your name" />
+                <Input name="name" required className="mt-1.5 bg-background border-white/15" placeholder="Your name" />
               </div>
               <div>
                 <Label>Email</Label>
-                <Input required type="email" className="mt-1.5 bg-background border-white/15" placeholder="you@email.com" />
+                <Input name="email" required type="email" className="mt-1.5 bg-background border-white/15" placeholder="you@email.com" />
               </div>
             </div>
             <div>
               <Label>Subject</Label>
-              <Input required className="mt-1.5 bg-background border-white/15" placeholder="How can we help?" />
+              <Input name="subject" required className="mt-1.5 bg-background border-white/15" placeholder="How can we help?" />
             </div>
             <div>
               <Label>Message</Label>
-              <Textarea required rows={6} className="mt-1.5 bg-background border-white/15" placeholder="Tell us about your goal..." />
+              <Textarea name="message" required rows={6} className="mt-1.5 bg-background border-white/15" placeholder="Tell us about your goal..." />
             </div>
-            <Button type="submit" size="lg" className="bg-primary hover:bg-primary/90 shadow-glow">Send Message</Button>
+            <Button disabled={busy} type="submit" size="lg" className="bg-primary hover:bg-primary/90 shadow-glow">{busy ? "Sending…" : "Send Message"}</Button>
           </form>
         </div>
       </section>

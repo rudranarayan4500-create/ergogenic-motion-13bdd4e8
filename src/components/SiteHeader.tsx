@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, Moon, ShoppingBag, Sun, X } from "lucide-react";
+import { LogOut, Menu, Moon, ShoppingBag, Sun, User, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 const links = [
   { to: "/", label: "Home" },
@@ -18,6 +19,7 @@ const links = [
 export const SiteHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user, isAdmin, signOut } = useAuth();
   const [dark, setDark] = useState(() => {
     if (typeof window !== "undefined") {
       return document.documentElement.classList.contains("dark") ||
@@ -74,6 +76,9 @@ export const SiteHeader = () => {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          {isAdmin && (
+            <Link to="/admin" className="hidden md:inline text-xs font-semibold text-primary border border-primary/40 rounded-full px-3 py-1 hover:bg-primary/10">Admin</Link>
+          )}
           <button
             onClick={() => setDark((v) => !v)}
             className="h-9 w-9 rounded-full border border-white/15 grid place-items-center text-white hover:border-primary hover:text-primary transition-colors"
@@ -86,10 +91,16 @@ export const SiteHeader = () => {
               <ShoppingBag className="h-5 w-5" />
             </Link>
           </Button>
-          <Button
-            asChild
-            className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90"
-          >
+          {user ? (
+            <Button onClick={() => signOut()} variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Sign out">
+              <LogOut className="h-5 w-5" />
+            </Button>
+          ) : (
+            <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Sign in">
+              <Link to="/auth"><User className="h-5 w-5" /></Link>
+            </Button>
+          )}
+          <Button asChild className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90">
             <Link to="/products">Shop Now</Link>
           </Button>
           <button
