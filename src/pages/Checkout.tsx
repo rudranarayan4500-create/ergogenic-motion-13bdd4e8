@@ -25,7 +25,8 @@ const Checkout = () => {
     if (!user) return;
     setBusy(true);
     const fd = new FormData(e.currentTarget);
-    const shipping = Object.fromEntries(fd.entries());
+    const shipping: Record<string, string> = {};
+    fd.forEach((v, k) => { shipping[k] = String(v); });
     try {
       // 1. Create order in DB
       const fakeRzpOrderId = `order_TEST_${Math.random().toString(36).slice(2, 12)}`;
