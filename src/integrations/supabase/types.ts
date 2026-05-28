@@ -192,28 +192,46 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           blocked: boolean
+          city: string | null
+          country: string | null
+          country_code: string | null
           created_at: string
           email: string | null
           full_name: string | null
           id: string
           phone: string | null
+          pincode: string | null
+          state: string | null
         }
         Insert: {
+          address?: string | null
           blocked?: boolean
+          city?: string | null
+          country?: string | null
+          country_code?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id: string
           phone?: string | null
+          pincode?: string | null
+          state?: string | null
         }
         Update: {
+          address?: string | null
           blocked?: boolean
+          city?: string | null
+          country?: string | null
+          country_code?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
           phone?: string | null
+          pincode?: string | null
+          state?: string | null
         }
         Relationships: []
       }
