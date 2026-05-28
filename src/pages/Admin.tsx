@@ -8,8 +8,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
-import { Trash2 } from "lucide-react";
+import { Eye, EyeOff, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { MediaLibrary, MediaPicker } from "@/components/MediaPicker";
 
 const Section = ({ children }: any) => <div className="bg-card border border-white/10 rounded-xl p-6">{children}</div>;
 
@@ -19,21 +20,32 @@ export default function Admin() {
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [settings, setSettings] = useState<any>({ secret_code: "", admin_email: "" });
+  const [productImage, setProductImage] = useState("");
+  const [newOrderCount, setNewOrderCount] = useState(0);
 
   const loadAll = async () => {
-    const [p, o, pr, m, s] = await Promise.all([
+    const [p, o, pr, m, s, rv] = await Promise.all([
       supabase.from("profiles").select("*").order("created_at", { ascending: false }),
       supabase.from("orders").select("*").order("created_at", { ascending: false }),
       supabase.from("products").select("*").order("created_at", { ascending: false }),
       supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
       supabase.from("admin_settings").select("*").eq("id", 1).maybeSingle(),
+      supabase.from("reviews").select("*").order("created_at", { ascending: false }),
     ]);
-    setProfiles(p.data ?? []); setOrders(o.data ?? []); setProducts(pr.data ?? []); setMessages(m.data ?? []);
+    setProfiles(p.data ?? []); setOrders(o.data ?? []); setProducts(pr.data ?? []); setMessages(m.data ?? []); setReviews(rv.data ?? []);
+    setNewOrderCount((o.data ?? []).filter((x: any) => !x.seen_by_admin).length);
     if (s.data) setSettings(s.data);
   };
 
   useEffect(() => { loadAll(); }, []);
+
+  const markOrdersSeen = async () => {
+    if (newOrderCount === 0) return;
+    await supabase.from("orders").update({ seen_by_admin: true }).eq("seen_by_admin", false);
+    setNewOrderCount(0);
+  };
 
   const blockUser = async (id: string, blocked: boolean) => {
     const { error } = await supabase.from("profiles").update({ blocked }).eq("id", id);
@@ -67,15 +79,24 @@ export default function Admin() {
       price: Number(f.get("price")),
       mrp: Number(f.get("mrp")),
       category: f.get("category") as string,
-      image: (f.get("image") as string) || null,
+      image: productImage || null,
       description: f.get("description") as string,
     };
     const { error } = await supabase.from("products").insert(payload);
     if (error) toast({ title: "Failed", description: error.message, variant: "destructive" });
-    else { toast({ title: "Product added" }); (e.target as HTMLFormElement).reset(); loadAll(); }
+    else { toast({ title: "Product added" }); (e.target as HTMLFormElement).reset(); setProductImage(""); loadAll(); }
   };
 
   const deleteMessage = async (id: string) => { await supabase.from("contact_messages").delete().eq("id", id); loadAll(); };
+
+  const toggleReview = async (id: string, approved: boolean) => {
+    await supabase.from("reviews").update({ approved }).eq("id", id);
+    loadAll();
+  };
+  const deleteReview = async (id: string) => {
+    await supabase.from("reviews").delete().eq("id", id);
+    loadAll();
+  };
 
   const saveSettings = async () => {
     const { error } = await supabase.from("admin_settings").update({
@@ -102,8 +123,13 @@ export default function Admin() {
           <Tabs defaultValue="users">
             <TabsList className="bg-card border border-white/10">
               <TabsTrigger value="users">Users</TabsTrigger>
-              <TabsTrigger value="orders">Orders</TabsTrigger>
+              <TabsTrigger value="orders" className="relative" onClick={markOrdersSeen}>
+                Orders
+                {newOrderCount > 0 && <span className="ml-2 h-4 min-w-4 px-1 rounded-full bg-primary text-[10px] text-primary-foreground grid place-items-center animate-pulse">{newOrderCount}</span>}
+              </TabsTrigger>
               <TabsTrigger value="products">Products</TabsTrigger>
+              <TabsTrigger value="reviews">Reviews</TabsTrigger>
+              <TabsTrigger value="media">Media</TabsTrigger>
               <TabsTrigger value="messages">Messages</TabsTrigger>
               <TabsTrigger value="settings">Settings</TabsTrigger>
             </TabsList>
@@ -153,9 +179,13 @@ export default function Admin() {
               <Section>
                 <h3 className="font-bold mb-3">Add product</h3>
                 <form onSubmit={saveProduct} className="space-y-2 text-sm">
-                  {["slug","name","tagline","category","image"].map(k => (
+                  {["slug","name","tagline","category"].map(k => (
                     <div key={k}><Label className="capitalize">{k}</Label><Input name={k} required={k==="slug"||k==="name"||k==="category"} className="mt-1 bg-background border-white/15" /></div>
                   ))}
+                  <div>
+                    <Label>Image</Label>
+                    <div className="mt-1"><MediaPicker value={productImage} onChange={setProductImage} /></div>
+                  </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div><Label>Price</Label><Input name="price" type="number" required className="mt-1 bg-background border-white/15" /></div>
                     <div><Label>MRP</Label><Input name="mrp" type="number" className="mt-1 bg-background border-white/15" /></div>
@@ -176,6 +206,32 @@ export default function Admin() {
                 </div>
               </Section></div>
             </div></TabsContent>
+
+            <TabsContent value="reviews"><Section>
+              <div className="space-y-3">
+                {reviews.map(r => (
+                  <div key={r.id} className="p-4 bg-background/40 border border-white/5 rounded-lg">
+                    <div className="flex justify-between items-start gap-3">
+                      <div className="flex-1">
+                        <div className="text-xs text-white/40">{new Date(r.created_at).toLocaleString()} · {r.product_slug} · {r.rating}★</div>
+                        {r.title && <div className="font-semibold mt-1">{r.title}</div>}
+                        <p className="text-sm text-white/80 mt-1 whitespace-pre-wrap">{r.body}</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <Badge variant={r.approved ? "default" : "secondary"}>{r.approved ? "Approved" : "Hidden"}</Badge>
+                        <Button size="icon" variant="ghost" onClick={() => toggleReview(r.id, !r.approved)}>{r.approved ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</Button>
+                        <Button size="icon" variant="ghost" onClick={() => deleteReview(r.id)}><Trash2 className="h-4 w-4 text-primary" /></Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {!reviews.length && <p className="text-white/40 text-sm py-6 text-center">No reviews yet.</p>}
+              </div>
+            </Section></TabsContent>
+
+            <TabsContent value="media"><Section>
+              <MediaLibrary embedded />
+            </Section></TabsContent>
 
             <TabsContent value="messages"><Section>
               <div className="space-y-3">
