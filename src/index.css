@@ -119,6 +119,15 @@ All colors MUST be HSL.
       linear-gradient(to bottom, hsl(0 0% 100% / 0.04) 1px, transparent 1px);
     background-size: 48px 48px;
   }
+  .spin-360 {
+    animation: spin360 12s linear infinite;
+    transform-style: preserve-3d;
+  }
+  @keyframes spin360 {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+  }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
   .bg-grid-light {
     background-image:
       linear-gradient(to right, hsl(0 0% 0% / 0.04) 1px, transparent 1px),

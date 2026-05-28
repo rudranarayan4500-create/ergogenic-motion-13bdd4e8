@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
+import { ProductReviews } from "@/components/ProductReviews";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -124,19 +125,8 @@ const ProductDetail = () => {
                 ))}
               </ul>
             </TabsContent>
-            <TabsContent value="reviews" className="mt-6 space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="p-5 bg-card border border-white/10 rounded-lg">
-                  <div className="flex items-center gap-3 mb-2">
-                    <img src={`https://i.pravatar.cc/40?img=${i + 20}`} className="h-9 w-9 rounded-full" alt="" />
-                    <div>
-                      <p className="font-semibold text-sm">Verified Buyer</p>
-                      <div className="flex">{Array.from({ length: 5 }).map((_, j) => <Star key={j} className="h-3 w-3 fill-primary text-primary" />)}</div>
-                    </div>
-                  </div>
-                  <p className="text-sm text-white/75">Excellent product. Mixes well, tastes great and the results show. Will reorder for sure.</p>
-                </div>
-              ))}
+            <TabsContent value="reviews" className="mt-6">
+              <ProductReviews slug={product.id} />
             </TabsContent>
           </Tabs>
         </div>

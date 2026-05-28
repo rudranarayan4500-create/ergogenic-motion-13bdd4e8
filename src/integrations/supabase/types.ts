@@ -65,6 +65,39 @@ export type Database = {
         }
         Relationships: []
       }
+      media_assets: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          name: string
+          path: string
+          size_bytes: number | null
+          uploaded_by: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: string
+          name: string
+          path: string
+          size_bytes?: number | null
+          uploaded_by?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          name?: string
+          path?: string
+          size_bytes?: number | null
+          uploaded_by?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           id: string
@@ -106,6 +139,7 @@ export type Database = {
           id: string
           razorpay_order_id: string | null
           razorpay_payment_id: string | null
+          seen_by_admin: boolean
           shipping: Json | null
           status: string
           total: number
@@ -116,6 +150,7 @@ export type Database = {
           id?: string
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
+          seen_by_admin?: boolean
           shipping?: Json | null
           status?: string
           total: number
@@ -126,6 +161,7 @@ export type Database = {
           id?: string
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
+          seen_by_admin?: boolean
           shipping?: Json | null
           status?: string
           total?: number
@@ -232,6 +268,39 @@ export type Database = {
           phone?: string | null
           pincode?: string | null
           state?: string | null
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          approved: boolean
+          body: string
+          created_at: string
+          id: string
+          product_slug: string
+          rating: number
+          title: string | null
+          user_id: string
+        }
+        Insert: {
+          approved?: boolean
+          body: string
+          created_at?: string
+          id?: string
+          product_slug: string
+          rating: number
+          title?: string | null
+          user_id: string
+        }
+        Update: {
+          approved?: boolean
+          body?: string
+          created_at?: string
+          id?: string
+          product_slug?: string
+          rating?: number
+          title?: string | null
+          user_id?: string
         }
         Relationships: []
       }
