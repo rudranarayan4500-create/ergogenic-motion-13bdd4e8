@@ -1,10 +1,22 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { LogOut, Menu, Moon, ShoppingBag, Sun, User, X } from "lucide-react";
+import { Bell, LogOut, Menu, ShoppingBag, User, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const links = [
   { to: "/", label: "Home" },
@@ -20,13 +32,7 @@ export const SiteHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
-  const [dark, setDark] = useState(() => {
-    if (typeof window !== "undefined") {
-      return document.documentElement.classList.contains("dark") ||
-        localStorage.getItem("theme") !== "light";
-    }
-    return true;
-  });
+  const [newOrders, setNewOrders] = useState(0);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -36,14 +42,26 @@ export const SiteHeader = () => {
   }, []);
 
   useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [dark]);
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  }, []);
+
+  useEffect(() => {
+    if (!isAdmin) { setNewOrders(0); return; }
+    const load = async () => {
+      const { count } = await supabase
+        .from("orders")
+        .select("id", { count: "exact", head: true })
+        .eq("seen_by_admin", false);
+      setNewOrders(count ?? 0);
+    };
+    load();
+    const ch = supabase
+      .channel("orders-admin-badge")
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, load)
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [isAdmin]);
 
   return (
     <header
@@ -77,24 +95,39 @@ export const SiteHeader = () => {
         </nav>
         <div className="flex items-center gap-2">
           {isAdmin && (
-            <Link to="/admin" className="hidden md:inline text-xs font-semibold text-primary border border-primary/40 rounded-full px-3 py-1 hover:bg-primary/10">Admin</Link>
+            <Link to="/admin" className="relative hidden md:inline-flex items-center gap-1 text-xs font-semibold text-primary border border-primary/40 rounded-full px-3 py-1 hover:bg-primary/10 transition-colors">
+              <Bell className="h-3 w-3" />
+              Admin
+              {newOrders > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-primary text-[10px] text-primary-foreground grid place-items-center animate-pulse">
+                  {newOrders}
+                </span>
+              )}
+            </Link>
           )}
-          <button
-            onClick={() => setDark((v) => !v)}
-            className="h-9 w-9 rounded-full border border-white/15 grid place-items-center text-white hover:border-primary hover:text-primary transition-colors"
-            aria-label="Toggle theme"
-          >
-            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
           <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/10">
             <Link to="/cart" aria-label="Cart">
               <ShoppingBag className="h-5 w-5" />
             </Link>
           </Button>
           {user ? (
-            <Button onClick={() => signOut()} variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Sign out">
-              <LogOut className="h-5 w-5" />
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Sign out">
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="bg-card border-white/10">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Sign out of your account?</AlertDialogTitle>
+                  <AlertDialogDescription>You'll need to log back in to view orders, post reviews or access the admin panel.</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="border-white/15">Stay signed in</AlertDialogCancel>
+                  <AlertDialogAction className="bg-primary hover:bg-primary/90" onClick={() => signOut()}>Yes, sign out</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           ) : (
             <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Sign in">
               <Link to="/auth"><User className="h-5 w-5" /></Link>
