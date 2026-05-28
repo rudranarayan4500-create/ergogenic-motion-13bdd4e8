@@ -100,7 +100,7 @@ const Ingredients = () => (
             <div className={`grid lg:grid-cols-12 gap-8 items-center bg-card border border-white/10 rounded-2xl p-6 md:p-10 hover-lift ${idx % 2 === 1 ? "lg:[&>div:first-child]:order-2" : ""}`}>
               <div className="lg:col-span-4 grid place-items-center">
                 <div className="relative w-56 h-56 md:w-72 md:h-72 grid place-items-center">
-                  <div className="absolute inset-0 rounded-full bg-gradient-radial from-primary/25 via-primary/5 to-transparent blur-2xl" />
+                  <div className="absolute inset-0 rounded-full blur-2xl" style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.25), transparent 65%)" }} />
                   <div className="absolute inset-4 rounded-full border border-primary/20" />
                   <div className="absolute inset-10 rounded-full border border-white/10" />
                   <img
