@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { CheckCircle2, ChevronRight, Minus, Plus, ShieldCheck, Star, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,15 +7,27 @@ import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
 import { ProductReviews } from "@/components/ProductReviews";
+import { ProductGallery, type MediaItem } from "@/components/ProductGallery";
+import { supabase } from "@/integrations/supabase/client";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
   const [qty, setQty] = useState(1);
+  const [extraMedia, setExtraMedia] = useState<MediaItem[]>([]);
+  useEffect(() => {
+    if (!id) return;
+    supabase.from("products").select("media").eq("slug", id).maybeSingle()
+      .then(({ data }) => {
+        const m = (data?.media as any[]) ?? [];
+        setExtraMedia(m.filter((x) => x?.url).map((x) => ({ url: x.url, kind: x.kind })));
+      });
+  }, [id]);
   if (!product) return <Navigate to="/products" replace />;
   const related = products.filter((p) => p.id !== product.id).slice(0, 4);
-  const images = [product.image, product.image, product.image];
-  const [active, setActive] = useState(0);
+  const gallery: MediaItem[] = extraMedia.length
+    ? extraMedia
+    : [{ url: product.image, kind: "image" }];
 
   const add = () => toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
 
@@ -31,22 +43,7 @@ const ProductDetail = () => {
             <span className="text-white">{product.name}</span>
           </nav>
           <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <div className="bg-card rounded-xl overflow-hidden border border-white/10 aspect-square">
-                <img src={images[active]} alt={product.name} className="h-full w-full object-cover" />
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-3">
-                {images.map((src, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActive(i)}
-                    className={`aspect-square rounded-lg overflow-hidden border-2 ${active === i ? "border-primary" : "border-white/10"}`}
-                  >
-                    <img src={src} alt="" className="h-full w-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            </div>
+            <ProductGallery items={gallery} alt={product.name} />
             <div>
               <p className="text-xs text-primary tracking-widest uppercase">{product.category}</p>
               <h1 className="mt-2 text-3xl md:text-5xl font-bold tracking-tight">{product.name}</h1>

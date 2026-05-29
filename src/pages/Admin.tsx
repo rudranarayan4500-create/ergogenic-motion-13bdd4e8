@@ -11,6 +11,9 @@ import { toast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { MediaLibrary, MediaPicker } from "@/components/MediaPicker";
+import { MediaGalleryEditor } from "@/components/MediaGalleryEditor";
+import { ArticleEditor } from "@/components/ArticleEditor";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const Section = ({ children }: any) => <div className="bg-card border border-white/10 rounded-xl p-6">{children}</div>;
 
@@ -24,6 +27,7 @@ export default function Admin() {
   const [settings, setSettings] = useState<any>({ secret_code: "", admin_email: "" });
   const [productImage, setProductImage] = useState("");
   const [newOrderCount, setNewOrderCount] = useState(0);
+  const [mediaProduct, setMediaProduct] = useState<any | null>(null);
 
   const loadAll = async () => {
     const [p, o, pr, m, s, rv] = await Promise.all([
@@ -67,6 +71,13 @@ export default function Admin() {
   const deleteProduct = async (id: string) => {
     await supabase.from("products").delete().eq("id", id);
     loadAll();
+  };
+
+  const saveProductMedia = async (media: any[]) => {
+    if (!mediaProduct) return;
+    const { error } = await supabase.from("products").update({ media }).eq("id", mediaProduct.id);
+    if (error) toast({ title: "Failed", description: error.message, variant: "destructive" });
+    else { setMediaProduct({ ...mediaProduct, media }); loadAll(); }
   };
 
   const saveProduct = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -128,6 +139,7 @@ export default function Admin() {
                 {newOrderCount > 0 && <span className="ml-2 h-4 min-w-4 px-1 rounded-full bg-primary text-[10px] text-primary-foreground grid place-items-center animate-pulse">{newOrderCount}</span>}
               </TabsTrigger>
               <TabsTrigger value="products">Products</TabsTrigger>
+              <TabsTrigger value="articles">Articles</TabsTrigger>
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
               <TabsTrigger value="media">Media</TabsTrigger>
               <TabsTrigger value="messages">Messages</TabsTrigger>
@@ -200,12 +212,19 @@ export default function Admin() {
                   {products.map(p => (
                     <div key={p.id} className="flex items-center justify-between p-3 bg-background/40 border border-white/5 rounded-lg">
                       <div><div className="font-semibold">{p.name} <span className="text-xs text-white/40">/ {p.category}</span></div><div className="text-xs text-white/50">{p.slug} • ₹{p.price}</div></div>
-                      <Button size="icon" variant="ghost" onClick={() => deleteProduct(p.id)}><Trash2 className="h-4 w-4 text-primary" /></Button>
+                      <div className="flex items-center gap-2">
+                        <Button size="sm" variant="outline" className="border-white/15" onClick={() => setMediaProduct(p)}>
+                          Gallery ({(p.media ?? []).length})
+                        </Button>
+                        <Button size="icon" variant="ghost" onClick={() => deleteProduct(p.id)}><Trash2 className="h-4 w-4 text-primary" /></Button>
+                      </div>
                     </div>
                   ))}
                 </div>
               </Section></div>
             </div></TabsContent>
+
+            <TabsContent value="articles"><ArticleEditor /></TabsContent>
 
             <TabsContent value="reviews"><Section>
               <div className="space-y-3">
@@ -261,6 +280,14 @@ export default function Admin() {
           </Tabs>
         </div>
       </section>
+      <Dialog open={!!mediaProduct} onOpenChange={(v) => !v && setMediaProduct(null)}>
+        <DialogContent className="bg-card border-white/10 text-white max-w-2xl">
+          <DialogHeader><DialogTitle>{mediaProduct?.name} — gallery</DialogTitle></DialogHeader>
+          {mediaProduct && (
+            <MediaGalleryEditor value={mediaProduct.media ?? []} onChange={saveProductMedia} />
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

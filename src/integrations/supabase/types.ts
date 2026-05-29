@@ -35,6 +35,51 @@ export type Database = {
         }
         Relationships: []
       }
+      articles: {
+        Row: {
+          body: string
+          category: string
+          cover_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          published: boolean
+          read_time: string | null
+          slug: string
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          read_time?: string | null
+          slug: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          read_time?: string | null
+          slug?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
@@ -180,6 +225,7 @@ export type Database = {
           id: string
           image: string | null
           ingredients: string[] | null
+          media: Json
           mrp: number | null
           name: string
           price: number
@@ -198,6 +244,7 @@ export type Database = {
           id?: string
           image?: string | null
           ingredients?: string[] | null
+          media?: Json
           mrp?: number | null
           name: string
           price: number
@@ -216,6 +263,7 @@ export type Database = {
           id?: string
           image?: string | null
           ingredients?: string[] | null
+          media?: Json
           mrp?: number | null
           name?: string
           price?: number
