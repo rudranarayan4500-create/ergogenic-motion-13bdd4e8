@@ -1,4 +1,4 @@
-import logo from "@/assets/image.png";
+import logo from "@/assets/logo-ergogenic.png";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -9,7 +9,7 @@ export const Logo = ({ className }: LogoProps) => (
   <img
     src={logo}
     alt="Ergogenic Nutrients logo"
-    className={cn("h-8 w-auto select-none brightness-0 invert", className)}
+    className={cn("h-8 w-auto select-none object-contain", className)}
     draggable={false}
   />
 );
