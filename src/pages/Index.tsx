@@ -281,35 +281,45 @@ const Index = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-black/40 border-y border-white/10 overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-[hsl(var(--ink))] via-[hsl(0_0%_8%)] to-[hsl(357_60%_12%)] border-y border-white/10 overflow-hidden">
         <ScrollReveal className="container mb-12 text-center">
           <p className="text-xs tracking-[0.4em] text-primary mb-3">SUCCESS STORIES</p>
           <h2 className="text-3xl md:text-5xl font-bold text-white">Hear From Our Success Stories</h2>
           <p className="mt-4 text-white/65 max-w-2xl mx-auto">Real people. Real performance. Real transformation.</p>
         </ScrollReveal>
-        {[row1, row2].map((row, idx) => (
-          <div key={idx} className="overflow-hidden mb-6">
-            <div className={`flex gap-5 ${idx === 0 ? "marquee" : "marquee marquee-rev"}`}>
-              {[...row, ...row, ...row].map((t, i) => (
-                <div key={i} className="w-[340px] shrink-0 bg-card border border-white/10 rounded-xl p-6">
-                  <div className="flex items-center gap-3">
-                    <img src={t.img} alt={t.name} className="h-12 w-12 rounded-full" />
-                    <div>
-                      <p className="font-semibold text-white">{t.name}</p>
-                      <p className="text-xs text-white/60">{t.role}</p>
+        <div className="container">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 [perspective:1200px]">
+            {testimonials.map((t, i) => {
+              const tilts = ["-rotate-3", "rotate-2", "-rotate-1", "rotate-3", "-rotate-2", "rotate-1", "-rotate-3", "rotate-2"];
+              const offsets = ["translate-y-0", "translate-y-6", "-translate-y-2", "translate-y-4", "translate-y-1", "-translate-y-3", "translate-y-2", "translate-y-5"];
+              return (
+                <ScrollReveal key={i} delay={i * 70}>
+                  <div className={`group ${tilts[i]} ${offsets[i]} transition-all duration-500 hover:rotate-0 hover:translate-y-0`}>
+                    <div className="relative bg-[hsl(0_0%_8%)] border border-white/10 rounded-2xl p-6 shadow-[0_25px_60px_-15px_hsl(357_96%_46%/0.25)] hover:shadow-[0_30px_80px_-10px_hsl(357_96%_46%/0.55)] hover:border-primary/40 transition-all">
+                      <div className="absolute -top-3 -right-3 h-10 w-10 rounded-full bg-primary grid place-items-center text-primary-foreground text-xl font-serif shadow-lg">"</div>
+                      <div className="flex items-center gap-3">
+                        <img src={t.img} alt={t.name} className="h-12 w-12 rounded-full ring-2 ring-primary/40" />
+                        <div>
+                          <p className="font-semibold text-white flex items-center gap-1.5">
+                            {t.name}
+                            <span className="text-[10px] uppercase tracking-wider bg-primary/20 text-primary px-1.5 py-0.5 rounded">Verified</span>
+                          </p>
+                          <p className="text-xs text-white/60">{t.role}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-0.5 my-3">
+                        {Array.from({ length: 5 }).map((_, j) => (
+                          <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                        ))}
+                      </div>
+                      <p className="text-sm text-white/85 leading-relaxed">"{t.text}"</p>
                     </div>
                   </div>
-                  <div className="flex gap-0.5 my-3">
-                    {Array.from({ length: 5 }).map((_, j) => (
-                      <Star key={j} className="h-4 w-4 fill-primary text-primary" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-white/80 leading-relaxed">"{t.text}"</p>
-                </div>
-              ))}
-            </div>
+                </ScrollReveal>
+              );
+            })}
           </div>
-        ))}
+        </div>
       </section>
 
       {/* CERTIFICATIONS */}

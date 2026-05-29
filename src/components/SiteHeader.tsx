@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Bell, LogOut, Menu, ShoppingBag, User, X } from "lucide-react";
+import { Bell, LogOut, Menu, Moon, ShoppingBag, Sun, User, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -33,6 +33,10 @@ export const SiteHeader = () => {
   const [open, setOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
   const [newOrders, setNewOrders] = useState(0);
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window === "undefined") return "dark";
+    return (localStorage.getItem("theme") as "dark" | "light") ?? "dark";
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -42,9 +46,11 @@ export const SiteHeader = () => {
   }, []);
 
   useEffect(() => {
-    document.documentElement.classList.add("dark");
-    localStorage.setItem("theme", "dark");
-  }, []);
+    const root = document.documentElement;
+    if (theme === "dark") root.classList.add("dark");
+    else root.classList.remove("dark");
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     if (!isAdmin) { setNewOrders(0); return; }
@@ -109,6 +115,15 @@ export const SiteHeader = () => {
             <Link to="/cart" aria-label="Cart">
               <ShoppingBag className="h-5 w-5" />
             </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white hover:bg-white/10"
+            aria-label="Toggle theme"
+            onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+          >
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
           {user ? (
             <AlertDialog>
