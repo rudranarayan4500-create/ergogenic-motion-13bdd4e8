@@ -4,13 +4,14 @@ import { useState } from "react";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { products } from "@/data/products";
+import { calculateShipping } from "@/lib/utils";
 
 const Cart = () => {
   const [items, setItems] = useState(
     products.slice(0, 2).map((p) => ({ ...p, qty: 1 }))
   );
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const shipping = subtotal > 999 ? 0 : 49;
+  const shipping = calculateShipping(subtotal);
   const total = subtotal + shipping;
 
   const update = (id: string, delta: number) =>

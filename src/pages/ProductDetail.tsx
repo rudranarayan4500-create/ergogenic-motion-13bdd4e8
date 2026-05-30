@@ -9,6 +9,7 @@ import { ProductReviews } from "@/components/ProductReviews";
 import { ProductGallery, type MediaItem } from "@/components/ProductGallery";
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "next-themes";
+import { throttle } from "@/lib/utils";
 
 interface ScrollPosition {
   scale: number;
@@ -23,6 +24,7 @@ const ProductDetail = () => {
   const [scrollPositions, setScrollPositions] = useState<{ [key: number]: ScrollPosition }>({});
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const scrollHandlerRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -50,8 +52,13 @@ const ProductDetail = () => {
       });
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    scrollHandlerRef.current = throttle(handleScroll, 30);
+    window.addEventListener("scroll", scrollHandlerRef.current);
+    return () => {
+      if (scrollHandlerRef.current) {
+        window.removeEventListener("scroll", scrollHandlerRef.current);
+      }
+    };
   }, []);
 
   if (!product) return <Navigate to="/products" replace />;
