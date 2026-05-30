@@ -5,6 +5,7 @@ import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "next-themes";
 import { supabase } from "@/integrations/supabase/client";
 import {
   AlertDialog,
@@ -32,11 +33,9 @@ export const SiteHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [newOrders, setNewOrders] = useState(0);
-  const [theme, setTheme] = useState<"dark" | "light">(() => {
-    if (typeof window === "undefined") return "dark";
-    return (localStorage.getItem("theme") as "dark" | "light") ?? "dark";
-  });
+  const isDark = theme === "dark";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -44,13 +43,6 @@ export const SiteHeader = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") root.classList.add("dark");
-    else root.classList.remove("dark");
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
   useEffect(() => {
     if (!isAdmin) { setNewOrders(0); return; }
@@ -69,15 +61,19 @@ export const SiteHeader = () => {
     return () => { supabase.removeChannel(ch); };
   }, [isAdmin]);
 
+  const bgClass = scrolled
+    ? isDark
+      ? "bg-[hsl(var(--ink))]/95 backdrop-blur-md border-b border-white/10"
+      : "bg-white/95 backdrop-blur-md border-b border-blue-200"
+    : isDark
+      ? "bg-transparent"
+      : "bg-transparent";
+
+  const textClass = isDark ? "text-white/80 hover:text-white" : "text-gray-700 hover:text-gray-900";
+  const iconClass = isDark ? "text-white hover:bg-white/10" : "text-gray-700 hover:bg-gray-200";
+
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
-        scrolled
-          ? "bg-[hsl(var(--ink))]/95 backdrop-blur-md border-b border-white/10 shadow-[0_2px_20px_hsl(0_0%_0%/0.5)]"
-          : "bg-transparent"
-      )}
-    >
+    <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-500", bgClass)}>
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <Logo className="h-8" />
@@ -91,7 +87,7 @@ export const SiteHeader = () => {
               className={({ isActive }) =>
                 cn(
                   "text-sm font-medium tracking-wide transition-colors",
-                  isActive ? "text-primary" : "text-white/80 hover:text-white"
+                  isActive ? "text-primary" : textClass
                 )
               }
             >
@@ -111,7 +107,7 @@ export const SiteHeader = () => {
               )}
             </Link>
           )}
-          <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/10">
+          <Button asChild variant="ghost" size="icon" className={iconClass}>
             <Link to="/cart" aria-label="Cart">
               <ShoppingBag className="h-5 w-5" />
             </Link>
@@ -119,32 +115,32 @@ export const SiteHeader = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-white/10"
+            className={iconClass}
             aria-label="Toggle theme"
-            onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+            onClick={() => setTheme(isDark ? "light" : "dark")}
           >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
           {user ? (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Sign out">
+                <Button variant="ghost" size="icon" className={iconClass} aria-label="Sign out">
                   <LogOut className="h-5 w-5" />
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="bg-card border-white/10">
+              <AlertDialogContent className={cn("bg-card border", isDark ? "border-white/10" : "border-blue-200")}>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Sign out of your account?</AlertDialogTitle>
                   <AlertDialogDescription>You'll need to log back in to view orders, post reviews or access the admin panel.</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel className="border-white/15">Stay signed in</AlertDialogCancel>
+                  <AlertDialogCancel className={isDark ? "border-white/15" : "border-blue-300"}>Stay signed in</AlertDialogCancel>
                   <AlertDialogAction className="bg-primary hover:bg-primary/90" onClick={() => signOut()}>Yes, sign out</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           ) : (
-            <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Sign in">
+            <Button asChild variant="ghost" size="icon" className={iconClass} aria-label="Sign in">
               <Link to="/auth"><User className="h-5 w-5" /></Link>
             </Button>
           )}
@@ -152,7 +148,7 @@ export const SiteHeader = () => {
             <Link to="/products">Shop Now</Link>
           </Button>
           <button
-            className="lg:hidden text-white p-2"
+            className={`lg:hidden p-2 ${isDark ? "text-white" : "text-gray-700"}`}
             onClick={() => setOpen((v) => !v)}
             aria-label="Open menu"
           >
@@ -161,7 +157,7 @@ export const SiteHeader = () => {
         </div>
       </div>
       {open && (
-        <div className="lg:hidden bg-[hsl(var(--ink))] border-t border-white/10 animate-fade-in">
+        <div className={cn("lg:hidden border-t animate-fade-in", isDark ? "bg-[hsl(var(--ink))] border-white/10" : "bg-white/50 border-blue-200")}>
           <nav className="container flex flex-col py-4">
             {links.map((l) => (
               <NavLink
@@ -171,8 +167,8 @@ export const SiteHeader = () => {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   cn(
-                    "py-3 text-base border-b border-white/5",
-                    isActive ? "text-primary" : "text-white/85"
+                    "py-3 text-base border-b transition-colors",
+                    isActive ? "text-primary" : isDark ? "text-white/85 border-white/5" : "text-gray-700 border-gray-200"
                   )
                 }
               >
