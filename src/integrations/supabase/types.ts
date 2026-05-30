@@ -80,6 +80,33 @@ export type Database = {
         }
         Relationships: []
       }
+      callbacks: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string
+          preferred_time: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone: string
+          preferred_time?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string
+          preferred_time?: string | null
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
@@ -325,6 +352,7 @@ export type Database = {
           body: string
           created_at: string
           id: string
+          image_url: string | null
           product_slug: string
           rating: number
           title: string | null
@@ -335,6 +363,7 @@ export type Database = {
           body: string
           created_at?: string
           id?: string
+          image_url?: string | null
           product_slug: string
           rating: number
           title?: string | null
@@ -345,6 +374,7 @@ export type Database = {
           body?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           product_slug?: string
           rating?: number
           title?: string | null
