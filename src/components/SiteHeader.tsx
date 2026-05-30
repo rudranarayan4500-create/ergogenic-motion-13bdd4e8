@@ -22,7 +22,7 @@ const links = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Products" },
   { to: "/ingredients", label: "Ingredients" },
-  { to: "/reviews", label: "Reviews" },
+  { to: "/gallery", label: "Gallery" },
   { to: "/resources", label: "Resources" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
