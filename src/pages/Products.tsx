@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ChevronRight, Star, SlidersHorizontal, RotateCcw, Flame, Sparkles } from "lucide-react";
+import { ChevronRight, Star, SlidersHorizontal, RotateCcw, ArrowDown } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { categories, products, type Category } from "@/data/products";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,7 @@ const Products = () => {
     setParams({});
   };
 
-  // Highly Targeted Multi-Filter Engine
+  // Multi-Filter Engine
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchesCategory = activeCategory ? p.category === activeCategory : true;
@@ -45,19 +45,127 @@ const Products = () => {
     });
   }, [activeCategory, maxPrice, formFactor]);
 
+  // Framer Motion Variants for Scroll-Driven Zoom and Glide Ups
+  const scrollContainerVariants = {
+    hidden: { opacity: 0 },
+    whileInView: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.1 }
+    }
+  };
+
+  const textGlideUpVariants = {
+    hidden: { opacity: 0, y: 50 },
+    whileInView: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
+    }
+  };
+
+  const imageZoomVariants = {
+    hidden: { opacity: 0, scale: 0.85 },
+    whileInView: { 
+      opacity: 1, 
+      scale: 1, 
+      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } 
+    }
+  };
+
   return (
-    <div className="bg-black text-white min-h-screen selection:bg-primary selection:text-black">
+    <div className="bg-black text-white min-h-screen selection:bg-primary selection:text-black overflow-x-hidden">
+      {/* 1. HERO BANNER */}
       <PageHero
         eyebrow="ERGOGENIC NUTRITION · 2026 LINEUP"
         title="THE COMPLETE ARSENAL"
         subtitle="Fueling the future of performance with ultra-potent elite formulas designed to deliver legendary results."
       />
 
-      <section className="py-12 border-t border-neutral-900">
+      {/* 2. PREMIUM FEATURED SPOTLIGHTS SECTION (Alternating Layouts with Scroll Animations) */}
+      <section className="py-20 bg-gradient-to-b from-black to-neutral-950 border-b border-neutral-900">
+        <div className="container max-w-7xl mx-auto px-4 space-y-32">
+          
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <span className="text-xs font-mono tracking-widest text-primary uppercase">Elite Formulations</span>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight uppercase">Product Spotlights</h2>
+            <p className="text-neutral-400 text-sm md:text-base">Discover the science, the power, and the delivery mechanisms making waves across sports science engineering fields.</p>
+            <div className="flex justify-center pt-4">
+              <ArrowDown className="animate-bounce text-primary h-5 w-5" />
+            </div>
+          </div>
+
+          {products.slice(0, 2).map((p, idx) => {
+            const isEven = idx % 2 === 0;
+            return (
+              <motion.div 
+                key={`spotlight-${p.id}`}
+                variants={scrollContainerVariants}
+                initial="hidden"
+                whileInView="whileInView"
+                viewport={{ once: true, margin: "-100px" }}
+                className={cn(
+                  "flex flex-col gap-12 items-center justify-between w-full",
+                  isEven ? "lg:flex-row" : "lg:flex-row-reverse"
+                )}
+              >
+                {/* TEXT SIDE - GLIDES FROM DOWN TO UP */}
+                <motion.div variants={textGlideUpVariants} className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
+                  <div className="inline-block px-3 py-1 bg-primary/10 border border-primary/20 rounded-full">
+                    <span className="text-[10px] uppercase tracking-widest font-mono text-primary font-bold">{p.category}</span>
+                  </div>
+                  <h3 className="text-4xl md:text-6xl font-black tracking-tighter uppercase text-white leading-none">
+                    {p.name}
+                  </h3>
+                  <p className="text-neutral-400 text-base md:text-lg font-light leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    {p.tagline || "Engineered for elite performers demanding absolute strength, pure clarity, and maximized recovery thresholds."}
+                  </p>
+                  <div className="flex items-center justify-center lg:justify-start gap-6 pt-2">
+                    <div className="text-left">
+                      <span className="block text-xs font-mono text-neutral-500 uppercase">Rating Score</span>
+                      <span className="text-xl font-black text-white flex items-center gap-1">
+                        {p.rating} <Star className="h-4 w-4 fill-primary text-primary inline" />
+                      </span>
+                    </div>
+                    <div className="h-8 w-px bg-neutral-800" />
+                    <div className="text-left">
+                      <span className="block text-xs font-mono text-neutral-500 uppercase">System Integrity</span>
+                      <span className="text-sm font-bold text-neutral-200">100% Tested Base</span>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* IMAGE SIDE - SMOOTH ZOOM IN EFFECT WITH GLOWING OVAL */}
+                <motion.div variants={imageZoomVariants} className="w-full lg:w-1/2 flex items-center justify-center relative">
+                  {/* Glowing Oval Shape Backdrop Wrapper */}
+                  <div className="absolute w-[70%] h-[85%] rounded-[50%] bg-primary/10 blur-[80px] md:blur-[120px] animate-pulse pointer-events-none" />
+                  
+                  <div className="relative w-full max-w-[320px] md:max-w-[400px] aspect-square group">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      className="w-full h-full object-contain filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.8)] transition-all duration-700 ease-out group-hover:scale-105 group-hover:-translate-y-2 group-hover:rotate-1"
+                    />
+                  </div>
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 3. MAIN INTERACTIVE STOREFRONT */}
+      <section className="py-16 bg-black">
         <div className="container max-w-7xl mx-auto px-4">
+          
+          <div className="mb-10">
+            <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight">Browse The Store</h2>
+            <p className="text-neutral-500 text-xs md:text-sm">Filter tactical configurations using our advanced filter engine matrix.</p>
+          </div>
+
           <div className="grid lg:grid-cols-[280px_1fr] gap-12 items-start">
             
-            {/* LEFT SIDE: ADVANCED E-COMMERCE FILTER CONTROLS */}
+            {/* LEFT SIDE: ADVANCED DESKTOP FILTER CONTROLS */}
             <aside className="sticky top-24 space-y-8 bg-neutral-950 border border-neutral-900 rounded-2xl p-6 hidden lg:block">
               <div className="flex items-center justify-between pb-4 border-b border-neutral-900">
                 <div className="flex items-center gap-2 font-bold uppercase tracking-wider text-sm">
@@ -141,10 +249,10 @@ const Products = () => {
               </div>
             </aside>
 
-            {/* RIGHT SIDE: PREMIUM NO-BOX ALTERNATING IMAGE LISTINGS */}
+            {/* RIGHT SIDE: INTERACTIVE GRID LISTINGS */}
             <div className="space-y-4">
               
-              {/* Mobile Filter Tabs Quick View (Fallbacks for smaller screens) */}
+              {/* Mobile Filter Tabs Horizontal View */}
               <div className="flex items-center gap-2 overflow-x-auto pb-4 lg:hidden scrollbar-none">
                 <Button 
                   variant={activeCategory === null ? "default" : "outline"} 
@@ -167,8 +275,8 @@ const Products = () => {
                 ))}
               </div>
 
-              {/* Products Yield Grid */}
-              <motion.div layout className="flex flex-col gap-24 md:gap-40">
+              {/* Products Yield List */}
+              <motion.div layout className="flex flex-col gap-16 md:gap-24">
                 <AnimatePresence mode="popLayout">
                   {filteredProducts.length > 0 ? (
                     filteredProducts.map((p, index) => {
@@ -178,21 +286,22 @@ const Products = () => {
                         <motion.div
                           key={p.id}
                           layout
-                          initial={{ opacity: 0, y: 40 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                          initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                           className="w-full"
                         >
                           <Link
                             to={`/products/${p.id}`}
                             className={cn(
-                              "group flex flex-col gap-10 w-full justify-between items-center transition-all duration-300 pb-16 border-b border-neutral-900 last:border-0",
+                              "group flex flex-col gap-8 w-full justify-between items-center transition-all duration-300 pb-12 border-b border-neutral-900 last:border-0",
                               isEven ? "md:flex-row" : "md:flex-row-reverse"
                             )}
                           >
-                            {/* TEXT SECTION (Clean Canvas Typography) */}
-                            <div className="min-w-0 flex-1 space-y-5 w-full">
+                            {/* TEXT DYNAMICS */}
+                            <div className="min-w-0 flex-1 space-y-4 w-full text-left">
                               <div className="flex items-center gap-2">
                                 <span className="text-[10px] tracking-[0.3em] uppercase text-primary font-bold bg-primary/10 px-2.5 py-1 rounded">
                                   {p.category}
@@ -204,22 +313,22 @@ const Products = () => {
                                 )}
                               </div>
                               
-                              <h3 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-none group-hover:text-primary transition-colors duration-300 text-white">
+                              <h3 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter uppercase leading-none group-hover:text-primary transition-colors duration-300 text-white">
                                 {p.name}
                               </h3>
                               
-                              <p className="text-base md:text-lg text-neutral-400 max-w-xl font-light leading-relaxed">
+                              <p className="text-sm md:text-base text-neutral-400 max-w-xl font-light leading-relaxed">
                                 {p.tagline}
                               </p>
                               
-                              {/* Core Matrix / Features row */}
-                              <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs font-medium text-neutral-500">
+                              {/* Features row */}
+                              <div className="flex flex-wrap items-center gap-y-2 gap-x-3 text-xs font-medium text-neutral-500">
                                 <div className="flex items-center gap-1">
                                   <Star className="h-3.5 w-3.5 fill-primary text-primary" /> 
                                   <span className="text-neutral-200 font-bold">{p.rating}</span>
                                 </div>
                                 <span>·</span>
-                                <span>{p.reviews} Verified Reviews</span>
+                                <span>{p.reviews} Reviews</span>
                                 {p.mainIngredients && (
                                   <>
                                     <span>·</span>
@@ -228,34 +337,33 @@ const Products = () => {
                                 )}
                               </div>
                               
-                              <div className="flex items-baseline gap-3 pt-2">
-                                <span className="text-3xl font-black text-white tracking-tight">₹{p.price.toLocaleString()}</span>
-                                <span className="text-sm text-neutral-600 line-through font-medium">₹{p.mrp.toLocaleString()}</span>
-                                <span className="text-[11px] font-extrabold text-primary border border-primary/20 bg-primary/5 px-2 py-0.5 rounded uppercase tracking-wider">
+                              <div className="flex items-baseline gap-3 pt-1">
+                                <span className="text-2xl font-black text-white tracking-tight">₹{p.price.toLocaleString()}</span>
+                                <span className="text-xs text-neutral-600 line-through font-medium">₹{p.mrp.toLocaleString()}</span>
+                                <span className="text-[10px] font-extrabold text-primary border border-primary/20 bg-primary/5 px-2 py-0.5 rounded uppercase tracking-wider">
                                   Save {Math.round((1 - p.price / p.mrp) * 100)}%
                                 </span>
                               </div>
                               
                               <div className="pt-2">
                                 <Button 
-                                  size="lg" 
-                                  className="bg-primary text-black font-bold uppercase tracking-widest text-xs px-7 rounded-xl group-hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/5 group-hover:translate-x-2"
+                                  size="sm" 
+                                  className="bg-primary text-black font-bold uppercase tracking-widest text-[10px] px-6 rounded-xl group-hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/5 group-hover:translate-x-1"
                                 >
-                                  Explore Formulation <ChevronRight className="h-4 w-4 ml-2" />
+                                  Explore Formulation <ChevronRight className="h-3 w-3 ml-1" />
                                 </Button>
                               </div>
                             </div>
 
-                            {/* EXTRA LARGE BACKGROUND-REMOVED FLOATING IMAGE CONFIGURATION */}
-                            <div className="relative w-full max-w-[280px] sm:max-w-[340px] md:max-w-[420px] aspect-square flex items-center justify-center shrink-0">
-                              {/* Ambient soft glow mapping under product image profile */}
-                              <div className="absolute inset-0 rounded-full bg-primary/[0.03] blur-3xl group-hover:bg-primary/[0.12] transition-all duration-700 ease-out scale-125" />
+                            {/* HOVER DYNAMIC IMAGE SYSTEM */}
+                            <div className="relative w-full max-w-[240px] sm:max-w-[280px] md:max-w-[340px] aspect-square flex items-center justify-center shrink-0">
+                              <div className="absolute inset-0 rounded-full bg-primary/[0.02] blur-2xl group-hover:bg-primary/[0.08] transition-all duration-700 ease-out scale-125" />
                               
                               <img
                                 src={p.image}
                                 alt={p.name}
                                 loading="lazy"
-                                className="relative h-full w-full object-contain filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.7)] drop-shadow-[0_10px_30px_hsl(var(--primary)/0.2)] transition-all duration-700 ease-out group-hover:scale-105 group-hover:-translate-y-4 group-hover:rotate-3"
+                                className="relative h-full w-full object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] transition-all duration-700 ease-out group-hover:scale-105 group-hover:-translate-y-3 group-hover:rotate-2"
                               />
                             </div>
                           </Link>
