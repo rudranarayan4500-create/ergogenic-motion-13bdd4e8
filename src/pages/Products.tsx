@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { 
   ChevronRight, Star, SlidersHorizontal, RotateCcw, Sliders, CheckSquare, 
@@ -23,6 +23,9 @@ const Products = () => {
   const [showOutOfStock, setShowOutOfStock] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<string>("featured");
 
+  // Live Logistics Countdown State
+  const [timeLeft, setTimeLeft] = useState("24:00:00");
+
   // Accordion Sidebar Open/Close States
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({
     gender: true,
@@ -34,6 +37,37 @@ const Products = () => {
     activity: false,
     origin: false,
   });
+
+  // Calculate Dispatch Timer Loop
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const now = new Date();
+      const cutoff = new Date();
+      
+      // Set daily container lockdown cutoff threshold to 4:00 PM
+      cutoff.setHours(16, 0, 0, 0);
+
+      if (now.getTime() > cutoff.getTime()) {
+        cutoff.setDate(cutoff.getDate() + 1);
+      }
+
+      const difference = cutoff.getTime() - now.getTime();
+
+      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((difference / (1000 * 60)) % 60);
+      const seconds = Math.floor((difference / 1000) % 60);
+
+      setTimeLeft(
+        `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+      );
+    };
+
+    calculateTimeRemaining();
+    const timer = setInterval(calculateTimeRemaining, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleFilterSection = (section: string) => {
     setExpandedFilters(prev => ({ ...prev, [section]: !prev[section] }));
@@ -82,7 +116,6 @@ const Products = () => {
     return count;
   }, [activeCategory, maxPrice, selectedGender, selectedSize, selectedActivity, showOutOfStock]);
 
-  // Framer Motion Protocols
   const sectionContainerVariants = {
     hidden: { opacity: 0 },
     whileInView: {
@@ -133,11 +166,7 @@ const Products = () => {
                 key={`typewriter-char-${idx}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{
-                  duration: 0.04,
-                  delay: idx * 0.06,
-                  ease: "linear"
-                }}
+                transition={{ duration: 0.04, delay: idx * 0.06, ease: "linear" }}
               >
                 {letter}
               </motion.span>
@@ -176,24 +205,27 @@ const Products = () => {
         </div>
       </header>
 
-      {/* RAPID PERFORMANCE METRICS BANNER STRIP */}
-      <div className="bg-neutral-950 border-b border-neutral-900 py-6">
+      {/* ==================== HIGH-URGENCY PERFORMANCE METRICS & COUNTDOWN STRIP ==================== */}
+      <div className="bg-neutral-950 border-b border-neutral-900 py-8">
         <div className="container max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div>
-            <span className="block text-xl md:text-3xl font-black text-white">500K+</span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-neutral-500">Athletes Served</span>
+          <div className="space-y-1">
+            <span className="block text-2xl md:text-4xl font-black text-white tracking-tight">500K+</span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-neutral-500 font-bold block">Athletes Served</span>
           </div>
-          <div>
-            <span className="block text-xl md:text-3xl font-black text-primary">100%</span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-neutral-500">Label Disclosures</span>
+          <div className="space-y-1">
+            <span className="block text-2xl md:text-4xl font-black text-primary tracking-tight">100%</span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-neutral-500 font-bold block">Label Disclosures</span>
           </div>
-          <div>
-            <span className="block text-xl md:text-3xl font-black text-white">WADA / ISO</span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-neutral-500">Certified Batches</span>
+          <div className="space-y-1">
+            <span className="block text-2xl md:text-4xl font-black text-white tracking-tight">WADA / ISO</span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-neutral-500 font-bold block">Certified Batches</span>
           </div>
-          <div>
-            <span className="block text-xl md:text-3xl font-black text-white">24 Hour</span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-neutral-500">Logistics Fulfillment</span>
+          {/* Real-time Countdown Element */}
+          <div className="space-y-1">
+            <span className="block text-2xl md:text-4xl font-black font-mono tracking-tighter text-orange-500 tabular-nums">
+              {timeLeft}
+            </span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-neutral-400 font-extrabold block">Fulfillment Dispatch Countdown</span>
           </div>
         </div>
       </div>
@@ -231,7 +263,7 @@ const Products = () => {
           <div className="grid xl:grid-cols-[260px_1fr] gap-10 items-start">
             
             {/* STARK ACCORDION FILTER SIDEBAR */}
-            <aside className="space-y-1 hidden xl:block pr-4 sticky top-24 max-h-[80vh] overflow-y-auto scrollbar-none text-left border-r border-neutral-900">
+            <aside className="space-y-1 hidden xl:block pr-4  sticky top-24 max-h-[80vh] overflow-y-auto scrollbar-none text-left border-r border-neutral-900">
               
               {/* ACCORDION MODULE 1: GENDER */}
               <div className="border-b border-neutral-900 py-3.5">
@@ -330,7 +362,7 @@ const Products = () => {
             {/* PRECISE CLONE STOREFRONT LAYOUT - IMAGES FILL CONTAINER COMPLETELY */}
             <div className="space-y-6">
               
-              {/* Mobile quick swipe horizontal filter layout fallbacks */}
+              {/* Mobile quick swipe horizontal layout fallbacks */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-2 xl:hidden scrollbar-none">
                 <Button 
                   variant={activeCategory === null ? "default" : "outline"} size="sm" 
@@ -364,7 +396,7 @@ const Products = () => {
                         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                         className="group flex flex-col text-left relative"
                       >
-                        {/* REPLICATED CULT LIGHT GREY FULL IMAGE BACKDROP CELL */}
+                        {/* CULT FULL IMAGE BACKDROP BOX */}
                         <div className="w-full aspect-square relative bg-[#141414] rounded-none mb-3.5 flex items-center justify-center overflow-hidden border border-neutral-900/60">
                           <Link to={`/products/${p.id}`} className="w-full h-full block cursor-pointer">
                             <img
@@ -373,7 +405,7 @@ const Products = () => {
                             />
                           </Link>
 
-                          {/* REPLICATED FLOATING LABELS */}
+                          {/* REPLICATED STICKERS */}
                           {isNewArrival && (
                             <div className="absolute top-0 left-0 bg-white text-black font-mono font-black text-[9px] tracking-widest px-2.5 py-1 uppercase">
                               New Arrival
@@ -386,13 +418,12 @@ const Products = () => {
                           )}
                         </div>
 
-                        {/* LIGHT WEIGHT PRODUCT CONTENT META CARD STACK */}
+                        {/* PRODUCT CONTENT CARD INFO STACK */}
                         <div className="space-y-1 px-0.5">
                           <h3 className="text-[13px] font-bold tracking-tight text-neutral-200 group-hover:text-primary transition-colors line-clamp-1">
                             <Link to={`/products/${p.id}`}>{p.name}</Link>
                           </h3>
                           
-                          {/* Rating metadata metrics layer */}
                           <div className="flex items-center gap-1.5 text-[11px] font-bold text-neutral-500">
                             <div className="flex items-center text-amber-500">
                               <Star className="h-3 w-3 fill-current stroke-none" /> 
@@ -402,7 +433,6 @@ const Products = () => {
                             <span className="font-medium text-neutral-500 font-mono">{p.reviews || 12} Reviews</span>
                           </div>
 
-                          {/* Replicated Pricing metrics layer block */}
                           <div className="flex items-center gap-2 pt-0.5 text-xs">
                             <span className="font-extrabold text-white text-sm">₹{p.price.toLocaleString()}</span>
                             <span className="text-neutral-600 line-through font-medium">₹{p.mrp.toLocaleString()}</span>
@@ -460,7 +490,7 @@ const Products = () => {
                   isEven ? "-right-20 -top-20 bg-primary/20" : "-left-20 -bottom-20 bg-primary/20"
                 )} />
 
-                {/* TEXT DYNAMICS BLOCK: GLIDES SEAMLESSLY FROM DOWN SIDE UP TO UPSIDE VIA SCROLL INTERSECTION */}
+                {/* TEXT LAYER: RISING TRANSITIONS */}
                 <motion.div variants={textGlideUpVariants} className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-neutral-900/80 border border-neutral-800 rounded-md">
                     <Activity className="h-3.5 w-3.5 text-primary" />
@@ -499,7 +529,7 @@ const Products = () => {
                   </div>
                 </motion.div>
 
-                {/* IMAGE DYNAMICS BLOCK: LINKABLE DIRECT REDIRECT WITH IMMERSIVE ZOOM SCALING EFFECTS ON SCREEN ENTRY */}
+                {/* IMAGE LAYER: SCROLL DRIVEN ENTRANCE ZOOM EFFECT */}
                 <motion.div variants={imageScrollZoomVariants} className="w-full lg:w-1/2 flex items-center justify-center relative">
                   <Link to={`/products/${p.id}`} className="relative w-full max-w-[300px] md:max-w-[380px] aspect-square block cursor-pointer">
                     <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/10 to-transparent blur-[70px] pointer-events-none group-hover:scale-125 transition-transform duration-700" />
@@ -515,7 +545,7 @@ const Products = () => {
         </div>
       </section>
 
-      {/* ==================== SECTION 4: THE SUBSCRIPTION PASS TIERS ==================== */}
+      {/* ==================== SECTION 4: SUBSCRIPTION MEMBERSHIP PASSES ==================== */}
       <section className="py-24 bg-black border-t border-neutral-900 relative">
         <div className="container max-w-6xl mx-auto px-4">
           
@@ -529,7 +559,7 @@ const Products = () => {
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
             
-            {/* CARD 1: ELITE PASS */}
+            {/* ELITE COMPUND PASS CARD */}
             <div className="bg-gradient-to-b from-neutral-950 to-neutral-900 border border-primary/20 p-8 rounded-3xl flex flex-col justify-between relative overflow-hidden group">
               <div className="absolute top-0 right-0 bg-primary text-black font-black font-mono px-4 py-1 rounded-bl-xl text-[9px] uppercase tracking-widest">
                 Recommended Lineup
@@ -561,13 +591,13 @@ const Products = () => {
                   <span className="block text-[10px] uppercase font-mono text-neutral-500">Subscription Cost</span>
                   <span className="text-3xl font-black text-white tracking-tight">₹4,499<span className="text-xs font-light text-neutral-500">/mo</span></span>
                 </div>
-                <Button className="bg-primary hover:bg-primary/90 text-black font-black uppercase text-xs tracking-wider px-6 rounded-xl h-11">
+                <Button className="bg-primary text-black font-black uppercase text-xs tracking-wider px-6 rounded-xl h-11">
                   Activate Pass
                 </Button>
               </div>
             </div>
 
-            {/* CARD 2: PRO PASS */}
+            {/* BASE PRO PASS CARD */}
             <div className="bg-neutral-950 border border-neutral-900 p-8 rounded-3xl flex flex-col justify-between group">
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
