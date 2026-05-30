@@ -84,15 +84,7 @@ const Products = () => {
                     src={p.image}
                     alt={p.name}
                     loading="lazy"
-                    className="relative h-full w-full object-contain drop-shadow-[0_10px_30px_hsl(var(--primary)/0.3)] transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-3"
-                    style={{ mixBlendMode: "multiply" }}
-                  />
-                  <img
-                    src={p.image}
-                    alt=""
-                    aria-hidden
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-contain opacity-0 dark:opacity-100 transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-3"
+                    className="relative h-full w-full object-contain drop-shadow-[0_10px_30px_hsl(var(--primary)/0.35)] transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-3"
                   />
                 </div>
               </Link>

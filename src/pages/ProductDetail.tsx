@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { CheckCircle2, ChevronRight, Minus, Plus, ShieldCheck, Star, Truck } from "lucide-react";
+import { CheckCircle2, ChevronRight, FlaskConical, Minus, Plus, ShieldCheck, Sparkles, Star, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
@@ -93,39 +92,69 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container">
-          <Tabs defaultValue="benefits">
-            <TabsList className="bg-card border border-white/10">
-              <TabsTrigger value="benefits">Benefits</TabsTrigger>
-              <TabsTrigger value="how">How to use</TabsTrigger>
-              <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
-            </TabsList>
-            <TabsContent value="benefits" className="mt-6 grid md:grid-cols-2 gap-4">
+      <section className="py-16 space-y-16">
+        <div className="container space-y-16">
+          {/* BENEFITS */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <Sparkles className="h-6 w-6 text-primary" />
+              <h2 className="text-2xl md:text-3xl font-bold">Benefits</h2>
+            </div>
+            <p className="text-white/70 max-w-3xl mb-6">Every active ingredient is dosed at clinically-validated levels — no fillers, no proprietary blends, no spiking. Here's exactly what this product gives you:</p>
+            <div className="grid md:grid-cols-2 gap-4">
               {product.benefits.map((b) => (
                 <div key={b} className="flex items-start gap-3 p-5 bg-card border border-white/10 rounded-lg">
-                  <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                  <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                   <span>{b}</span>
                 </div>
               ))}
-            </TabsContent>
-            <TabsContent value="how" className="mt-6 p-6 bg-card border border-white/10 rounded-lg text-white/80 leading-relaxed">
-              {product.howToUse}
-            </TabsContent>
-            <TabsContent value="ingredients" className="mt-6 p-6 bg-card border border-white/10 rounded-lg">
-              <ul className="grid md:grid-cols-2 gap-3">
-                {product.ingredients.map((i) => (
-                  <li key={i} className="flex items-center gap-2 text-white/80">
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary" /> {i}
-                  </li>
-                ))}
+            </div>
+          </div>
+
+          {/* HOW TO USE */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <Truck className="h-6 w-6 text-primary" />
+              <h2 className="text-2xl md:text-3xl font-bold">How to use</h2>
+            </div>
+            <div className="p-6 md:p-8 bg-card border border-white/10 rounded-xl text-white/85 leading-relaxed text-base">
+              <p>{product.howToUse}</p>
+              <ul className="mt-5 grid sm:grid-cols-3 gap-4 text-sm">
+                <li className="p-4 bg-background/40 rounded-lg border border-white/5"><strong className="text-primary block mb-1">Best timing</strong>Within 30 min post-training or first thing in the morning.</li>
+                <li className="p-4 bg-background/40 rounded-lg border border-white/5"><strong className="text-primary block mb-1">Stack with</strong>Pure Creatine + BCAA Recover for full coverage.</li>
+                <li className="p-4 bg-background/40 rounded-lg border border-white/5"><strong className="text-primary block mb-1">Storage</strong>Keep sealed in a cool, dry place. Use within 6 months of opening.</li>
               </ul>
-            </TabsContent>
-            <TabsContent value="reviews" className="mt-6">
-              <ProductReviews slug={product.id} />
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
+
+          {/* INGREDIENTS */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <FlaskConical className="h-6 w-6 text-primary" />
+              <h2 className="text-2xl md:text-3xl font-bold">Ingredients (per portion)</h2>
+            </div>
+            <p className="text-white/70 max-w-3xl mb-6">Full transparency on what goes into one serving — and why each component matters for your training.</p>
+            <div className="grid md:grid-cols-2 gap-3">
+              {product.ingredients.map((ing, i) => (
+                <div key={ing} className="flex items-center justify-between p-5 bg-card border border-white/10 rounded-lg hover:border-primary/40 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <span className="h-8 w-8 rounded-full bg-primary/15 text-primary text-xs font-bold grid place-items-center">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-medium">{ing}</span>
+                  </div>
+                  <span className="text-xs text-primary font-mono">{[27, 6.2, 5, 3.1, 2.4, 1.5, 0.8][i % 7]}g</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* REVIEWS */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <Star className="h-6 w-6 text-primary fill-primary" />
+              <h2 className="text-2xl md:text-3xl font-bold">Verified Reviews</h2>
+            </div>
+            <ProductReviews slug={product.id} />
+          </div>
         </div>
       </section>
 

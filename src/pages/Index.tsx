@@ -347,22 +347,31 @@ const Index = () => {
         </div>
       </section>
 
-      {/* EXPERTS */}
+      {/* EXPERTS — infinite marquee */}
       <section className="py-24 bg-black/40 border-y border-white/10 overflow-hidden">
-        <ScrollReveal className="container mb-10">
+        <ScrollReveal className="container mb-10 text-center">
           <p className="text-xs tracking-[0.4em] text-primary mb-3">MEET OUR EXPERTS</p>
-          <h2 className="text-3xl md:text-5xl font-bold max-w-xl text-white">The minds behind the formulas</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-white">The minds behind the formulas</h2>
+          <p className="mt-4 text-white/65 max-w-2xl mx-auto">Scientists, coaches and athletes who shape every Ergogenic blend.</p>
         </ScrollReveal>
-        <div className="overflow-x-auto pb-4">
-          <div className="container flex gap-5 min-w-max">
-            {experts.map((e) => (
-              <div key={e.name} className="w-[280px] shrink-0 bg-card border border-white/10 rounded-xl p-6 hover-lift">
-                <div className="h-12 w-12 rounded-full bg-primary/20 grid place-items-center text-primary font-bold">
-                  {e.name.split(" ").map((s) => s[0]).join("").slice(0, 2)}
+        <div className="relative">
+          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[hsl(var(--ink))] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[hsl(var(--ink))] to-transparent z-10 pointer-events-none" />
+          <div className="marquee gap-5">
+            {[...experts, ...experts].map((e, i) => (
+              <div key={i} className="w-[300px] shrink-0 bg-card border border-white/10 rounded-xl p-6 hover-lift">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={`https://i.pravatar.cc/120?img=${[12, 47, 8, 32, 15, 44][i % 6]}`}
+                    alt={e.name}
+                    className="h-14 w-14 rounded-full ring-2 ring-primary/40 object-cover"
+                  />
+                  <div>
+                    <p className="font-semibold text-white">{e.name}</p>
+                    <p className="text-[10px] text-primary uppercase tracking-widest mt-0.5">{e.role}</p>
+                  </div>
                 </div>
-                <p className="mt-5 font-semibold text-white">{e.name}</p>
-                <p className="text-xs text-primary uppercase tracking-widest mt-1">{e.role}</p>
-                <p className="mt-3 text-sm text-white/65">{e.desc}</p>
+                <p className="mt-4 text-sm text-white/65 leading-relaxed">{e.desc}</p>
               </div>
             ))}
           </div>
