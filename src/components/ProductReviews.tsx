@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Image as ImageIcon, Star, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 
-type Review = { id: string; user_id: string; rating: number; title: string | null; body: string; created_at: string; approved: boolean };
+type Review = { id: string; user_id: string; rating: number; title: string | null; body: string; created_at: string; approved: boolean; image_url: string | null };
 
 export const ProductReviews = ({ slug }: { slug: string }) => {
   const { user } = useAuth();
@@ -18,6 +18,8 @@ export const ProductReviews = ({ slug }: { slug: string }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const load = async () => {
     const { data } = await supabase.from("reviews").select("*").eq("product_slug", slug).order("created_at", { ascending: false });
@@ -43,13 +45,28 @@ export const ProductReviews = ({ slug }: { slug: string }) => {
     e.preventDefault();
     if (!user) return;
     setSubmitting(true);
+    let image_url: string | null = null;
+    try {
+      if (file) {
+        const path = `${user.id}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
+        const { error: upErr } = await supabase.storage.from("review-photos").upload(path, file);
+        if (upErr) throw upErr;
+        const { data } = supabase.storage.from("review-photos").getPublicUrl(path);
+        image_url = data.publicUrl;
+      }
+    } catch (err: any) {
+      setSubmitting(false);
+      toast({ title: "Photo upload failed", description: err.message, variant: "destructive" });
+      return;
+    }
     const { error } = await supabase.from("reviews").insert({
-      user_id: user.id, product_slug: slug, rating, title: title || null, body,
+      user_id: user.id, product_slug: slug, rating, title: title || null, body, image_url,
     });
     setSubmitting(false);
     if (error) { toast({ title: "Couldn't post", description: error.message, variant: "destructive" }); return; }
     toast({ title: "Thanks for the review!" });
-    setTitle(""); setBody(""); setRating(5);
+    setTitle(""); setBody(""); setRating(5); setFile(null);
+    if (fileInput.current) fileInput.current.value = "";
     load();
   };
 
@@ -73,7 +90,27 @@ export const ProductReviews = ({ slug }: { slug: string }) => {
             </div>
             <Input placeholder="Review title (optional)" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={120} className="bg-background border-white/15" />
             <Textarea required placeholder="Share your honest experience…" value={body} onChange={(e) => setBody(e.target.value)} maxLength={1500} className="bg-background border-white/15" rows={4} />
-            <Button type="submit" disabled={submitting || !body.trim()} className="bg-primary hover:bg-primary/90">{submitting ? "Posting…" : "Post review"}</Button>
+            <div className="flex flex-wrap items-center gap-3">
+              <input
+                ref={fileInput}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              />
+              <Button type="button" variant="outline" size="sm" onClick={() => fileInput.current?.click()} className="border-white/20 bg-transparent">
+                <ImageIcon className="h-4 w-4 mr-1" /> {file ? "Change photo" : "Add product photo"}
+              </Button>
+              {file && (
+                <span className="text-xs text-white/70 flex items-center gap-1 max-w-[12rem] truncate">
+                  {file.name}
+                  <button type="button" onClick={() => { setFile(null); if (fileInput.current) fileInput.current.value = ""; }}>
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              )}
+              <Button type="submit" disabled={submitting || !body.trim()} className="bg-primary hover:bg-primary/90 ml-auto">{submitting ? "Posting…" : "Post review"}</Button>
+            </div>
           </form>
         )}
       </div>
@@ -90,6 +127,11 @@ export const ProductReviews = ({ slug }: { slug: string }) => {
           </div>
           {r.title && <p className="font-semibold mb-1">{r.title}</p>}
           <p className="text-sm text-white/75 whitespace-pre-wrap">{r.body}</p>
+          {r.image_url && (
+            <a href={r.image_url} target="_blank" rel="noreferrer" className="block mt-3 max-w-xs rounded-lg overflow-hidden border border-white/10 hover:border-primary/50 transition">
+              <img src={r.image_url} alt="Customer photo" loading="lazy" className="w-full h-auto object-cover" />
+            </a>
+          )}
         </div>
       ))}
       {!reviews.filter(r=>r.approved).length && <p className="text-sm text-white/40 text-center py-6">Be the first to review this product.</p>}

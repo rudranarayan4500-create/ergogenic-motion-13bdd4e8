@@ -8,7 +8,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Products from "./pages/Products.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
 import Ingredients from "./pages/Ingredients.tsx";
-import Reviews from "./pages/Reviews.tsx";
+import Gallery from "./pages/Gallery.tsx";
 import Resources from "./pages/Resources.tsx";
 import About from "./pages/About.tsx";
 import Contact from "./pages/Contact.tsx";
@@ -39,7 +39,7 @@ const App = () => (
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/ingredients" element={<Ingredients />} />
-              <Route path="/reviews" element={<Reviews />} />
+              <Route path="/gallery" element={<Gallery />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
