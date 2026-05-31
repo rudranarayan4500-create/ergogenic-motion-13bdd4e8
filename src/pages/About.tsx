@@ -1,3 +1,4 @@
+
 import {
   CheckCircle2,
   Dumbbell,
@@ -10,7 +11,6 @@ import {
   ChevronRight,
   Star,
   Truck,
-  Beaker,
   Globe,
 } from "lucide-react";
 
@@ -56,19 +56,22 @@ const ingredients = [
 
 const team = [
   {
-    name: "Dr. Aryan Kapoor",
-    role: "Sports Nutrition Specialist",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop",
+    name: "Aarav Mehta",
+    role: "Certified Strength Coach",
+    img: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 8.13.03 PM.jpeg",
+    desc: "Specializes in hypertrophy programming, advanced strength cycles and athlete performance optimization.",
   },
   {
-    name: "Coach Daniel Roy",
-    role: "Elite Strength Coach",
-    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200&auto=format&fit=crop",
+    name: "Dr. Sarah Khan",
+    role: "Sports Nutrition Scientist",
+    img: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 8.15.32 PM.jpeg",
+    desc: "Works on evidence-based supplementation and recovery systems for elite athletes.",
   },
   {
-    name: "Dr. Maya Sharma",
-    role: "Biochemist & Formulator",
-    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop",
+    name: "Ryan Brooks",
+    role: "Performance Specialist",
+    img: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 7.38.06 PM.jpeg",
+    desc: "Focuses on explosive power training, endurance development and functional movement.",
   },
 ];
 
@@ -260,43 +263,114 @@ const About = () => {
         </div>
       </section>
 
-      {/* TEAM */}
-      <section className="py-24">
+      {/* TEAM FLIP CARDS */}
+      <section className="py-28 overflow-hidden">
         <div className="container">
-          <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
+          <ScrollReveal className="text-center max-w-3xl mx-auto mb-16">
             <p className="text-xs tracking-[0.4em] text-primary mb-3">
-              OUR EXPERTS
+              OUR EXPERT TEAM
             </p>
 
-            <h2 className="text-4xl md:text-5xl font-bold">
-              The people behind the science
+            <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+              Built by professionals who live performance
             </h2>
+
+            <p className="mt-6 text-white/65 text-lg">
+              Our coaches, nutritionists and scientists work together to build
+              supplements designed for real-world athletic performance.
+            </p>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {team.map((member, i) => (
-              <ScrollReveal key={member.name} delay={i * 80}>
-                <div className="group overflow-hidden rounded-3xl border border-white/10 bg-card">
-                  <div className="aspect-[4/5] overflow-hidden">
-                    <img
-                      src={member.img}
-                      alt={member.name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
+          <div className="overflow-x-auto scrollbar-hide pb-6">
+            <div className="flex gap-8 min-w-max px-2">
+              {team.map((member, i) => (
+                <motion.div
+                  key={member.name}
+                  initial={{ opacity: 0, x: 120 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{
+                    duration: 0.7,
+                    delay: i * 0.15,
+                  }}
+                  viewport={{ once: true }}
+                  className="group perspective"
+                >
+                  <div className="relative h-[520px] w-[340px] duration-700 transform-style-preserve-3d group-hover:rotate-y-180">
+                    
+                    {/* FRONT */}
+                    <div className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden border border-white/10 bg-card shadow-2xl">
+                      <img
+                        src={member.img}
+                        alt={member.name}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
 
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold">
-                      {member.name}
-                    </h3>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-                    <p className="mt-2 text-primary">
-                      {member.role}
-                    </p>
+                      <div className="absolute bottom-0 left-0 p-7">
+                        <p className="text-primary text-sm tracking-widest uppercase">
+                          Ergogenic Expert
+                        </p>
+
+                        <h3 className="text-3xl font-bold mt-2">
+                          {member.name}
+                        </h3>
+
+                        <p className="text-white/75 mt-2">
+                          {member.role}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* BACK */}
+                    <div className="absolute inset-0 rotate-y-180 backface-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-[#111] to-[#1d1d1d] p-8 flex flex-col justify-between">
+                      <div>
+                        <div className="h-20 w-20 rounded-2xl bg-primary/15 grid place-items-center">
+                          <Dumbbell className="h-10 w-10 text-primary" />
+                        </div>
+
+                        <h3 className="mt-8 text-3xl font-bold">
+                          {member.name}
+                        </h3>
+
+                        <p className="text-primary mt-2 font-medium">
+                          {member.role}
+                        </p>
+
+                        <p className="mt-6 text-white/70 leading-relaxed">
+                          {member.desc}
+                        </p>
+                      </div>
+
+                      <div className="pt-8 border-t border-white/10">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs text-white/40 uppercase tracking-widest">
+                              Experience
+                            </p>
+
+                            <p className="font-semibold mt-1">
+                              10+ Years
+                            </p>
+                          </div>
+
+                          <div>
+                            <p className="text-xs text-white/40 uppercase tracking-widest">
+                              Specialty
+                            </p>
+
+                            <p className="font-semibold mt-1">
+                              Elite Performance
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
-                </div>
-              </ScrollReveal>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -344,60 +418,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* VALUES */}
-      <section className="py-24">
-        <div className="container">
-          <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-xs tracking-[0.4em] text-primary mb-3">
-              WHY ERGOGENIC
-            </p>
-
-            <h2 className="text-4xl md:text-5xl font-bold">
-              More than supplements
-            </h2>
-          </ScrollReveal>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Award,
-                title: "Premium Quality",
-                desc: "Only premium raw materials and clinically validated ingredients.",
-              },
-              {
-                icon: Users,
-                title: "Athlete Focused",
-                desc: "Created with real-world athlete feedback and testing.",
-              },
-              {
-                icon: Globe,
-                title: "Global Standards",
-                desc: "Manufactured under strict international quality protocols.",
-              },
-              {
-                icon: Truck,
-                title: "Fast Delivery",
-                desc: "Quick shipping and secure packaging across India.",
-              },
-            ].map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 80}>
-                <div className="bg-card border border-white/10 rounded-2xl p-7 hover-lift">
-                  <item.icon className="h-10 w-10 text-primary" />
-
-                  <h3 className="mt-5 text-xl font-bold">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-3 text-white/65">
-                    {item.desc}
-                  </p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="py-28 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.25),transparent_60%)]" />
@@ -432,3 +452,4 @@ const About = () => {
 };
 
 export default About;
+
