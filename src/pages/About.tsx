@@ -295,7 +295,7 @@ const About = () => {
                   viewport={{ once: true }}
                   className="group perspective"
                 >
-                  <div className="relative h-[520px] w-[340px] duration-700 transform-style-preserve-3d group-hover:rotate-y-180">
+                  <div className="relative h-[420px] w-[315px] duration-700 transform-style-preserve-3d group-hover:rotate-y-180"> 
                     
                     {/* FRONT */}
                     <div className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden border border-white/10 bg-card shadow-2xl">
