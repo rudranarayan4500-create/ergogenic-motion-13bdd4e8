@@ -50,7 +50,7 @@ const ingredients = [
 
 const testimonials = [
   { name: "Arjun S.", role: "Powerlifter", text: "Super Whey mixes effortlessly and the gains are real. Best whey I've used in 8 years of training.", img: "https://i.pravatar.cc/120?img=11" },
-  { name: "Neha R.", role: "CrossFit Athlete", text: "Lean Shot gave me clean energy without crash. My conditioning has never been better.", img: "https://i.pravatar.cc/120?img=47" },
+  { name: "Neha R.", role: "CrossFit Athlete", text: "Lean Shot gave me clean energy without crash. My conditioning has never been better.", img: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 7.38.06 PM.jpeg" },
   { name: "Rohit M.", role: "Bodybuilder", text: "Plasma Mass actually delivers clean calories. Up 6kg in three months without any bloat.", img: "https://i.pravatar.cc/120?img=15" },
   { name: "Kavya P.", role: "Marathon Runner", text: "BCAA Recover is now a non-negotiable in my long runs. Recovery is dramatically better.", img: "https://i.pravatar.cc/120?img=32" },
   { name: "Vikram T.", role: "Strength Coach", text: "Finally a brand that publishes lab reports. I recommend Ergogenic to all my athletes.", img: "https://i.pravatar.cc/120?img=12" },
