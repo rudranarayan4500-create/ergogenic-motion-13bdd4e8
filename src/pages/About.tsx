@@ -1,431 +1,385 @@
+import { useState } from "react";
 import {
-  CheckCircle2,
+  ArrowLeft,
+  ArrowRight,
   Dumbbell,
+  Flame,
+  HeartPulse,
   ShieldCheck,
   Sparkles,
-  FlaskConical,
-  HeartPulse,
-  Award,
-  Users,
-  ChevronRight,
   Star,
-  Truck,
-  Beaker,
-  Globe,
+  Trophy,
+  Zap,
 } from "lucide-react";
-
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-
+import { motion, AnimatePresence } from "framer-motion";
 import { PageHero } from "@/components/PageHero";
 import { Counter } from "@/components/Counter";
-import { ScrollReveal } from "@/components/ScrollReveal";
-import { Button } from "@/components/ui/button";
+import { CheckCircle2 } from "lucide-react";
 
-const certifications = [
-  "Third-Party Lab Tested",
-  "FSSAI Approved",
-  "No Amino Spiking",
-  "Transparent Labels",
-  "Athlete Approved",
-  "Clinically Dosed",
-];
-
-const ingredients = [
+const athletes = [
   {
-    title: "Whey Protein Isolate",
-    icon: Dumbbell,
-    desc: "Fast-digesting premium protein engineered for lean muscle growth and rapid recovery.",
+    name: "Arjun Mehta",
+    role: "IFBB Athlete",
+    level: "Professional Bodybuilder",
+    img: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%208.15.32%20PM.jpeg",
+    desc: "Arjun uses Ergogenic Whey Isolate, Creatine and Pre-X before every heavy push session.",
+    stats: [
+      "Bench Press: 180KG",
+      "Stage Weight: 92KG",
+      "8 Years Training",
+    ],
   },
   {
-    title: "Creatine Monohydrate",
-    icon: Sparkles,
-    desc: "Clinically proven to increase strength, power output and training performance.",
+    name: "Ritika Sharma",
+    role: "CrossFit Elite",
+    level: "National Athlete",
+    img: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%209.28.42%20PM.jpeg",
+    desc: "Focuses on endurance, recovery and explosive performance with BCAA Recover.",
+    stats: [
+      "VO2 Max Focus",
+      "Recovery Specialist",
+      "5x National Finalist",
+    ],
   },
   {
-    title: "L-Citrulline",
-    icon: FlaskConical,
-    desc: "Improves blood flow, nitric oxide production and muscular endurance.",
-  },
-  {
-    title: "Electrolytes Blend",
-    icon: HeartPulse,
-    desc: "Hydration-focused minerals that support endurance and recovery.",
-  },
-];
-
-const team = [
-  {
-    name: "Dr. Aryan Kapoor",
-    role: "Sports Nutrition Specialist",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    name: "Coach Daniel Roy",
-    role: "Elite Strength Coach",
-    img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    name: "Dr. Maya Sharma",
-    role: "Biochemist & Formulator",
-    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop",
-  },
-];
-
-const reviews = [
-  {
-    name: "Rahul S.",
+    name: "Karan Singh",
     role: "Powerlifter",
-    text: "The cleanest whey I've used in years. Recovery and strength both improved dramatically.",
+    level: "Strength Athlete",
+    img: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%208.13.03%20PM.jpeg",
+    desc: "Uses Creatine X and Mass Gainer during heavy off-season power blocks.",
+    stats: [
+      "Deadlift: 320KG",
+      "Squat: 280KG",
+      "Strength Coach",
+    ],
+  },
+];
+
+const pillars = [
+  {
+    icon: ShieldCheck,
+    title: "Lab Tested",
+    desc: "Every batch goes through independent third-party testing for purity and performance.",
   },
   {
-    name: "Neha P.",
-    role: "CrossFit Athlete",
-    text: "Finally a supplement brand that actually discloses every ingredient properly.",
+    icon: Sparkles,
+    title: "Zero Amino Spiking",
+    desc: "No cheap fillers. No hidden blends. Pure transparent formulations only.",
   },
   {
-    name: "Arjun K.",
-    role: "Bodybuilder",
-    text: "The pumps, energy and recovery are unreal. Ergogenic became my daily stack.",
+    icon: Zap,
+    title: "Performance Driven",
+    desc: "Clinical dosages engineered for real gym performance and athletic recovery.",
+  },
+];
+
+const supplements = [
+  {
+    icon: Dumbbell,
+    title: "Whey Isolate",
+    desc: "Ultra-filtered whey isolate for lean muscle recovery and rapid absorption.",
+  },
+  {
+    icon: Flame,
+    title: "Fat Burner",
+    desc: "Thermogenic support with clean energy and metabolism optimization.",
+  },
+  {
+    icon: HeartPulse,
+    title: "Recovery Formula",
+    desc: "Supports muscle repair, joint health and reduced soreness post training.",
+  },
+  {
+    icon: Trophy,
+    title: "Mass Gainer",
+    desc: "High-calorie clean bulking formula designed for lean growth phases.",
   },
 ];
 
 const About = () => {
+  const [active, setActive] = useState(0);
+
+  const next = () => {
+    setActive((prev) => (prev + 1) % athletes.length);
+  };
+
+  const prev = () => {
+    setActive((prev) => (prev - 1 + athletes.length) % athletes.length);
+  };
+
   return (
     <div className="bg-[hsl(var(--ink))] text-white overflow-hidden">
-      {/* HERO */}
       <PageHero
         eyebrow="About Ergogenic"
-        title="Built for athletes who demand more"
-        subtitle="Science-backed supplements engineered for real performance, recovery and transparency."
+        title="Built by athletes. Verified by science."
+        subtitle="Premium sports nutrition engineered for serious athletes who demand transparency, performance and recovery."
       />
 
-      {/* STORY */}
+      {/* HERO SHOWCASE */}
       <section className="py-24 relative">
-        <div className="absolute inset-0 bg-grid-white/[0.03]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,0,0.15),transparent_60%)]" />
 
-        <div className="container relative grid lg:grid-cols-2 gap-16 items-center">
-          <ScrollReveal direction="left">
+        <div className="container relative">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-xs tracking-[0.4em] text-primary mb-4">
-                OUR STORY
+              <p className="text-primary tracking-[0.4em] text-xs uppercase mb-4">
+                Elite Nutrition
               </p>
 
-              <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-                We built Ergogenic to fix the supplement industry.
+              <h2 className="text-5xl md:text-6xl font-black leading-tight">
+                SUPPLEMENTS
+                <span className="block text-gradient-red">
+                  BUILT FOR WAR
+                </span>
               </h2>
 
-              <p className="mt-6 text-white/75 leading-relaxed text-lg">
-                Most supplement brands focus on marketing first and quality
-                second. We decided to reverse that. Ergogenic was founded by
-                athletes, coaches and researchers who were tired of hidden
-                formulas, amino spiking and under-dosed ingredients.
+              <p className="mt-6 text-white/70 leading-relaxed text-lg">
+                Ergogenic is not another flashy supplement brand.
+                Every scoop is formulated with clinical dosing,
+                premium imported ingredients and athlete-first transparency.
               </p>
 
-              <p className="mt-5 text-white/70 leading-relaxed">
-                Every formula we create is transparently labeled, clinically
-                dosed and independently tested for purity and performance.
-                Because athletes deserve supplements they can actually trust.
-              </p>
-
-              <div className="mt-8 grid sm:grid-cols-2 gap-4">
+              <div className="mt-8 grid gap-4">
                 {[
-                  "Independent Lab Testing",
-                  "Clinically Effective Doses",
-                  "Transparent Ingredient Labels",
-                  "No Proprietary Blends",
+                  "Third-party tested ingredients",
+                  "Performance-focused formulas",
+                  "Transparent labels",
+                  "Built with athletes & scientists",
                 ].map((item) => (
                   <div
                     key={item}
-                    className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-xl p-4"
+                    className="flex items-center gap-3"
                   >
-                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                    <span className="text-white/85">{item}</span>
+                    <CheckCircle2 className="h-5 w-5 text-primary" />
+                    <span className="text-white/80">{item}</span>
                   </div>
                 ))}
               </div>
             </div>
-          </ScrollReveal>
 
-          <ScrollReveal direction="right">
-            <div className="relative">
-              <div className="absolute -inset-5 bg-primary/20 blur-3xl rounded-full" />
+            {/* FLIP CARD SLIDER */}
+            <div className="relative flex items-center justify-center">
+              <button
+                onClick={prev}
+                className="absolute left-0 z-20 bg-primary/20 hover:bg-primary/40 border border-primary/30 p-3 rounded-full transition-all"
+              >
+                <ArrowLeft />
+              </button>
 
-              <motion.img
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.5 }}
-                src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png"
-                alt="Ergogenic Supplements"
-                className="relative rounded-3xl border border-white/10 shadow-2xl object-cover"
-              />
+              <button
+                onClick={next}
+                className="absolute right-0 z-20 bg-primary/20 hover:bg-primary/40 border border-primary/30 p-3 rounded-full transition-all"
+              >
+                <ArrowRight />
+              </button>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active}
+                  initial={{ opacity: 0, x: 200 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -200 }}
+                  transition={{ duration: 0.5 }}
+                  className="w-full max-w-md"
+                >
+                  <div className="group perspective">
+                    <div className="relative h-[560px] w-full transition-all duration-700 preserve-3d group-hover:rotate-y-180">
+                      
+                      {/* FRONT */}
+                      <div className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_80px_rgba(255,0,0,0.2)]">
+                        <img
+                          src={athletes[active].img}
+                          alt={athletes[active].name}
+                          className="h-full w-full object-cover"
+                        />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+                        <div className="absolute bottom-0 p-8">
+                          <div className="flex gap-1 mb-3">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className="h-4 w-4 fill-primary text-primary"
+                              />
+                            ))}
+                          </div>
+
+                          <h3 className="text-3xl font-black">
+                            {athletes[active].name}
+                          </h3>
+
+                          <p className="text-primary font-semibold mt-1">
+                            {athletes[active].role}
+                          </p>
+
+                          <p className="text-white/60 mt-2">
+                            Hover to view details
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* BACK */}
+                      <div className="absolute inset-0 rotate-y-180 backface-hidden rounded-3xl bg-gradient-to-br from-black via-zinc-900 to-red-950 border border-primary/20 p-8 flex flex-col justify-center">
+                        <h3 className="text-3xl font-black">
+                          {athletes[active].name}
+                        </h3>
+
+                        <p className="text-primary mt-2 font-semibold">
+                          {athletes[active].level}
+                        </p>
+
+                        <p className="mt-6 text-white/70 leading-relaxed">
+                          {athletes[active].desc}
+                        </p>
+
+                        <div className="mt-8 space-y-3">
+                          {athletes[active].stats.map((s) => (
+                            <div
+                              key={s}
+                              className="bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+                            >
+                              {s}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="mt-8 flex items-center gap-2 text-primary">
+                          <Sparkles className="h-5 w-5" />
+                          Verified Ergogenic Athlete
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
 
       {/* STATS */}
-      <section className="py-24 bg-black/40 border-y border-white/10">
-        <div className="container grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="py-24 border-y border-white/10 bg-black/40">
+        <div className="container grid md:grid-cols-4 gap-6">
           {[
-            { v: 15000, s: "+", l: "Athletes Served" },
-            { v: 250, s: "+", l: "Lab Tests Per Year" },
-            { v: 24, s: "h", l: "Dispatch Speed" },
-            { v: 100, s: "%", l: "Transparency" },
-          ].map((item, i) => (
-            <ScrollReveal key={i} delay={i * 80}>
-              <div className="bg-card border border-white/10 rounded-2xl p-8 text-center hover-lift">
-                <div className="text-4xl md:text-5xl font-bold text-gradient-red">
-                  <Counter to={item.v} suffix={item.s} />
-                </div>
-
-                <p className="mt-3 text-xs tracking-widest uppercase text-white/60">
-                  {item.l}
-                </p>
+            { value: 15000, suffix: "+", label: "Athletes Served" },
+            { value: 250, suffix: "+", label: "Gym Partners" },
+            { value: 100, suffix: "%", label: "Transparent Labels" },
+            { value: 24, suffix: "h", label: "Shipping Dispatch" },
+          ].map((item) => (
+            <div
+              key={item.label}
+              className="bg-card border border-white/10 rounded-2xl p-8 text-center hover:-translate-y-2 transition-all duration-500"
+            >
+              <div className="text-5xl font-black text-gradient-red">
+                <Counter to={item.value} suffix={item.suffix} />
               </div>
-            </ScrollReveal>
+
+              <p className="mt-3 text-white/60 uppercase tracking-widest text-xs">
+                {item.label}
+              </p>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* CERTIFICATIONS */}
+      {/* PILLARS */}
       <section className="py-24">
         <div className="container">
-          <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-xs tracking-[0.4em] text-primary mb-3">
-              CERTIFIED QUALITY
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-primary tracking-[0.4em] text-xs uppercase mb-4">
+              Why Ergogenic
             </p>
 
-            <h2 className="text-4xl md:text-5xl font-bold">
-              Trusted at every level
+            <h2 className="text-5xl font-black">
+              Science. Purity. Results.
             </h2>
+          </div>
 
-            <p className="mt-5 text-white/65">
-              From sourcing to manufacturing, every step is verified for purity,
-              safety and effectiveness.
-            </p>
-          </ScrollReveal>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {certifications.map((item, i) => (
-              <ScrollReveal key={item} delay={i * 70}>
-                <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 hover:border-primary/40 transition-all">
-                  <div className="absolute top-0 right-0 h-28 w-28 bg-primary/10 blur-3xl group-hover:bg-primary/20 transition-all" />
-
-                  <div className="relative flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-primary/15 grid place-items-center">
-                      <ShieldCheck className="h-6 w-6 text-primary" />
-                    </div>
-
-                    <h3 className="font-semibold text-lg">{item}</h3>
-                  </div>
+          <div className="grid md:grid-cols-3 gap-6 mt-16">
+            {pillars.map((item) => (
+              <div
+                key={item.title}
+                className="group bg-card border border-white/10 rounded-3xl p-8 hover:border-primary/30 transition-all duration-500 hover:-translate-y-3"
+              >
+                <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <item.icon className="h-8 w-8 text-primary" />
                 </div>
-              </ScrollReveal>
+
+                <h3 className="mt-6 text-2xl font-bold">
+                  {item.title}
+                </h3>
+
+                <p className="mt-4 text-white/65 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* INGREDIENTS */}
+      {/* SUPPLEMENTS */}
       <section className="py-24 bg-black/40 border-y border-white/10">
         <div className="container">
-          <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-xs tracking-[0.4em] text-primary mb-3">
-              PERFORMANCE INGREDIENTS
+          <div className="text-center">
+            <p className="text-primary tracking-[0.4em] text-xs uppercase mb-4">
+              Product Range
             </p>
 
-            <h2 className="text-4xl md:text-5xl font-bold">
-              Engineered with clinically backed compounds
+            <h2 className="text-5xl font-black">
+              Engineered Supplement Stack
             </h2>
-          </ScrollReveal>
+          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {ingredients.map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 80}>
-                <div className="group bg-card border border-white/10 rounded-2xl p-7 hover-lift">
-                  <div className="h-14 w-14 rounded-xl bg-primary/15 grid place-items-center text-primary">
-                    <item.icon className="h-7 w-7" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+            {supplements.map((item) => (
+              <div
+                key={item.title}
+                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-card p-8 hover:border-primary/40 transition-all duration-500 hover:-translate-y-3"
+              >
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-primary/15 flex items-center justify-center">
+                    <item.icon className="h-7 w-7 text-primary" />
                   </div>
 
-                  <h3 className="mt-6 text-xl font-bold">
+                  <h3 className="mt-6 text-2xl font-bold">
                     {item.title}
                   </h3>
 
-                  <p className="mt-3 text-white/65 leading-relaxed">
+                  <p className="mt-4 text-white/65 leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
-              </ScrollReveal>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* TEAM */}
-      <section className="py-24">
-        <div className="container">
-          <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-xs tracking-[0.4em] text-primary mb-3">
-              OUR EXPERTS
-            </p>
+      {/* FINAL CTA */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,0,0.2),transparent_60%)]" />
 
-            <h2 className="text-4xl md:text-5xl font-bold">
-              The people behind the science
-            </h2>
-          </ScrollReveal>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {team.map((member, i) => (
-              <ScrollReveal key={member.name} delay={i * 80}>
-                <div className="group overflow-hidden rounded-3xl border border-white/10 bg-card">
-                  <div className="aspect-[4/5] overflow-hidden">
-                    <img
-                      src={member.img}
-                      alt={member.name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold">
-                      {member.name}
-                    </h3>
-
-                    <p className="mt-2 text-primary">
-                      {member.role}
-                    </p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section className="py-24 bg-black/40 border-y border-white/10">
-        <div className="container">
-          <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-xs tracking-[0.4em] text-primary mb-3">
-              ATHLETE REVIEWS
-            </p>
-
-            <h2 className="text-4xl md:text-5xl font-bold">
-              Trusted by serious athletes
-            </h2>
-          </ScrollReveal>
-
-          <div className="grid lg:grid-cols-3 gap-6">
-            {reviews.map((review, i) => (
-              <ScrollReveal key={review.name} delay={i * 80}>
-                <div className="bg-card border border-white/10 rounded-2xl p-7 hover-lift">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: 5 }).map((_, idx) => (
-                      <Star
-                        key={idx}
-                        className="h-4 w-4 fill-primary text-primary"
-                      />
-                    ))}
-                  </div>
-
-                  <p className="text-white/80 leading-relaxed">
-                    "{review.text}"
-                  </p>
-
-                  <div className="mt-6">
-                    <p className="font-semibold">{review.name}</p>
-                    <p className="text-sm text-primary">
-                      {review.role}
-                    </p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* VALUES */}
-      <section className="py-24">
-        <div className="container">
-          <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-xs tracking-[0.4em] text-primary mb-3">
-              WHY ERGOGENIC
-            </p>
-
-            <h2 className="text-4xl md:text-5xl font-bold">
-              More than supplements
-            </h2>
-          </ScrollReveal>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Award,
-                title: "Premium Quality",
-                desc: "Only premium raw materials and clinically validated ingredients.",
-              },
-              {
-                icon: Users,
-                title: "Athlete Focused",
-                desc: "Created with real-world athlete feedback and testing.",
-              },
-              {
-                icon: Globe,
-                title: "Global Standards",
-                desc: "Manufactured under strict international quality protocols.",
-              },
-              {
-                icon: Truck,
-                title: "Fast Delivery",
-                desc: "Quick shipping and secure packaging across India.",
-              },
-            ].map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 80}>
-                <div className="bg-card border border-white/10 rounded-2xl p-7 hover-lift">
-                  <item.icon className="h-10 w-10 text-primary" />
-
-                  <h3 className="mt-5 text-xl font-bold">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-3 text-white/65">
-                    {item.desc}
-                  </p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-28 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.25),transparent_60%)]" />
-
-        <ScrollReveal className="container relative text-center max-w-3xl">
-          <p className="text-xs tracking-[0.4em] text-primary mb-4">
-            READY TO LEVEL UP?
-          </p>
-
-          <h2 className="text-4xl md:text-6xl font-bold leading-tight">
-            Fuel your performance with supplements built for results.
+        <div className="container text-center relative">
+          <h2 className="text-5xl md:text-7xl font-black leading-tight">
+            BUILT FOR
+            <span className="block text-gradient-red">
+              ELITE PERFORMANCE
+            </span>
           </h2>
 
-          <p className="mt-6 text-white/70 text-lg">
-            Transparent formulas. Clinical doses. Zero compromises.
+          <p className="mt-6 text-white/70 max-w-2xl mx-auto text-lg">
+            Join thousands of athletes transforming their recovery,
+            performance and physique with Ergogenic supplements.
           </p>
 
-          <Button
-            asChild
-            size="lg"
-            className="mt-10 bg-primary hover:bg-primary/90 h-12 px-10 shadow-glow"
-          >
-            <Link to="/products">
-              Explore Products
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </ScrollReveal>
+          <button className="mt-10 bg-primary hover:bg-primary/90 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-105 shadow-[0_10px_40px_rgba(255,0,0,0.4)]">
+            Start Your Transformation
+          </button>
+        </div>
       </section>
     </div>
   );
