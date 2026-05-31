@@ -20,6 +20,7 @@ import AdminLogin from "./pages/AdminLogin.tsx";
 import Admin from "./pages/Admin.tsx";
 import { AdminGuard } from "./components/AdminGuard.tsx";
 import { AuthProvider } from "./hooks/useAuth.tsx";
+import { ThemeProvider } from "./hooks/useTheme.tsx";
 import { Layout } from "./components/Layout.tsx";
 import { IntroOverlay } from "./components/IntroOverlay.tsx";
 
@@ -27,6 +28,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <ThemeProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -55,6 +57,7 @@ const App = () => (
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
