@@ -28,30 +28,68 @@ const Checkout = () => {
     const shipping: Record<string, string> = {};
     fd.forEach((v, k) => { shipping[k] = String(v); });
     try {
-      // 1. Create order in DB
       const fakeRzpOrderId = `order_TEST_${Math.random().toString(36).slice(2, 12)}`;
       const { data: order, error } = await supabase.from("orders").insert({
         user_id: user.id, total, status: "created", razorpay_order_id: fakeRzpOrderId, shipping,
       }).select().single();
       if (error) throw error;
 
-      // 2. Sample items
       await supabase.from("order_items").insert([
         { order_id: order.id, product_slug: "super-whey", name: "Super Whey", qty: 1, price: 4499 },
         { order_id: order.id, product_slug: "bcaa-recover", name: "BCAA Recover", qty: 1, price: 1899 },
       ]);
 
-      // 3. Open Razorpay TEST checkout (demo mode — simulated success)
-      await new Promise((r) => setTimeout(r, 1200)); // simulate gateway latency
-      const fakePaymentId = `pay_TEST_${Math.random().toString(36).slice(2, 12)}`;
+      if (pay === "cod") {
+        await supabase.from("orders").update({ status: "placed" }).eq("id", order.id);
+        setPaid(`COD-${order.id.slice(0, 8)}`);
+        toast({ title: "Order placed", description: "Pay on delivery." });
+        setBusy(false);
+        return;
+      }
 
-      // 4. Mark paid
-      await supabase.from("orders").update({ status: "paid", razorpay_payment_id: fakePaymentId }).eq("id", order.id);
-      setPaid(fakePaymentId);
-      toast({ title: "Payment successful (test mode)", description: `Order #${order.id.slice(0,8)} confirmed.` });
+      // Razorpay real test checkout
+      const Razorpay = (window as any).Razorpay;
+      if (!Razorpay) throw new Error("Razorpay SDK not loaded. Refresh and try again.");
+      const options = {
+        key: "rzp_test_1DP5mmOlF5G5ag", // public Razorpay TEST key
+        amount: total * 100,
+        currency: "INR",
+        name: "Ergogenic Nutrients",
+        description: `Order #${order.id.slice(0, 8)}`,
+        image: "/favicon.png",
+        prefill: {
+          name: `${shipping.first_name ?? ""} ${shipping.last_name ?? ""}`.trim(),
+          email: shipping.email ?? user.email ?? "",
+          contact: shipping.phone ?? "",
+        },
+        notes: { order_id: order.id },
+        theme: { color: "#E50914" },
+        method: pay === "upi" ? { upi: true, card: false, netbanking: false, wallet: false } : undefined,
+        handler: async (resp: any) => {
+          await supabase.from("orders").update({
+            status: "paid",
+            razorpay_payment_id: resp.razorpay_payment_id,
+          }).eq("id", order.id);
+          setPaid(resp.razorpay_payment_id);
+          toast({ title: "Payment successful (test mode)", description: `Order #${order.id.slice(0, 8)} confirmed.` });
+        },
+        modal: {
+          ondismiss: () => {
+            setBusy(false);
+            toast({ title: "Payment cancelled", description: "You closed the checkout.", variant: "destructive" });
+          },
+        },
+      };
+      const rzp = new Razorpay(options);
+      rzp.on("payment.failed", (resp: any) => {
+        setBusy(false);
+        toast({ title: "Payment failed", description: resp.error?.description ?? "Try again.", variant: "destructive" });
+      });
+      rzp.open();
     } catch (err: any) {
       toast({ title: "Checkout failed", description: err.message, variant: "destructive" });
-    } finally { setBusy(false); }
+      setBusy(false);
+    }
   };
 
   if (paid) return (
