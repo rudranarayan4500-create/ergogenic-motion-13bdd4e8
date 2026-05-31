@@ -89,7 +89,7 @@ const Products = () => {
     // Inject the uploaded high-fidelity assets and specific parameters into the client data matrix loop
     let result = products.map((p, index) => {
       // Dynamic mapping for Lean Shot
-      if (p.id === "lean-shot" || p.slug === "lean-shot") {
+      if (p.id === "lean- shot" || p.slug === "lean-shot") {
         return {
           ...p,
           image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 7.38.06 PM.jpeg"
