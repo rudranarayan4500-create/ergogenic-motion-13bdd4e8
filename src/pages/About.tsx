@@ -312,7 +312,7 @@ const About = () => {
                           Ergogenic Expert
                         </p>
 
-                        <h3 className="text-3xl font-bold mt-2">
+                        <h3 className="text-2xl font-bold mt-2">
                           {member.name}
                         </h3>
 
@@ -325,7 +325,7 @@ const About = () => {
                     {/* BACK */}
                     <div className="absolute inset-0 rotate-y-180 backface-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-[#111] to-[#1d1d1d] p-8 flex flex-col justify-between">
                       <div>
-                        <div className="h-20 w-20 rounded-2xl bg-primary/15 grid place-items-center">
+                        <div className="h-16 w-16 rounded-2xl bg-primary/15 grid place-items-center">
                           <Dumbbell className="h-10 w-10 text-primary" />
                         </div>
 
