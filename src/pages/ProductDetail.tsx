@@ -70,9 +70,9 @@ const ProductDetail = () => {
 
   const add = () => toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
 
-  const productIngredients = product.mainIngredients || [];
-  const productBenefits = product.keyBenefits || [];
-  const productFlavours = product.flavours || ["Standard Edition"];
+  const productIngredients = (product as any).mainIngredients || product.ingredients || [];
+  const productBenefits = (product as any).keyBenefits || product.benefits || [];
+  const productFlavours = (product as any).flavours || ["Standard Edition"];
 
   const baseClasses = isDark
     ? "bg-black text-white"
