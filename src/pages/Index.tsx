@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Beaker,
@@ -24,15 +23,11 @@ import {
 } from "@/components/ui/accordion";
 import { Logo } from "@/components/Logo";
 import { ProductCard } from "@/components/ProductCard";
+import { Counter } from "@/components/Counter";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { TypewriterText } from "@/components/TypewriterText";
-
-// GSAP Core & Plugins
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-gsap.registerPlugin(ScrollTrigger);
+import { ScrollReveal } from "@/components/ScrollReveal";
+import { categories, products } from "@/data/products";
 
 const trustItems = [
   "Lab Tested",
@@ -60,455 +55,336 @@ const testimonials = [
   { name: "Kavya P.", role: "Marathon Runner", text: "BCAA Recover is now a non-negotiable in my long runs. Recovery is dramatically better.", img: "https://i.pravatar.cc/120?img=32" },
   { name: "Vikram T.", role: "Strength Coach", text: "Finally a brand that publishes lab reports. I recommend Ergogenic to all my athletes.", img: "https://i.pravatar.cc/120?img=12" },
   { name: "Priya K.", role: "Fitness Coach", text: "The taste, the dosing, the transparency — Ergogenic raised the bar for Indian supplements.", img: "https://i.pravatar.cc/120?img=44" },
+  { name: "Sahil D.", role: "Calisthenics Athlete", text: "Pure Creatine works exactly as it should. Strength is up across all my pulls.", img: "https://i.pravatar.cc/120?img=8" },
+  { name: "Meera J.", role: "Yoga Instructor", text: "Daily Multi keeps my immunity solid through hectic class schedules. Love it.", img: "https://i.pravatar.cc/120?img=49" },
 ];
 
 const experts = [
   { name: "Dr. Anand Kapoor", role: "Sports Nutrition Lead", desc: "PhD in Exercise Physiology with 15 years guiding elite athletes." },
   { name: "Dr. Ritika Mehra", role: "Clinical R&D", desc: "Formulator for over 40 ergogenic blends across pro sports teams." },
   { name: "Coach Daniel Roy", role: "Performance Coach", desc: "International strength coach focused on evidence-based protocols." },
+  { name: "Sneha Iyer", role: "Quality & Compliance", desc: "Leads our independent third-party lab verification program." },
+  { name: "Karan Bhalla", role: "Athlete Programs", desc: "Works directly with national-level athletes on supplementation." },
+  { name: "Dr. Maya Sharma", role: "Biochemist", desc: "Designs absorption-optimized matrices for our flagship products." },
 ];
 
 const partners = ["IRON REALM", "FORGE GYMS", "ATHLETIC LAB", "PEAK FITNESS", "VOLT TRAINING", "PRO STRENGTH"];
 
-export const Index = () => {
+const Index = () => {
   const featured = products.slice(0, 4);
-  const mainViewportRef = useRef<HTMLDivElement>(null);
-
-  // Structural DOM Refs for 3D Pinning/Interpolation
-  const heroRef = useRef<HTMLDivElement>(null);
-  const categoriesRef = useRef<HTMLDivElement>(null);
-  const featuredRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const comparisonRef = useRef<HTMLDivElement>(null);
-  const testimonialsRef = useRef<HTMLDivElement>(null);
-
-  // Stat Numeric Target Hooks
-  const proteinCountRef = useRef<HTMLSpanElement>(null);
-  const customerCountRef = useRef<HTMLSpanElement>(null);
-
-  useGSAP(() => {
-    // ----------------------------------------------------
-    // 1. HARDWARE ACCELERATED COUNTER TIMELINES
-    // ----------------------------------------------------
-    const counterMetrics = { protein: 0, customers: 0 };
-    gsap.to(counterMetrics, {
-      protein: 27,
-      customers: 15000,
-      scrollTrigger: {
-        trigger: statsRef.current,
-        start: "top 85%",
-      },
-      onUpdate: () => {
-        if (proteinCountRef.current) {
-          proteinCountRef.current.innerText = Math.floor(counterMetrics.protein).toString();
-        }
-        if (customerCountRef.current) {
-          customerCountRef.current.innerText = Math.floor(counterMetrics.customers).toLocaleString();
-        }
-      },
-      duration: 2.5,
-      ease: "power3.out",
-    });
-
-    // ----------------------------------------------------
-    // 2. HERO 3D Z-SPACE TUNNELING ON SCROLL
-    // ----------------------------------------------------
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-      }
-    })
-    .to(heroRef.current, {
-      scale: 1.35,
-      opacity: 0,
-      filter: "blur(15px)",
-      z: 150,
-      ease: "none"
-    });
-
-    // ----------------------------------------------------
-    // 3. SECTION-TO-SECTION 3D INTERPOLATIONS
-    // ----------------------------------------------------
-    const interactiveSections = [categoriesRef, featuredRef, comparisonRef, testimonialsRef];
-    
-    interactiveSections.forEach((section) => {
-      if (!section.current) return;
-
-      // Entry Perspective Warping
-      gsap.fromTo(section.current,
-        { scale: 0.88, opacity: 0, rotationX: -8, transformPerspective: 1200 },
-        {
-          scale: 1,
-          opacity: 1,
-          rotationX: 0,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section.current,
-            start: "top 95%",
-            end: "top 50%",
-            scrub: 1,
-          }
-        }
-      );
-
-      // Deep Exit Blurring & Zooming
-      gsap.to(section.current, {
-        scale: 1.12,
-        opacity: 0,
-        filter: "blur(10px)",
-        z: -50,
-        ease: "power1.in",
-        scrollTrigger: {
-          trigger: section.current,
-          start: "bottom 35%",
-          end: "bottom top",
-          scrub: true,
-        }
-      });
-    });
-  }, { scope: mainViewportRef });
+  const row1 = testimonials.slice(0, 4);
+  const row2 = testimonials.slice(4);
 
   return (
-    <div ref={mainViewportRef} className="bg-[#030303] text-white overflow-x-hidden antialiased select-none [perspective:1000px]">
-      
-      {/* 3D HERO CONTAINER */}
-      <section ref={heroRef} className="relative min-h-[100vh] flex items-center justify-center overflow-hidden will-change-transform z-20">
+    <div className="bg-[hsl(var(--ink))] text-white">
+      {/* HERO */}
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden">
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-30 scale-105"
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
           src="/videos/hero.mp4"
-          autoPlay muted loop playsInline
+          autoPlay
+          muted
+          loop
+          playsInline
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-[#030303]" />
-        <div className="absolute top-1/4 left-1/4 w-[450px] h-[450px] bg-primary/10 rounded-full filter blur-[120px] animate-pulse pointer-events-none" />
-
-        <div className="container relative z-10 py-32 text-center">
-          <div className="flex justify-center mb-8 transform hover:scale-105 transition-transform duration-500">
+        <div className="absolute inset-0 bg-grid-dark opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-[hsl(var(--ink))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,hsl(var(--primary)/0.25),transparent_60%)]" />
+        <div className="container relative z-10 py-32 text-center animate-fade-in">
+          <div className="flex justify-center mb-8">
             <Logo className="h-10 md:h-12" />
           </div>
-          <p className="text-xs md:text-sm tracking-[0.6em] text-primary mb-5 font-black">SCIENCE IN MOTION</p>
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.95] uppercase">
+          <p className="text-xs md:text-sm tracking-[0.5em] text-primary mb-5">SCIENCE IN MOTION</p>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]">
             FUEL{" "}
-            <span className="text-gradient-red block md:inline">
+            <span className="text-gradient-red">
               <TypewriterText text="EVOLVED" speed={120} delay={400} />
             </span>
           </h1>
-          <p className="mt-8 text-base md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed">
-            Performance nutrition engineered for athletes who train with intent.
-            Lab-tested, transparently dosed, made for physical evolution.
+          <p className="mt-6 text-lg md:text-xl text-white max-w-2xl mx-auto overflow-hidden">
+            <span className="inline-block animate-[fade-in_1.2s_ease-out_0.8s_both]">
+              Performance-focused nutrition engineered for athletes who train with intent.
+              Lab-tested, transparently dosed, made for evolution.
+            </span>
           </p>
-          <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-base h-14 px-10 shadow-glow rounded-xl w-full sm:w-auto">
-              <Link to="/products">Shop Catalog <ChevronRight className="ml-1 h-4 w-4" /></Link>
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-[fade-in_1s_ease-out_1s_both]">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-base h-12 px-8 shadow-glow">
+              <Link to="/products">Shop Now <ChevronRight className="ml-1 h-4 w-4" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-14 px-10 border-white/20 text-white hover:bg-white/5 bg-transparent backdrop-blur-md rounded-xl w-full sm:w-auto">
+            <Button asChild size="lg" variant="outline" className="h-12 px-8 border-white/30 text-white hover:bg-white/10 bg-transparent">
               <Link to="/ingredients">Explore Science</Link>
             </Button>
           </div>
-          <div className="mt-12 inline-flex items-center gap-3 text-sm text-neutral-400">
+          <div className="mt-10 inline-flex items-center gap-3 text-sm text-white/70 animate-[fade-in_1s_ease-out_1.2s_both]">
             <div className="flex -space-x-2">
               {[11, 47, 15, 32].map((i) => (
-                <img key={i} src={`https://i.pravatar.cc/40?img=${i}`} className="h-8 w-8 rounded-full border-2 border-black" alt="" />
+                <img key={i} src={`https://i.pravatar.cc/40?img=${i}`} className="h-8 w-8 rounded-full border-2 border-[hsl(var(--ink))]" alt="" />
               ))}
             </div>
-            <span><strong className="text-white font-bold">15,000+ Athletes</strong> trust Ergogenic</span>
+            <span><strong className="text-white">15,000+ Customers</strong> trust Ergogenic</span>
           </div>
         </div>
       </section>
 
-      {/* INFINITE TRUST RUNWAY */}
-      <section className="bg-primary text-primary-foreground py-5 overflow-hidden border-y border-white/10 relative z-30 shadow-2xl">
-        <div className="marquee gap-12 whitespace-nowrap text-xs font-black tracking-[0.25em] uppercase">
+      {/* TRUST BAR */}
+      <section className="bg-primary text-primary-foreground py-4 overflow-hidden border-y border-white/10">
+        <div className="marquee gap-12 whitespace-nowrap text-sm font-semibold tracking-widest uppercase">
           {[...trustItems, ...trustItems, ...trustItems].map((t, i) => (
             <span key={i} className="flex items-center gap-12">
               <span>{t}</span>
-              <span className="opacity-40 text-sm">✦</span>
+              <span className="opacity-50">◆</span>
             </span>
           ))}
         </div>
       </section>
 
-      {/* ASYMMETRIC NATURAL CARD CATEGORIES */}
-      <section ref={categoriesRef} className="py-32 relative z-20 will-change-transform">
+      {/* CATEGORIES */}
+      <section className="py-24 relative">
+        <div className="absolute inset-0 bg-grid-dark opacity-40" />
         <div className="container relative">
-          <div className="text-center max-w-2xl mx-auto mb-20">
-            <span className="text-xs tracking-[0.4em] text-primary font-bold bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full uppercase">BUILD YOUR STACK</span>
-            <h2 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mt-6">Engineered for your mission</h2>
-          </div>
-          
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
+            <p className="text-xs tracking-[0.4em] text-primary mb-3">BUILD YOUR STACK</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">Engineered for every goal</h2>
+            <p className="mt-4 text-white/65">Choose the category that matches your mission. Every product is dosed for results, not marketing.</p>
+          </ScrollReveal>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {categories.map((c, i) => {
-              const Icon = [Dumbbell, Zap, HeartPulse, Leaf][i] || Dumbbell;
+              const Icon = [Dumbbell, Zap, HeartPulse, Leaf][i];
               return (
-                <Link
-                  key={c.name}
-                  to={`/products?cat=${c.name}`}
-                  className="group relative bg-neutral-900/40 backdrop-blur-xl border border-white/5 hover:border-primary/30 p-8 block transition-all duration-500 shadow-xl"
-                  style={{ 
-                    borderRadius: i % 2 === 0 ? "32px 64px 32px 48px" : "48px 32px 64px 32px" 
-                  }}
-                >
-                  <div className="absolute -top-12 -right-12 h-36 w-36 rounded-full bg-primary/5 blur-2xl group-hover:bg-primary/20 transition-all duration-700" />
-                  <div className="h-14 w-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all duration-500 shadow-inner">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mt-8 text-2xl font-bold text-white tracking-tight">{c.name}</h3>
-                  <p className="mt-3 text-sm text-neutral-400 leading-relaxed">{c.description}</p>
-                  <div className="mt-8 inline-flex items-center text-xs font-bold tracking-wider text-primary uppercase">
-                    Explore Stack <ChevronRight className="h-3 w-3 ml-1 group-hover:translate-x-1.5 transition-transform" />
-                  </div>
-                </Link>
+                <ScrollReveal key={c.name} delay={i * 100}>
+                  <Link
+                    to={`/products?cat=${c.name}`}
+                    className="group relative bg-[hsl(var(--card))] border border-white/10 rounded-xl p-7 hover-lift overflow-hidden block"
+                  >
+                    <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary/10 blur-3xl group-hover:bg-primary/30 transition-colors" />
+                    <Icon className="h-8 w-8 text-primary" />
+                    <h3 className="mt-5 text-xl font-bold text-white">{c.name}</h3>
+                    <p className="mt-2 text-sm text-white/60">{c.description}</p>
+                    <div className="mt-6 inline-flex items-center text-sm text-primary">
+                      Explore <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
+                </ScrollReveal>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* PREMIUM INVENTORY CONFIGURATIONS */}
-      <section ref={featuredRef} className="py-32 bg-black/50 border-y border-white/5 relative z-20 will-change-transform">
+      {/* FEATURED PRODUCTS */}
+      <section className="py-24 bg-black/40 border-y border-white/10">
         <div className="container">
-          <div className="flex items-end justify-between mb-16 flex-wrap gap-8">
-            <div>
-              <p className="text-xs tracking-[0.4em] text-primary font-bold uppercase">PREMIUM INVENTORY</p>
-              <h2 className="text-4xl md:text-6xl font-black max-w-xl text-white tracking-tight mt-3">Top-rated formulations</h2>
-            </div>
-            <Button asChild variant="outline" className="border-white/10 bg-transparent hover:bg-white/5 text-white h-12 rounded-xl px-6">
-              <Link to="/products">View all configurations <ChevronRight className="ml-1 h-4 w-4" /></Link>
+          <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
+            <ScrollReveal direction="left">
+              <p className="text-xs tracking-[0.4em] text-primary mb-3">FEATURED PRODUCTS</p>
+              <h2 className="text-3xl md:text-5xl font-bold max-w-xl text-white">Top-rated by 15,000+ athletes</h2>
+            </ScrollReveal>
+            <Button asChild variant="outline" className="border-white/20 bg-transparent hover:bg-white/10 text-white">
+              <Link to="/products">View all products <ChevronRight className="ml-1 h-4 w-4" /></Link>
             </Button>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featured.map((p) => (
-              <div key={p.id} className="transform hover:scale-[1.02] transition-transform duration-500">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featured.map((p, i) => (
+              <ScrollReveal key={p.id} delay={i * 80}>
                 <ProductCard p={p} />
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SMOOTH COUNTER METRICS */}
-      <section ref={statsRef} className="py-28 relative z-20 bg-[#060606]">
-        <div className="container grid grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* STATS */}
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.12),transparent_60%)]" />
+        <div className="container relative grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
           {[
-            { ref: proteinCountRef, val: "0", s: "g", l: "Protein per serving" },
-            { ref: customerCountRef, val: "0", s: "+", l: "Verified Customers" },
-            { val: "4.9", s: "/5", l: "Avg. Athlete rating", static: true },
-            { val: "0", s: "%", l: "Amino spiking guarantee" },
+            { v: 27, s: "g", l: "Protein per serving" },
+            { v: 15000, s: "+", l: "Happy customers" },
+            { v: 4.9, s: "/5", l: "Avg. rating", float: true },
+            { v: 0, s: "%", l: "Amino spiking" },
           ].map((stat, i) => (
-            <div key={i} className="border border-white/5 rounded-2xl p-8 bg-neutral-900/30 backdrop-blur-md text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="text-4xl md:text-6xl font-black text-gradient-red tracking-tighter">
-                {stat.static ? (
-                  <span>4.9</span>
-                ) : (
-                  <span ref={stat.ref}>{stat.val}</span>
-                )}
-                <span className="text-2xl md:text-3xl text-primary ml-0.5">{stat.s}</span>
+            <ScrollReveal key={i} delay={i * 100}>
+              <div className="border border-white/10 rounded-xl p-8 bg-card/50 backdrop-blur">
+                <div className="text-4xl md:text-5xl font-bold text-gradient-red">
+                  {stat.float ? "4.9" : <Counter to={stat.v} suffix={stat.s} />}
+                  {stat.float && stat.s}
+                </div>
+                <p className="mt-3 text-sm text-white/60 uppercase tracking-widest">{stat.l}</p>
               </div>
-              <p className="mt-4 text-xs font-bold text-neutral-400 uppercase tracking-widest leading-relaxed">{stat.l}</p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>
 
-      {/* MATRIX COMPARISON GRID */}
-      <section ref={comparisonRef} className="py-32 bg-black/40 border-y border-white/5 relative z-20 will-change-transform">
+      {/* COMPARISON */}
+      <section className="py-24 bg-black/40 border-y border-white/10">
         <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-xs tracking-[0.4em] text-primary font-bold uppercase">THE DIFFERENCE</p>
-            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight mt-4">Ergogenic vs The Rest</h2>
-          </div>
-          <div className="overflow-hidden rounded-2xl border border-white/5 bg-neutral-900/10 backdrop-blur-md">
-            <table className="w-full text-left border-collapse">
-              <thead className="bg-white/5 border-b border-white/10">
-                <tr>
-                  <th className="p-6 font-bold text-neutral-300 text-sm md:text-base">Feature Matrix</th>
-                  <th className="p-6 font-bold text-primary text-sm md:text-base">Ergogenic</th>
-                  <th className="p-6 font-bold text-neutral-500 text-sm md:text-base">Typical Brands</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5 text-sm">
-                {[
-                  ["Transparent ingredient panel", true, false],
-                  ["Clinical dosing on every active", true, false],
-                  ["Zero amino spiking guarantee", true, false],
-                  ["Independent third-party lab tested", true, false],
-                  ["No proprietary blends", true, false],
-                  ["FSSAI Approved", true, true],
-                ].map(([feat, a, b], i) => (
-                  <tr key={i} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-6 text-neutral-200 font-medium">{feat as string}</td>
-                    <td className="p-6">{a ? <CheckCircle2 className="h-5 w-5 text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]" /> : <X className="h-5 w-5 text-neutral-700" />}</td>
-                    <td className="p-6">{b ? <CheckCircle2 className="h-5 w-5 text-neutral-500" /> : <X className="h-5 w-5 text-neutral-700" />}</td>
+          <ScrollReveal className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xs tracking-[0.4em] text-primary mb-3">THE DIFFERENCE</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">Ergogenic vs. The Rest</h2>
+            <p className="mt-4 text-white/65">We built Ergogenic to fix what the supplement industry got wrong.</p>
+          </ScrollReveal>
+          <ScrollReveal>
+            <div className="overflow-hidden rounded-xl border border-white/10">
+              <table className="w-full text-left">
+                <thead className="bg-white/5">
+                  <tr>
+                    <th className="p-5 font-semibold text-white">Feature</th>
+                    <th className="p-5 font-semibold text-primary">Ergogenic</th>
+                    <th className="p-5 font-semibold text-white/60">Typical brands</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* INGREDIENT TECH ARSENAL */}
-      <section className="py-32 relative z-20">
-        <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-20">
-            <p className="text-xs tracking-[0.4em] text-primary font-bold uppercase">BIO-ENGINEERING</p>
-            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight mt-4">The Tech Arsenal</h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ingredients.map((ing) => (
-              <div key={ing.name} className="bg-neutral-900/20 backdrop-blur-md border border-white/5 rounded-2xl p-8 hover:border-white/10 transition-colors h-full flex flex-col justify-between">
-                <div>
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center text-primary shadow-lg shadow-primary/5">
-                    <ing.icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-6 font-bold text-xl text-white tracking-tight">{ing.name}</h3>
-                  <p className="mt-3 text-sm text-neutral-400 leading-relaxed">{ing.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TEXTIMONIALS SECTION - Fluid Organic Floating Layout */}
-      <section ref={testimonialsRef} className="py-32 relative z-20 overflow-hidden will-change-transform bg-gradient-to-b from-[#030303] to-[#0a0203]">
-        <div className="container mb-20 text-center">
-          <span className="text-xs tracking-[0.4em] text-primary font-bold uppercase">ELITE REVIEWS</span>
-          <h2 className="text-4xl md:text-6xl font-extrabold text-white mt-4">Athlete Feedback</h2>
-        </div>
-        <div className="container max-w-5xl">
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((t, i) => (
-              <div 
-                key={i} 
-                className="relative bg-neutral-900/60 backdrop-blur-xl border border-white/5 p-8 transition-all duration-500 group shadow-[0_30px_70px_rgba(0,0,0,0.5)] hover:border-primary/30"
-                style={{ 
-                  borderRadius: i % 3 === 0 ? "50% 45% 40% 55% / 40% 55% 45% 50%" : i % 3 === 1 ? "40% 55% 50% 45% / 55% 40% 55% 45%" : "55% 40% 45% 55% / 45% 50% 40% 55%",
-                  boxShadow: "inset 0 0 20px rgba(255,255,255,0.02)"
-                }}
-              >
-                <div className="flex items-center gap-4">
-                  <img src={t.img} alt={t.name} className="h-12 w-12 rounded-full object-cover ring-2 ring-primary/30" />
-                  <div>
-                    <h4 className="font-bold text-white flex items-center gap-2 text-sm">
-                      {t.name}
-                      <span className="text-[9px] font-black uppercase bg-primary/20 text-primary px-1.5 py-0.5 rounded-sm tracking-widest">PRO</span>
-                    </h4>
-                    <p className="text-xs text-neutral-400">{t.role}</p>
-                  </div>
-                </div>
-                <div className="flex gap-0.5 my-4">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className="h-3.5 w-3.5 fill-primary text-primary" />
+                </thead>
+                <tbody className="divide-y divide-white/10">
+                  {[
+                    ["Transparent ingredient panel", true, false],
+                    ["Clinical dosing on every active", true, false],
+                    ["Zero amino spiking guarantee", true, false],
+                    ["Independent third-party lab tested", true, false],
+                    ["No proprietary blends", true, false],
+                    ["FSSAI Approved", true, true],
+                  ].map(([feat, a, b], i) => (
+                    <tr key={i} className="hover:bg-white/5">
+                      <td className="p-5 text-white">{feat as string}</td>
+                      <td className="p-5">{a ? <CheckCircle2 className="h-5 w-5 text-primary" /> : <X className="h-5 w-5 text-white/40" />}</td>
+                      <td className="p-5">{b ? <CheckCircle2 className="h-5 w-5 text-white/40" /> : <X className="h-5 w-5 text-white/40" />}</td>
+                    </tr>
                   ))}
-                </div>
-                <p className="text-sm text-neutral-300 italic leading-relaxed">"{t.text}"</p>
-              </div>
-            ))}
-          </div>
+                </tbody>
+              </table>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* THIRD-PARTY CERTIFICATIONS MARQUEE */}
-      <section className="py-24 bg-neutral-950 border-y border-white/5 relative z-20">
+      {/* INGREDIENTS */}
+      <section className="py-24">
         <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { i: ShieldCheck, t: "Lab Tested Batch Matrix" },
-              { i: CheckCircle2, t: "FSSAI Premium Certified" },
-              { i: Beaker, t: "Independent Purity Verification" },
-              { i: Sparkles, t: "Zero Spiking Guarantee" },
-            ].map(({ i: Icon, t }, idx) => (
-              <div key={idx} className="bg-neutral-900/20 border border-white/5 rounded-2xl p-6 text-center hover:bg-neutral-900/40 transition-colors">
-                <Icon className="h-8 w-8 text-primary mx-auto drop-shadow-[0_0_10px_rgba(var(--primary),0.3)]" />
-                <p className="mt-4 font-semibold text-neutral-200 text-sm tracking-wide">{t}</p>
-              </div>
+          <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
+            <p className="text-xs tracking-[0.4em] text-primary mb-3">TECH ARSENAL</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">The science behind every scoop</h2>
+            <p className="mt-4 text-white/65">A closer look at the ingredients powering our formulations.</p>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {ingredients.map((ing, i) => (
+              <ScrollReveal key={ing.name} delay={i * 80}>
+                <div className="bg-card border border-white/10 rounded-xl p-6 hover-lift h-full">
+                  <div className="h-12 w-12 rounded-lg bg-primary/15 grid place-items-center text-primary">
+                    <ing.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-5 font-semibold text-lg text-white">{ing.name}</h3>
+                  <p className="mt-2 text-sm text-white/65 leading-relaxed">{ing.desc}</p>
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CLINICAL LAB RESEARCH SYNDICATE */}
-      <section className="py-24 bg-black/40 border-b border-white/5 overflow-hidden relative z-20">
-        <div className="container mb-12 text-center">
-          <p className="text-xs tracking-[0.4em] text-primary font-bold uppercase">MEET OUR EXPERTS</p>
-          <h2 className="text-4xl md:text-5xl font-black text-white mt-3">Minds Behind the Formulas</h2>
+      {/* TESTIMONIALS */}
+      <section className="py-24 bg-gradient-to-br from-[hsl(var(--ink))] via-[hsl(0_0%_8%)] to-[hsl(357_60%_12%)] border-y border-white/10 overflow-hidden">
+        <ScrollReveal className="container mb-12 text-center">
+          <p className="text-xs tracking-[0.4em] text-primary mb-3">SUCCESS STORIES</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-white">Hear From Our Success Stories</h2>
+          <p className="mt-4 text-white/65 max-w-2xl mx-auto">Real people. Real performance. Real transformation.</p>
+        </ScrollReveal>
+        <div className="container">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 [perspective:1200px]">
+            {testimonials.map((t, i) => {
+              const tilts = ["-rotate-3", "rotate-2", "-rotate-1", "rotate-3", "-rotate-2", "rotate-1", "-rotate-3", "rotate-2"];
+              const offsets = ["translate-y-0", "translate-y-6", "-translate-y-2", "translate-y-4", "translate-y-1", "-translate-y-3", "translate-y-2", "translate-y-5"];
+              return (
+                <ScrollReveal key={i} delay={i * 70}>
+                  <div className={`group ${tilts[i]} ${offsets[i]} transition-all duration-500 hover:rotate-0 hover:translate-y-0`}>
+                    <div className="relative bg-[hsl(0_0%_8%)] border border-white/10 rounded-2xl p-6 shadow-[0_25px_60px_-15px_hsl(357_96%_46%/0.25)] hover:shadow-[0_30px_80px_-10px_hsl(357_96%_46%/0.55)] hover:border-primary/40 transition-all">
+                      <div className="absolute -top-3 -right-3 h-10 w-10 rounded-full bg-primary grid place-items-center text-primary-foreground text-xl font-serif shadow-lg">"</div>
+                      <div className="flex items-center gap-3">
+                        <img src={t.img} alt={t.name} className="h-12 w-12 rounded-full ring-2 ring-primary/40" />
+                        <div>
+                          <p className="font-semibold text-white flex items-center gap-1.5">
+                            {t.name}
+                            <span className="text-[10px] uppercase tracking-wider bg-primary/20 text-primary px-1.5 py-0.5 rounded">Verified</span>
+                          </p>
+                          <p className="text-xs text-white/60">{t.role}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-0.5 my-3">
+                        {Array.from({ length: 5 }).map((_, j) => (
+                          <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                        ))}
+                      </div>
+                      <p className="text-sm text-white/85 leading-relaxed">"{t.text}"</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
         </div>
+      </section>
+
+      {/* CERTIFICATIONS */}
+      <section className="py-24">
+        <div className="container">
+          <ScrollReveal className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xs tracking-[0.4em] text-primary mb-3">CERTIFICATIONS</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">Verified at every step</h2>
+          </ScrollReveal>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+            {[
+              { i: ShieldCheck, t: "Lab Tested" },
+              { i: CheckCircle2, t: "FSSAI Approved" },
+              { i: Beaker, t: "Quality Verified" },
+              { i: Sparkles, t: "Zero Spiking" },
+            ].map(({ i: Icon, t }, idx) => (
+              <ScrollReveal key={t} delay={idx * 80}>
+                <div className="bg-card border border-white/10 rounded-xl p-8 text-center">
+                  <Icon className="h-10 w-10 text-primary mx-auto" />
+                  <p className="mt-4 font-semibold text-white">{t}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* EXPERTS — infinite marquee */}
+      <section className="py-24 bg-black/40 border-y border-white/10 overflow-hidden">
+        <ScrollReveal className="container mb-10 text-center">
+          <p className="text-xs tracking-[0.4em] text-primary mb-3">MEET OUR EXPERTS</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-white">The minds behind the formulas</h2>
+          <p className="mt-4 text-white/65 max-w-2xl mx-auto">Scientists, coaches and athletes who shape every Ergogenic blend.</p>
+        </ScrollReveal>
         <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#030303] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#030303] to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[hsl(var(--ink))] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[hsl(var(--ink))] to-transparent z-10 pointer-events-none" />
           <div className="marquee gap-5">
             {[...experts, ...experts].map((e, i) => (
-              <div key={i} className="w-[320px] shrink-0 bg-neutral-900/40 border border-white/5 rounded-2xl p-6 backdrop-blur-md">
-                <div className="flex items-center gap-4">
+              <div key={i} className="w-[300px] shrink-0 bg-card border border-white/10 rounded-xl p-6 hover-lift">
+                <div className="flex items-center gap-3">
                   <img
-                    src={`https://i.pravatar.cc/120?img=${[12, 47, 8, 32, 15, 44][i % 3]}`}
+                    src={`https://i.pravatar.cc/120?img=${[12, 47, 8, 32, 15, 44][i % 6]}`}
                     alt={e.name}
-                    className="h-14 w-14 rounded-full ring-2 ring-primary/30 object-cover"
+                    className="h-14 w-14 rounded-full ring-2 ring-primary/40 object-cover"
                   />
                   <div>
-                    <p className="font-bold text-white text-base">{e.name}</p>
-                    <p className="text-[10px] text-primary uppercase tracking-widest font-bold mt-0.5">{e.role}</p>
+                    <p className="font-semibold text-white">{e.name}</p>
+                    <p className="text-[10px] text-primary uppercase tracking-widest mt-0.5">{e.role}</p>
                   </div>
                 </div>
-                <p className="mt-4 text-sm text-neutral-400 leading-relaxed">{e.desc}</p>
+                <p className="mt-4 text-sm text-white/65 leading-relaxed">{e.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ALLOCATION MATRIX COUNTDOWN */}
-      <section className="py-32 relative z-20 overflow-hidden bg-[#060001]">
-        <div className="absolute inset-0 bg-radial-gradient from-primary/10 to-transparent pointer-events-none" />
-        <div className="container relative text-center max-w-2xl mx-auto">
-          <span className="text-xs tracking-[0.4em] text-primary font-bold uppercase">ALLOCATION LIMIT</span>
-          <h2 className="text-4xl md:text-6xl font-black text-white mt-4 tracking-tight">Batch pricing active</h2>
-          <p className="mt-4 text-sm text-neutral-400">Secured allocations are closing shortly. Locked rates expire in:</p>
-          <div className="mt-12 scale-105 md:scale-110">
-            <CountdownTimer />
-          </div>
-          <Button asChild size="lg" className="mt-14 bg-primary hover:bg-primary/90 h-14 px-10 shadow-glow rounded-xl font-bold">
-            <Link to="/products">Secure My Allotment</Link>
-          </Button>
-        </div>
-      </section>
-
-      {/* COLLAPSIBLE FAQ SYSTEM */}
-      <section className="py-32 bg-black/60 border-t border-white/5 relative z-20">
-        <div className="container max-w-3xl">
-          <div className="text-center mb-16">
-            <p className="text-xs tracking-[0.4em] text-primary font-bold uppercase">SUPPORT DEPOT</p>
-            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mt-3">FAQ</h2>
-          </div>
-          <Accordion type="single" collapsible className="space-y-4">
-            {[
-              { q: "Are your products safe and tested?", a: "Yes. Every batch is tested at independent third-party labs and is FSSAI approved. We publish lab reports transparently." },
-              { q: "How should I take my supplements?", a: "Each product has detailed usage instructions on the label and product page. Most proteins are best post-workout with 200ml water or milk." },
-              { q: "Can I stack multiple products together?", a: "Absolutely. Our most common stack is Super Whey + Pure Creatine + BCAA Recover. Visit the product pages for personalized stacking guides." },
-              { q: "What is your shipping time?", a: "All orders ship within 24 hours. Standard delivery is 2-4 business days across India with free shipping over ₹999." },
-              { q: "What's your return policy?", a: "Sealed products can be returned within 7 days of delivery for a full refund. Opened products are non-returnable for hygiene reasons." },
-              { q: "Do you offer COD?", a: "Yes — UPI, all major cards, net banking and cash on delivery are supported across India." },
-            ].map((f, i) => (
-              <AccordionItem key={i} value={`f${i}`} className="bg-neutral-900/30 backdrop-blur-sm border border-white/5 rounded-2xl px-6">
-                <AccordionTrigger className="text-left font-bold text-white hover:no-underline text-base py-5">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-neutral-400 text-sm leading-relaxed pb-5">{f.a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </section>
-
-      {/* INDUSTRIAL BRANDING PARTNERS */}
-      <section className="py-20 border-t border-white/5 bg-[#030303] relative z-20">
+      {/* PARTNERS */}
+      <section className="py-16">
         <div className="container">
-          <p className="text-center text-xs tracking-[0.5em] text-neutral-600 font-bold mb-10 uppercase">TRUSTED BY NETWORK CORES</p>
+          <p className="text-center text-xs tracking-[0.4em] text-white/40 mb-8">TRUSTED BY INDUSTRY LEADERS</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
             {partners.map((p) => (
-              <div key={p} className="text-center text-neutral-600 font-black tracking-widest text-sm hover:text-white transition-colors duration-300">
+              <div key={p} className="text-center text-white/40 font-bold tracking-widest text-sm hover:text-white transition-colors">
                 {p}
               </div>
             ))}
@@ -516,25 +392,66 @@ export const Index = () => {
         </div>
       </section>
 
-      {/* INVERTED TERMINATION CTA */}
-      <section className="py-36 relative z-20 overflow-hidden bg-gradient-to-t from-black to-transparent">
-        <div className="container relative text-center max-w-3xl">
-          <Logo className="h-8 mx-auto mb-8 opacity-40" />
-          <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase">
-            Train harder. <span className="text-gradient-red block md:inline">Recover smarter.</span>
-          </h2>
-          <p className="mt-6 text-neutral-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
-            Join 15,000+ performance athletes who demand clinical transparent dosing.
-          </p>
-          <Button asChild size="lg" className="mt-12 bg-primary hover:bg-primary/90 h-14 px-12 shadow-glow rounded-xl font-bold">
-            <Link to="/products">Instant Access <ChevronRight className="ml-1 h-4 w-4" /></Link>
+      {/* OFFER + COUNTDOWN */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-transparent to-primary/30" />
+        <div className="absolute inset-0 bg-grid-dark opacity-40" />
+        <ScrollReveal className="container relative text-center">
+          <p className="text-xs tracking-[0.4em] text-primary mb-3">LIMITED TIME</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-white">Limited batch pricing available</h2>
+          <p className="mt-4 text-white/70 max-w-xl mx-auto">Save up to 25% on flagship products. Offer ends in:</p>
+          <div className="mt-10"><CountdownTimer /></div>
+          <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 h-12 px-8 shadow-glow">
+            <Link to="/products">Claim Offer</Link>
           </Button>
-          <div className="mt-14 flex justify-center gap-8 text-xs text-neutral-500 font-bold tracking-widest uppercase flex-wrap">
-            <span className="flex items-center gap-2"><Truck className="h-4 w-4 text-primary" /> Free Shipping Over ₹999</span>
-            <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> 100% Lab Verified</span>
-            <span className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" /> Zero Amino Spiking</span>
-          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-24 bg-black/40 border-y border-white/10">
+        <div className="container max-w-3xl">
+          <ScrollReveal className="text-center mb-12">
+            <p className="text-xs tracking-[0.4em] text-primary mb-3">FAQ</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white">Questions, answered</h2>
+          </ScrollReveal>
+          <Accordion type="single" collapsible className="space-y-3">
+            {[
+              { q: "Are your products safe and tested?", a: "Yes. Every batch is tested at independent third-party labs and is FSSAI approved. We publish lab reports on request." },
+              { q: "How should I take my supplements?", a: "Each product has detailed usage instructions on the label and product page. Most proteins are best post-workout with 200ml water or milk." },
+              { q: "Can I stack multiple products together?", a: "Absolutely. Our most common stack is Super Whey + Pure Creatine + BCAA Recover. Visit the product pages for personalized stacking guides." },
+              { q: "What is your shipping time?", a: "All orders ship within 24 hours. Standard delivery is 2-4 business days across India with free shipping over ₹999." },
+              { q: "What's your return policy?", a: "Sealed products can be returned within 7 days of delivery for a full refund. Opened products are non-returnable for hygiene reasons." },
+              { q: "Do you offer COD?", a: "Yes — UPI, all major cards, net banking and cash on delivery are supported across India." },
+            ].map((f, i) => (
+              <AccordionItem key={i} value={`f${i}`} className="bg-card border border-white/10 rounded-xl px-5">
+                <AccordionTrigger className="text-left font-semibold text-white">{f.q}</AccordionTrigger>
+                <AccordionContent className="text-white/75">{f.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="py-28 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.2),transparent_60%)]" />
+        <ScrollReveal className="container relative text-center max-w-3xl">
+          <Logo className="h-9 mx-auto mb-6 opacity-90" />
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
+            Train harder. <span className="text-gradient-red">Recover smarter.</span>
+          </h2>
+          <p className="mt-5 text-white/70 text-lg">
+            Join 15,000+ athletes who trust Ergogenic for transparent, performance-grade nutrition.
+          </p>
+          <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 h-12 px-10 shadow-glow">
+            <Link to="/products">Explore Products <ChevronRight className="ml-1 h-4 w-4" /></Link>
+          </Button>
+          <div className="mt-10 flex justify-center gap-8 text-xs text-white/50 tracking-widest uppercase flex-wrap">
+            <span className="flex items-center gap-2"><Truck className="h-4 w-4" /> Free shipping over ₹999</span>
+            <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> Lab tested</span>
+            <span className="flex items-center gap-2"><Sparkles className="h-4 w-4" /> Zero spiking</span>
+          </div>
+        </ScrollReveal>
       </section>
     </div>
   );
