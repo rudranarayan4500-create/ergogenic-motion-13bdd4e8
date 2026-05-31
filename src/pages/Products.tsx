@@ -108,7 +108,7 @@ const Products = () => {
           mrp: 1599,
           category: "Performance" as Category,
           tagline: "200-mesh pure micronized athletic phosphagen compound built to maximize systemic muscular cell hydration thresholds.",
-          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 9.30.47 PM.jpeg"
+          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg"
         };
       }
       return p;
