@@ -129,18 +129,18 @@ const Products = () => {
     whileInView: { 
       opacity: 1, 
       y: 0, 
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } 
     }
-  };
+  } as const;
 
   const imageScrollZoomVariants = {
     hidden: { opacity: 0, scale: 0.85 },
     whileInView: { 
       opacity: 1, 
       scale: 1, 
-      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } 
+      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } 
     }
-  };
+  } as const;
 
   return (
     <div className="bg-black text-white min-h-screen selection:bg-primary selection:text-black overflow-x-hidden antialiased">
