@@ -78,7 +78,7 @@ export default function AuthPage() {
           toast({ title: "Passwords don't match", variant: "destructive" });
           return;
         }
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email, password,
           options: {
             emailRedirectTo: window.location.origin,
@@ -89,11 +89,20 @@ export default function AuthPage() {
           },
         });
         if (error) throw error;
+        // Auto-confirm is on — try to immediately sign the user in
+        if (!data.session) {
+          await supabase.auth.signInWithPassword({ email, password });
+        }
         toast({ title: "Welcome to Ergogenic", description: "Account created successfully." });
         nav("/");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          if (/confirm/i.test(error.message)) {
+            throw new Error("Email not confirmed yet. Check your inbox or sign up again.");
+          }
+          throw error;
+        }
         nav("/");
       }
     } catch (err: any) {
