@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Bell, LogOut, Menu, Moon, ShoppingBag, Sun, User, X } from "lucide-react";
+import { Bell, LogOut, Menu, ShoppingBag, User, X } from "lucide-react"; // Removed Moon and Sun icons
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "@/hooks/useTheme";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client"; // Removed useTheme hook import
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,9 +32,10 @@ export const SiteHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
-  const { theme, setTheme } = useTheme();
   const [newOrders, setNewOrders] = useState(0);
-  const isDark = theme === "dark";
+
+  // Forced light mode styling by default since dark mode toggle is disabled
+  const isDark = false; 
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -112,15 +112,9 @@ export const SiteHeader = () => {
               <ShoppingBag className="h-5 w-5" />
             </Link>
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={iconClass}
-            aria-label="Toggle theme"
-            onClick={() => setTheme(isDark ? "light" : "dark")}
-          >
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
+
+          {/* Theme toggle button has been removed from here */}
+
           {user ? (
             <AlertDialog>
               <AlertDialogTrigger asChild>
