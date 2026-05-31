@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Bell, LogOut, Menu, ShoppingBag, User, X } from "lucide-react"; // Removed Moon and Sun icons
+import {
+  Bell,
+  LogOut,
+  Menu,
+  ShoppingBag,
+  User,
+  X,
+} from "lucide-react";
+
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client"; // Removed useTheme hook import
+import { supabase } from "@/integrations/supabase/client";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,128 +40,283 @@ const links = [
 export const SiteHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
   const { user, isAdmin, signOut } = useAuth();
+
   const [newOrders, setNewOrders] = useState(0);
 
-  // Forced light mode styling by default since dark mode toggle is disabled
-  const isDark = false; 
-
+  // SCROLL EFFECT
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
+
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // ADMIN BADGE
   useEffect(() => {
-    if (!isAdmin) { setNewOrders(0); return; }
+    if (!isAdmin) {
+      setNewOrders(0);
+      return;
+    }
+
     const load = async () => {
       const { count } = await supabase
         .from("orders")
-        .select("id", { count: "exact", head: true })
+        .select("id", {
+          count: "exact",
+          head: true,
+        })
         .eq("seen_by_admin", false);
+
       setNewOrders(count ?? 0);
     };
+
     load();
+
     const ch = supabase
       .channel("orders-admin-badge")
-      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, load)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "orders",
+        },
+        load
+      )
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [isAdmin]);
 
-  const bgClass = scrolled
-    ? isDark
-      ? "bg-[hsl(var(--ink))]/95 backdrop-blur-md border-b border-white/10"
-      : "bg-white/95 backdrop-blur-md border-b border-blue-200"
-    : isDark
-      ? "bg-transparent"
-      : "bg-transparent";
-
-  const textClass = isDark ? "text-white/80 hover:text-white" : "text-gray-700 hover:text-gray-900";
-  const iconClass = isDark ? "text-white hover:bg-white/10" : "text-gray-700 hover:bg-gray-200";
-
   return (
-    <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-500", bgClass)}>
-      <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <Logo className="h-8" />
-        </Link>
-        <nav className="hidden lg:flex items-center gap-8">
-          {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              end={l.to === "/"}
-              className={({ isActive }) =>
-                cn(
-                  "text-sm font-medium tracking-wide transition-colors",
-                  isActive ? "text-primary" : textClass
-                )
-              }
-            >
-              {l.label}
-            </NavLink>
-          ))}
-        </nav>
-        <div className="flex items-center gap-2">
-          {isAdmin && (
-            <Link to="/admin" className="relative hidden md:inline-flex items-center gap-1 text-xs font-semibold text-primary border border-primary/40 rounded-full px-3 py-1 hover:bg-primary/10 transition-colors">
-              <Bell className="h-3 w-3" />
-              Admin
-              {newOrders > 0 && (
-                <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-primary text-[10px] text-primary-foreground grid place-items-center animate-pulse">
-                  {newOrders}
-                </span>
-              )}
-            </Link>
+    <>
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+          scrolled
+            ? "bg-black/85 backdrop-blur-2xl border-b border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+            : "bg-transparent border-transparent"
+        )}
+      >
+        {/* GLOW */}
+        <div
+          className={cn(
+            "absolute inset-0 transition-opacity duration-500 pointer-events-none",
+            scrolled
+              ? "opacity-100"
+              : "opacity-0"
           )}
-          <Button asChild variant="ghost" size="icon" className={iconClass}>
-            <Link to="/cart" aria-label="Cart">
-              <ShoppingBag className="h-5 w-5" />
-            </Link>
-          </Button>
+        >
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-          {/* Theme toggle button has been removed from here */}
-
-          {user ? (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="icon" className={iconClass} aria-label="Sign out">
-                  <LogOut className="h-5 w-5" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className={cn("bg-card border", isDark ? "border-white/10" : "border-blue-200")}>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Sign out of your account?</AlertDialogTitle>
-                  <AlertDialogDescription>You'll need to log back in to view orders, post reviews or access the admin panel.</AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className={isDark ? "border-white/15" : "border-blue-300"}>Stay signed in</AlertDialogCancel>
-                  <AlertDialogAction className="bg-primary hover:bg-primary/90" onClick={() => signOut()}>Yes, sign out</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          ) : (
-            <Button asChild variant="ghost" size="icon" className={iconClass} aria-label="Sign in">
-              <Link to="/auth"><User className="h-5 w-5" /></Link>
-            </Button>
-          )}
-          <Button asChild className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90">
-            <Link to="/products">Shop Now</Link>
-          </Button>
-          <button
-            className={`lg:hidden p-2 ${isDark ? "text-white" : "text-gray-700"}`}
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Open menu"
-          >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-40 w-80 bg-primary/10 blur-[80px]" />
         </div>
-      </div>
-      {open && (
-        <div className={cn("lg:hidden border-t animate-fade-in", isDark ? "bg-[hsl(var(--ink))] border-white/10" : "bg-white/50 border-blue-200")}>
-          <nav className="container flex flex-col py-4">
+
+        <div className="container relative flex h-[74px] items-center justify-between">
+          {/* LOGO */}
+          <Link
+            to="/"
+            className="relative z-10 flex items-center gap-2"
+          >
+            <Logo className="h-9 transition-transform duration-300 hover:scale-105" />
+          </Link>
+
+          {/* DESKTOP NAV */}
+          <nav className="hidden lg:flex items-center gap-2">
+            {links.map((l) => (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                end={l.to === "/"}
+                className={({ isActive }) =>
+                  cn(
+                    "relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300",
+                    isActive
+                      ? "text-white"
+                      : scrolled
+                      ? "text-white/70 hover:text-white"
+                      : "text-white/90 hover:text-white"
+                  )
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {isActive && (
+                      <span className="absolute inset-0 rounded-full bg-white/10 border border-white/10 backdrop-blur-md" />
+                    )}
+
+                    <span className="relative z-10">
+                      {l.label}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* RIGHT SIDE */}
+          <div className="flex items-center gap-2 relative z-10">
+            {/* ADMIN */}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="relative hidden md:flex items-center gap-2 px-4 h-10 rounded-full border border-primary/30 bg-primary/10 hover:bg-primary/20 transition-all duration-300"
+              >
+                <Bell className="h-4 w-4 text-primary" />
+
+                <span className="text-xs font-bold text-primary uppercase tracking-wider">
+                  Admin
+                </span>
+
+                {newOrders > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-primary text-black text-[10px] font-black grid place-items-center animate-pulse">
+                    {newOrders}
+                  </span>
+                )}
+              </Link>
+            )}
+
+            {/* CART */}
+            <Button
+              asChild
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "rounded-full transition-all duration-300",
+                scrolled
+                  ? "hover:bg-white/10 text-white"
+                  : "hover:bg-white/10 text-white"
+              )}
+            >
+              <Link to="/cart">
+                <ShoppingBag className="h-5 w-5" />
+              </Link>
+            </Button>
+
+            {/* USER */}
+            {user ? (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full text-white hover:bg-white/10"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </AlertDialogTrigger>
+
+                <AlertDialogContent className="bg-[#0b0b0b] border border-white/10 text-white rounded-3xl">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-2xl font-black">
+                      Sign out?
+                    </AlertDialogTitle>
+
+                    <AlertDialogDescription className="text-white/60">
+                      You’ll need to log back in to access
+                      orders, reviews and admin features.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="border-white/10 bg-white/5 text-white hover:bg-white/10">
+                      Cancel
+                    </AlertDialogCancel>
+
+                    <AlertDialogAction
+                      onClick={() => signOut()}
+                      className="bg-primary hover:bg-primary/90 text-black font-bold"
+                    >
+                      Sign Out
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            ) : (
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                className="rounded-full text-white hover:bg-white/10"
+              >
+                <Link to="/auth">
+                  <User className="h-5 w-5" />
+                </Link>
+              </Button>
+            )}
+
+            {/* CTA */}
+            <Button
+              asChild
+              className="hidden md:flex h-11 px-6 rounded-full bg-primary hover:bg-primary/90 text-black font-bold shadow-[0_0_30px_rgba(255,0,0,0.35)]"
+            >
+              <Link to="/products">
+                Shop Now
+              </Link>
+            </Button>
+
+            {/* MOBILE MENU */}
+            <button
+              onClick={() => setOpen((v) => !v)}
+              className="lg:hidden h-11 w-11 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+            >
+              {open ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* MOBILE MENU */}
+      <div
+        className={cn(
+          "fixed inset-0 z-40 lg:hidden transition-all duration-500",
+          open
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+      >
+        {/* BACKDROP */}
+        <div
+          className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+          onClick={() => setOpen(false)}
+        />
+
+        {/* PANEL */}
+        <div
+          className={cn(
+            "absolute top-0 right-0 h-full w-[85%] max-w-[360px] bg-[#050505] border-l border-white/10 p-6 transition-transform duration-500",
+            open
+              ? "translate-x-0"
+              : "translate-x-full"
+          )}
+        >
+          <div className="flex items-center justify-between mb-10">
+            <Logo className="h-8" />
+
+            <button
+              onClick={() => setOpen(false)}
+              className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          <nav className="flex flex-col gap-2">
             {links.map((l) => (
               <NavLink
                 key={l.to}
@@ -161,8 +325,10 @@ export const SiteHeader = () => {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   cn(
-                    "py-3 text-base border-b transition-colors",
-                    isActive ? "text-primary" : isDark ? "text-white/85 border-white/5" : "text-gray-700 border-gray-200"
+                    "px-5 py-4 rounded-2xl text-base font-semibold transition-all duration-300",
+                    isActive
+                      ? "bg-primary text-black"
+                      : "text-white/70 hover:text-white hover:bg-white/5"
                   )
                 }
               >
@@ -170,8 +336,22 @@ export const SiteHeader = () => {
               </NavLink>
             ))}
           </nav>
+
+          <div className="mt-10">
+            <Button
+              asChild
+              className="w-full h-12 rounded-2xl bg-primary hover:bg-primary/90 text-black font-bold"
+            >
+              <Link
+                to="/products"
+                onClick={() => setOpen(false)}
+              >
+                Shop Products
+              </Link>
+            </Button>
+          </div>
         </div>
-      )}
-    </header>
+      </div>
+    </>
   );
 };
