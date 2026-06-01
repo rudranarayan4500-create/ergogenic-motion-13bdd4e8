@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/data/products";
+import { addToCart } from "@/lib/cart";
+import { toast } from "@/hooks/use-toast";
 
 export const ProductCard = ({ p }: { p: Product }) => (
   <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-white/10 hover-lift">
@@ -27,8 +29,16 @@ export const ProductCard = ({ p }: { p: Product }) => (
           <span className="text-lg font-bold">₹{p.price.toLocaleString()}</span>
           <span className="ml-2 text-xs text-muted-foreground line-through">₹{p.mrp.toLocaleString()}</span>
         </div>
-        <Button asChild size="sm" className="bg-primary hover:bg-primary/90">
-          <Link to={`/products/${p.id}`}>Add</Link>
+        <Button
+          size="sm"
+          className="bg-primary hover:bg-primary/90"
+          onClick={(e) => {
+            e.preventDefault();
+            addToCart({ slug: p.slug || p.id, name: p.name, price: p.price, image: p.image });
+            toast({ title: "Added to cart", description: p.name });
+          }}
+        >
+          Add
         </Button>
       </div>
     </div>

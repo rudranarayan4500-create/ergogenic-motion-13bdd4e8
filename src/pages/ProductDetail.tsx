@@ -9,6 +9,7 @@ import { ProductReviews } from "@/components/ProductReviews";
 import { ProductGallery, type MediaItem } from "@/components/ProductGallery";
 import { supabase } from "@/integrations/supabase/client";
 import { throttle } from "@/lib/utils";
+import { addToCart } from "@/lib/cart";
 
 interface ScrollPosition {
   scale: number;
@@ -111,10 +112,16 @@ const ProductDetail = () => {
   if (!product) return <Navigate to="/products" replace />;
 
   const related = products.filter((p) => p.id !== product.id).slice(0, 4);
-  const add = () => toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
+  const add = () => {
+    addToCart(
+      { slug: (product as any).slug || product.id, name: product.name, price: product.price, image: product.image },
+      qty
+    );
+    toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
+  };
 
-  const productIngredients = (product as any).mainIngredients || product.ingredients || ["Micronized Pure Creatine Monohydrate"];
-  const productBenefits = (product as any).keyBenefits || product.benefits || ["ATP Regeneration Acceleration", "Intracellular Hydration Support", "Explosive Output Scaling"];
+  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Micronized Pure Creatine Monohydrate"];
+  const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["ATP Regeneration Acceleration", "Intracellular Hydration Support", "Explosive Output Scaling"];
   const productFlavours = (product as any).flavours || ["Standard Edition"];
 
   const verificationComments = [

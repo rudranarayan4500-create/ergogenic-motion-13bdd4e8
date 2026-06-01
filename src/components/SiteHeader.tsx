@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { cartCount } from "@/lib/cart";
 
 import {
   AlertDialog,
@@ -44,6 +45,8 @@ export const SiteHeader = () => {
   const { user, isAdmin, signOut } = useAuth();
 
   const [newOrders, setNewOrders] = useState(0);
+  const [cartItems, setCartItems] = useState(0);
+  const [bellShake, setBellShake] = useState(false);
 
   // SCROLL EFFECT
   useEffect(() => {
@@ -58,6 +61,23 @@ export const SiteHeader = () => {
     });
 
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // CART BADGE + SHAKE
+  useEffect(() => {
+    setCartItems(cartCount());
+    const refresh = () => setCartItems(cartCount());
+    const onAdd = () => {
+      refresh();
+      setBellShake(true);
+      setTimeout(() => setBellShake(false), 700);
+    };
+    window.addEventListener("cart:change", refresh);
+    window.addEventListener("cart:add", onAdd);
+    return () => {
+      window.removeEventListener("cart:change", refresh);
+      window.removeEventListener("cart:add", onAdd);
+    };
   }, []);
 
   // ADMIN BADGE
@@ -193,14 +213,29 @@ export const SiteHeader = () => {
               variant="ghost"
               size="icon"
               className={cn(
-                "rounded-full transition-all duration-300",
+                "rounded-full transition-all duration-300 relative",
                 scrolled
                   ? "hover:bg-white/10 text-white"
                   : "hover:bg-white/10 text-white"
               )}
             >
               <Link to="/cart">
-                <ShoppingBag className="h-5 w-5" />
+                <span className="relative inline-flex">
+                  <ShoppingBag
+                    className={cn(
+                      "h-5 w-5 transition-colors",
+                      (bellShake || cartItems > 0) && "text-red-500"
+                    )}
+                  />
+                  {cartItems > 0 && (
+                    <span className="absolute -top-2 -right-2 min-w-4 h-4 px-1 rounded-full bg-red-600 text-white text-[9px] font-black grid place-items-center border border-black">
+                      {cartItems}
+                    </span>
+                  )}
+                  {bellShake && (
+                    <Bell className="absolute -top-3 -right-3 h-4 w-4 text-red-500 animate-bounce drop-shadow-[0_0_8px_rgba(239,68,68,0.9)]" />
+                  )}
+                </span>
               </Link>
             </Button>
 

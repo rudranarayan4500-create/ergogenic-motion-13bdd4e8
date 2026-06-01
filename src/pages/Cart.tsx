@@ -1,135 +1,53 @@
-import { useEffect, useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Bell } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Bell, Activity } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { calculateShipping } from "@/lib/utils";
+import { calculateShipping, cn } from "@/lib/utils";
+import { getCart, updateQty as updateQtyLs, removeItem as removeItemLs, type CartItem } from "@/lib/cart";
 
 export const Cart = () => {
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isBellRinging, setIsBellRinging] = useState(false); // Trigger handle for shaking notification matrix
-  const { user, loading: authLoading } = useAuth();
-  const nav = useNavigate();
+  const [isBellRinging, setIsBellRinging] = useState(false);
 
-  // Fetch real-time user cart contents from database schema collections
-  const loadCart = async () => {
-    if (!user) return;
-    try {
-      const { data, error } = await supabase
-        .from("cart_items")
-        .select(`
-          id,
-          qty,
-          product_id,
-          products (
-            id,
-            name,
-            slug,
-            price,
-            image,
-            category
-          )
-        `)
-        .eq("user_id", user.id);
-
-      if (error) throw error;
-      setItems(data ?? []);
-    } catch (err: any) {
-      toast({
-        title: "Cart syncing failed",
-        description: err.message,
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const refresh = () => setItems(getCart());
 
   useEffect(() => {
-    if (!authLoading) {
-      if (!user) {
-        nav("/auth");
-      } else {
-        loadCart();
-      }
-    }
-  }, [user, authLoading]);
+    refresh();
+    setLoading(false);
+    const onChange = () => refresh();
+    window.addEventListener("cart:change", onChange);
+    window.addEventListener("cart:add", () => {
+      setIsBellRinging(true);
+      setTimeout(() => setIsBellRinging(false), 600);
+    });
+    return () => window.removeEventListener("cart:change", onChange);
+  }, []);
 
-  // Dynamic calculation tracking total item allocation instances loaded inside the matrix hook
-  const totalItemCount = useMemo(() => {
-    return items.reduce((acc, item) => acc + (item.qty ?? 0), 0);
-  }, [items]);
+  const totalItemCount = items.reduce((acc, item) => acc + (item.qty ?? 0), 0);
 
-  // Micro-interaction keyframe automation engine trigger handle
-  const triggerNotificationShake = () => {
-    setIsBellRinging(true);
-    setTimeout(() => setIsBellRinging(false), 600); // Matches the exact loop parameters of the wiggle keyframe
-  };
-
-  // Adjust database values for item counts via single row updates
-  const updateQty = async (itemId: string, currentQty: number, delta: number) => {
+  const updateQty = (slug: string, currentQty: number, delta: number) => {
     const targetQty = currentQty + delta;
     if (targetQty < 1) return;
-
-    // Optimistic UI state update for immediate feedback
-    setItems((prev) =>
-      prev.map((item) => (item.id === itemId ? { ...item, qty: targetQty } : item))
-    );
-    
-    triggerNotificationShake(); // Execute visual feedback sequence
-
-    try {
-      const { error } = await supabase
-        .from("cart_items")
-        .update({ qty: targetQty })
-        .eq("id", itemId);
-
-      if (error) throw error;
-    } catch (err: any) {
-      // Revert back if backend fails
-      loadCart();
-      toast({
-        title: "Database update error",
-        description: err.message,
-        variant: "destructive",
-      });
-    }
+    updateQtyLs(slug, targetQty);
+    setIsBellRinging(true);
+    setTimeout(() => setIsBellRinging(false), 600);
+    refresh();
   };
 
-  // Remove rows from cart collections globally
-  const removeItem = async (itemId: string) => {
-    // Optimistic UI drop
-    setItems((prev) => prev.filter((item) => item.id !== itemId));
-    triggerNotificationShake();
-
-    try {
-      const { error } = await supabase
-        .from("cart_items")
-        .delete()
-        .eq("id", itemId);
-
-      if (error) throw error;
-      toast({ title: "Item removed from allocation" });
-    } catch (err: any) {
-      loadCart();
-      toast({
-        title: "Failed to drop allocation",
-        description: err.message,
-        variant: "destructive",
-      });
-    }
+  const removeItem = (slug: string) => {
+    removeItemLs(slug);
+    refresh();
+    toast({ title: "Item removed from cart" });
   };
 
-  // Live order pricing calculators
-  const subtotal = items.reduce((s, i) => s + (i.products?.price ?? 0) * i.qty, 0);
+  const subtotal = items.reduce((s, i) => s + (i.price ?? 0) * i.qty, 0);
   const shipping = calculateShipping(subtotal);
   const total = subtotal + shipping;
 
-  if (authLoading || loading) {
+  if (loading) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-[#030303] text-white">
         <p className="text-sm tracking-widest uppercase animate-pulse text-neutral-500">
@@ -208,28 +126,25 @@ export const Cart = () => {
             ) : (
               items.map((item) => (
                 <div 
-                  key={item.id} 
+                  key={item.slug} 
                   className="flex gap-4 p-5 bg-neutral-900/40 backdrop-blur-md border border-white/5 rounded-2xl items-center shadow-lg hover:border-white/10 transition-colors"
                 >
                   <img 
-                    src={item.products?.image} 
-                    alt={item.products?.name} 
+                    src={item.image} 
+                    alt={item.name} 
                     className="h-20 w-20 md:h-24 md:w-24 rounded-xl object-cover border border-white/5 bg-black/40 select-none pointer-events-none" 
                   />
                   
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-lg text-white truncate tracking-tight uppercase leading-none">
-                      {item.products?.name}
-                    </p>
-                    <p className="text-[10px] text-primary/80 font-black uppercase tracking-widest mt-1.5">
-                      {item.products?.category}
+                      {item.name}
                     </p>
                     
                     <div className="mt-4 flex items-center gap-4 flex-wrap">
                       {/* STEPPER METRIC UPDATER */}
                       <div className="flex items-center border border-white/10 bg-black/20 rounded-xl h-9">
                         <button 
-                          onClick={() => updateQty(item.id, item.qty, -1)} 
+                          onClick={() => updateQty(item.slug, item.qty, -1)} 
                           className="px-3 text-neutral-400 hover:text-white transition-colors"
                           disabled={item.qty <= 1}
                         >
@@ -239,7 +154,7 @@ export const Cart = () => {
                           {item.qty}
                         </span>
                         <button 
-                          onClick={() => updateQty(item.id, item.qty, 1)} 
+                          onClick={() => updateQty(item.slug, item.qty, 1)} 
                           className="px-3 text-neutral-400 hover:text-white transition-colors"
                         >
                           <Plus className="h-3 w-3" />
@@ -248,7 +163,7 @@ export const Cart = () => {
 
                       {/* TRASH DISPOSAL BUTTON */}
                       <button 
-                        onClick={() => removeItem(item.id)} 
+                        onClick={() => removeItem(item.slug)} 
                         className="text-neutral-500 hover:text-primary text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 transition-colors"
                       >
                         <Trash2 className="h-3.5 w-3.5" /> Drop Item
@@ -258,10 +173,10 @@ export const Cart = () => {
 
                   <div className="text-right pl-2 shrink-0">
                     <p className="font-black text-lg font-mono text-neutral-200">
-                      ₹{((item.products?.price ?? 0) * item.qty).toLocaleString()}
+                      ₹{((item.price ?? 0) * item.qty).toLocaleString()}
                     </p>
                     <p className="text-[10px] text-neutral-500 font-medium font-mono">
-                      ₹{(item.products?.price ?? 0).toLocaleString()} / unit
+                      ₹{(item.price ?? 0).toLocaleString()} / unit
                     </p>
                   </div>
                 </div>
