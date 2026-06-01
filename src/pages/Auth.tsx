@@ -89,11 +89,23 @@ export default function AuthPage() {
           },
         });
         if (error) throw error;
-        toast({ title: "Welcome to Ergogenic", description: "Account created successfully." });
-        nav("/");
+        // Auto-confirm is enabled, so we can sign in immediately
+        const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInErr) {
+          toast({ title: "Account created", description: "Please sign in to continue." });
+          setMode("login");
+        } else {
+          toast({ title: "Welcome to Ergogenic", description: "Account created successfully." });
+          nav("/");
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          if (/confirm/i.test(error.message)) {
+            throw new Error("Email not confirmed yet. Please sign up again or check your inbox.");
+          }
+          throw error;
+        }
         nav("/");
       }
     } catch (err: any) {
