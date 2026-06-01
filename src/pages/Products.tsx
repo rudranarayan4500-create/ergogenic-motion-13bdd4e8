@@ -154,7 +154,7 @@ const Products = () => {
     return count;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock]);
 
-  const sectionContainerVariants = {
+  const sectionContainerVariants: any = {
     hidden: { opacity: 0 },
     whileInView: {
       opacity: 1,
@@ -162,7 +162,7 @@ const Products = () => {
     }
   };
 
-  const textGlideUpVariants = {
+  const textGlideUpVariants: any = {
     hidden: { opacity: 0, y: 60 },
     whileInView: { 
       opacity: 1, 
@@ -171,7 +171,7 @@ const Products = () => {
     }
   };
 
-  const imageScrollZoomVariants = {
+  const imageScrollZoomVariants: any = {
     hidden: { opacity: 0, scale: 0.85 },
     whileInView: { 
       opacity: 1, 
