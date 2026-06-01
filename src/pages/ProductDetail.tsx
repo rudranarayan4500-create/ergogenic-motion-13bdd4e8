@@ -113,8 +113,8 @@ const ProductDetail = () => {
   const related = products.filter((p) => p.id !== product.id).slice(0, 4);
   const add = () => toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
 
-  const productIngredients = (product as any).mainIngredients || product.ingredients || ["Micronized Pure Creatine Monohydrate"];
-  const productBenefits = (product as any).keyBenefits || product.benefits || ["ATP Regeneration Acceleration", "Intracellular Hydration Support", "Explosive Output Scaling"];
+  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Micronized Pure Creatine Monohydrate"];
+  const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["ATP Regeneration Acceleration", "Intracellular Hydration Support", "Explosive Output Scaling"];
   const productFlavours = (product as any).flavours || ["Standard Edition"];
 
   const verificationComments = [
