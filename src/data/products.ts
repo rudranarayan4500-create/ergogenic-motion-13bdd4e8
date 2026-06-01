@@ -7,6 +7,7 @@ export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
 
 export interface Product {
   id: string;
+  slug?: string;
   name: string;
   tagline: string;
   price: number;
