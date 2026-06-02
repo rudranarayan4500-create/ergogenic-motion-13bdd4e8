@@ -266,6 +266,7 @@ export const products: Product[] = [
     rating: 4.8,
     reviews: 240,
   },
+];
 
 export const categories: { name: Category; description: string }[] = [
   { name: "Muscle", description: "Whey, gainers and lean-muscle support" },
