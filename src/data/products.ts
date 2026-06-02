@@ -2,6 +2,23 @@ import leanShot from "@/assets/product-leanshot.png";
 import plasmaMass from "@/assets/product-plasmamass.png";
 import superWhey from "@/assets/product-superwhey.png";
 import myogenetix from "@/assets/product-myogenetix.png";
+import ergo11 from "@/assets/brand/ergo-11.png.asset.json";
+import ergo12 from "@/assets/brand/ergo-12.png.asset.json";
+import ergo13 from "@/assets/brand/ergo-13.png.asset.json";
+import ergo14 from "@/assets/brand/ergo-14.png.asset.json";
+import ergo15 from "@/assets/brand/ergo-15.png.asset.json";
+import ergo16 from "@/assets/brand/ergo-16.png.asset.json";
+import ergo17 from "@/assets/brand/ergo-17.png.asset.json";
+
+const B = {
+  aminoshot: ergo11.url,
+  aminoshotAlt: ergo13.url,
+  glutashot: ergo12.url,
+  vitalshock: ergo14.url,
+  leanshot: ergo15.url,
+  superwhey: ergo16.url,
+  plasmamass: ergo17.url,
+};
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
 
@@ -20,6 +37,7 @@ export interface Product {
   ingredients: string[];
   rating: number;
   reviews: number;
+  gallery?: string[];
 }
 
 export const products: Product[] = [
@@ -30,7 +48,8 @@ export const products: Product[] = [
     price: 1999,
     mrp: 2499,
     category: "Recovery",
-    image: superWhey,
+    image: B.aminoshot,
+    gallery: [B.aminoshot, B.aminoshotAlt, B.glutashot],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
@@ -51,7 +70,8 @@ export const products: Product[] = [
     price: 1699,
     mrp: 2099,
     category: "Recovery",
-    image: superWhey,
+    image: B.glutashot,
+    gallery: [B.glutashot, B.aminoshotAlt, B.vitalshock],
     description:
       "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour.",
     benefits: ["Muscle repair", "Hydration & wellness", "Immunity support", "Easy mixing"],
@@ -67,7 +87,8 @@ export const products: Product[] = [
     price: 2299,
     mrp: 2799,
     category: "Performance",
-    image: leanShot,
+    image: B.leanshot,
+    gallery: [B.leanshot, B.aminoshot, B.plasmamass],
     description:
       "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
     benefits: [
@@ -88,7 +109,8 @@ export const products: Product[] = [
     price: 1499,
     mrp: 1899,
     category: "Performance",
-    image: leanShot,
+    image: B.leanshot,
+    gallery: [B.leanshot, B.plasmamass, B.superwhey],
     description:
       "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
     benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
@@ -104,7 +126,8 @@ export const products: Product[] = [
     price: 1899,
     mrp: 2399,
     category: "Performance",
-    image: leanShot,
+    image: B.leanshot,
+    gallery: [B.leanshot, B.aminoshot, B.vitalshock],
     description:
       "Lean Shot supports fat metabolism, energy, focus and vitality. Tropical Mango flavour.",
     benefits: ["Fat loss support", "Energy & endurance", "Focus & clarity", "Overall vitality"],
@@ -120,7 +143,8 @@ export const products: Product[] = [
     price: 4499,
     mrp: 5499,
     category: "Muscle",
-    image: superWhey,
+    image: B.superwhey,
+    gallery: [B.superwhey, B.plasmamass, B.leanshot],
     description:
       "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
     benefits: [
@@ -142,7 +166,8 @@ export const products: Product[] = [
     price: 3899,
     mrp: 4699,
     category: "Muscle",
-    image: plasmaMass,
+    image: B.plasmamass,
+    gallery: [B.plasmamass, B.superwhey, B.leanshot],
     description:
       "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size.",
     benefits: [
@@ -163,7 +188,8 @@ export const products: Product[] = [
     price: 899,
     mrp: 1199,
     category: "Performance",
-    image: myogenetix,
+    image: B.vitalshock,
+    gallery: [B.vitalshock, B.leanshot, B.aminoshot],
     description:
       "60 caplets of pure Caffeine Anhydrous for instant energy and performance. Push your limits with every dose.",
     benefits: ["Instant energy", "Sharper focus", "Performance boost", "60 caplets per bottle"],
@@ -179,7 +205,8 @@ export const products: Product[] = [
     price: 999,
     mrp: 1299,
     category: "Performance",
-    image: myogenetix,
+    image: B.vitalshock,
+    gallery: [B.vitalshock, B.leanshot, B.aminoshot],
     description:
       "60 caplets of L-Citrulline Malate and L-Arginine for nitric oxide pumps, strength and lean muscle building.",
     benefits: ["Bigger pumps", "Lean muscle support", "Strength gains", "60 caplets per bottle"],
@@ -195,7 +222,8 @@ export const products: Product[] = [
     price: 1099,
     mrp: 1399,
     category: "Recovery",
-    image: myogenetix,
+    image: B.aminoshotAlt,
+    gallery: [B.aminoshotAlt, B.aminoshot, B.glutashot],
     description:
       "60 caplets of BCAAs to support endurance, reduce fatigue and accelerate recovery.",
     benefits: ["Go further", "Reduced fatigue", "Faster recovery", "60 caplets per bottle"],
@@ -211,7 +239,8 @@ export const products: Product[] = [
     price: 1199,
     mrp: 1499,
     category: "Essentials",
-    image: myogenetix,
+    image: B.vitalshock,
+    gallery: [B.vitalshock, B.glutashot, B.aminoshot],
     description:
       "60 multivitamin caplets with the complete B-complex, vitamins A, C, D, E, K and essential minerals to stay sharp and rebuild faster.",
     benefits: ["Stay sharp", "Rebuild faster", "Complete vitamins & minerals", "Athlete formula"],
@@ -227,7 +256,8 @@ export const products: Product[] = [
     price: 1299,
     mrp: 1599,
     category: "Essentials",
-    image: myogenetix,
+    image: B.vitalshock,
+    gallery: [B.vitalshock, B.leanshot, B.glutashot],
     description:
       "60 caplets of Korean Red Ginseng Extract to fuel your day with sustained energy and vitality.",
     benefits: ["Fuel your day", "Sustained energy", "Daily vitality", "60 caplets per bottle"],
@@ -243,7 +273,8 @@ export const products: Product[] = [
     price: 2499,
     mrp: 2999,
     category: "Essentials",
-    image: myogenetix,
+    image: B.superwhey,
+    gallery: [B.superwhey, B.plasmamass, B.leanshot],
     description:
       "An everyday whey protein concentrate built for athletes who want consistent quality at an accessible price. Smooth mixability, great taste, lab-verified.",
     benefits: [
@@ -264,7 +295,8 @@ export const products: Product[] = [
     price: 1299,
     mrp: 1599,
     category: "Performance",
-    image: leanShot,
+    image: B.leanshot,
+    gallery: [B.leanshot, B.plasmamass, B.superwhey],
     description:
       "100% pure micronized creatine monohydrate. The most studied performance supplement in the world for strength, power and lean mass.",
     benefits: ["5g per scoop", "Micronized for solubility", "Unflavoured", "Third-party tested"],
@@ -280,7 +312,8 @@ export const products: Product[] = [
     price: 1599,
     mrp: 1999,
     category: "Recovery",
-    image: plasmaMass,
+    image: B.aminoshot,
+    gallery: [B.aminoshot, B.aminoshotAlt, B.glutashot],
     description:
       "An intra-workout amino blend with 7g BCAAs in the proven 2:1:1 ratio plus electrolytes for hydration and endurance.",
     benefits: ["7g BCAAs (2:1:1)", "Added electrolytes", "Sugar free", "Refreshing taste"],
@@ -296,7 +329,8 @@ export const products: Product[] = [
     price: 1399,
     mrp: 1799,
     category: "Recovery",
-    image: superWhey,
+    image: B.glutashot,
+    gallery: [B.glutashot, B.aminoshotAlt, B.vitalshock],
     description:
       "5g of pure L-Glutamine per serving to support post-training recovery, immunity and gut health.",
     benefits: ["5g L-Glutamine", "Supports recovery", "Unflavoured", "Easy mixing"],
@@ -312,7 +346,8 @@ export const products: Product[] = [
     price: 899,
     mrp: 1199,
     category: "Essentials",
-    image: myogenetix,
+    image: B.vitalshock,
+    gallery: [B.vitalshock, B.glutashot, B.aminoshot],
     description:
       "A complete daily multivitamin formulated for the demands of training. 23 essential vitamins and minerals.",
     benefits: ["23 vitamins & minerals", "Supports immunity", "Athlete formula", "Once daily"],
