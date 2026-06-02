@@ -23,6 +23,7 @@ const B = {
 // User-supplied product imagery (Supabase storage public URLs)
 const U = {
   proFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 8.26.16 PM.jpeg",
+  proBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png",
   capletsAllInOne: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-03 010450.png",
   creatine: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//596a34ab-1f16-48d9-ba17-e78d005ec14c.png",
   viper3: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//2e56399e-ae10-4ff1-a19b-1cd020f9eabc.png",
@@ -152,7 +153,7 @@ export const products: Product[] = [
     mrp: 5499,
     category: "Muscle",
     image: B.superwhey,
-    gallery: [B.superwhey, U.proFront, B.plasmamass, B.leanshot],
+    gallery: [B.superwhey, U.proFront, U.proBack, B.plasmamass, B.leanshot],
     description:
       "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
     benefits: [
@@ -175,7 +176,7 @@ export const products: Product[] = [
     mrp: 4699,
     category: "Muscle",
     image: B.plasmamass,
-    gallery: [B.plasmamass, U.proFront, B.superwhey, B.leanshot],
+    gallery: [B.plasmamass, U.proFront, U.proBack, B.superwhey, B.leanshot],
     description:
       "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size.",
     benefits: [

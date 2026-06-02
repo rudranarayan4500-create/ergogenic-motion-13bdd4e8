@@ -8,6 +8,9 @@ import caffeine from "@/assets/ingredient-caffeine.png";
 import bcaa from "@/assets/ingredient-bcaa.png";
 import glutamine from "@/assets/ingredient-glutamine.png";
 
+// User-supplied ingredient image from Supabase
+const ingredientProImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png";
+
 type Usage = { product: string; percent: number; per: string };
 type Ingredient = {
   name: string;
@@ -98,7 +101,7 @@ const Ingredients = () => (
         <div className="relative w-full max-w-2xl">
           <div className="absolute inset-0 blur-3xl opacity-50" style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.3), transparent 70%)" }} />
           <img
-            src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png"
+            src={ingredientProImage}
             alt="Ergogenic Nutrition ingredient line-up"
             loading="lazy"
             className="relative z-10 w-full h-auto object-contain drop-shadow-[0_20px_40px_rgba(229,9,20,0.25)] animate-fade-in"
