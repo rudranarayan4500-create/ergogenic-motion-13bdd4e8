@@ -90,7 +90,10 @@ const ProductDetail = () => {
       ];
     }
     
-    return product ? [{ url: product.image, kind: "image" }] : [];
+    if (!product) return [];
+    const g = (product as any).gallery as string[] | undefined;
+    if (g && g.length) return g.map((url) => ({ url, kind: "image" as const }));
+    return [{ url: product.image, kind: "image" }];
   }, [extraMedia, product]);
 
   const reviewVideos = useMemo(() => gallery.filter(m => m?.kind === "video"), [gallery]);
@@ -103,10 +106,11 @@ const ProductDetail = () => {
         { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", tag: "Seal Integrity Check" }
       ];
     }
-    return [
-      { url: product.image, tag: "Front Angle Core" },
-      { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", tag: "Macro Seal Check" }
-    ];
+    const g = (product as any).gallery as string[] | undefined;
+    if (g && g.length > 1) {
+      return g.slice(0, 3).map((url, i) => ({ url, tag: ["Front Angle", "Detail Shot", "Lifestyle"][i] || "Studio" }));
+    }
+    return [{ url: product.image, tag: "Front Angle Core" }];
   }, [product]);
 
   if (!product) return <Navigate to="/products" replace />;
