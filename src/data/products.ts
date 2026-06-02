@@ -20,6 +20,14 @@ const B = {
   plasmamass: ergo17.url,
 };
 
+// User-supplied product imagery (Supabase storage public URLs)
+const U = {
+  proFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 8.26.16 PM.jpeg",
+  capletsAllInOne: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-03 010450.png",
+  creatine: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//596a34ab-1f16-48d9-ba17-e78d005ec14c.png",
+  viper3: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//2e56399e-ae10-4ff1-a19b-1cd020f9eabc.png",
+};
+
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
 
 export interface Product {
