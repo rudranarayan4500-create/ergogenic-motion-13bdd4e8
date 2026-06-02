@@ -2,6 +2,23 @@ import leanShot from "@/assets/product-leanshot.png";
 import plasmaMass from "@/assets/product-plasmamass.png";
 import superWhey from "@/assets/product-superwhey.png";
 import myogenetix from "@/assets/product-myogenetix.png";
+import ergo11 from "@/assets/brand/ergo-11.png.asset.json";
+import ergo12 from "@/assets/brand/ergo-12.png.asset.json";
+import ergo13 from "@/assets/brand/ergo-13.png.asset.json";
+import ergo14 from "@/assets/brand/ergo-14.png.asset.json";
+import ergo15 from "@/assets/brand/ergo-15.png.asset.json";
+import ergo16 from "@/assets/brand/ergo-16.png.asset.json";
+import ergo17 from "@/assets/brand/ergo-17.png.asset.json";
+
+const B = {
+  aminoshot: ergo11.url,
+  aminoshotAlt: ergo13.url,
+  glutashot: ergo12.url,
+  vitalshock: ergo14.url,
+  leanshot: ergo15.url,
+  superwhey: ergo16.url,
+  plasmamass: ergo17.url,
+};
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
 
@@ -20,6 +37,7 @@ export interface Product {
   ingredients: string[];
   rating: number;
   reviews: number;
+  gallery?: string[];
 }
 
 export const products: Product[] = [
