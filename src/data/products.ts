@@ -95,8 +95,8 @@ export const products: Product[] = [
     price: 2299,
     mrp: 2799,
     category: "Performance",
-    image: B.leanshot,
-    gallery: [B.leanshot, B.aminoshot, B.plasmamass],
+    image: U.viper3,
+    gallery: [U.viper3, B.leanshot, B.aminoshot, B.plasmamass],
     description:
       "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
     benefits: [
@@ -117,8 +117,8 @@ export const products: Product[] = [
     price: 1499,
     mrp: 1899,
     category: "Performance",
-    image: B.leanshot,
-    gallery: [B.leanshot, B.plasmamass, B.superwhey],
+    image: U.creatine,
+    gallery: [U.creatine, B.leanshot, B.plasmamass, B.superwhey],
     description:
       "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
     benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
@@ -152,7 +152,7 @@ export const products: Product[] = [
     mrp: 5499,
     category: "Muscle",
     image: B.superwhey,
-    gallery: [B.superwhey, B.plasmamass, B.leanshot],
+    gallery: [B.superwhey, U.proFront, B.plasmamass, B.leanshot],
     description:
       "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
     benefits: [
@@ -175,7 +175,7 @@ export const products: Product[] = [
     mrp: 4699,
     category: "Muscle",
     image: B.plasmamass,
-    gallery: [B.plasmamass, B.superwhey, B.leanshot],
+    gallery: [B.plasmamass, U.proFront, B.superwhey, B.leanshot],
     description:
       "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size.",
     benefits: [
@@ -196,8 +196,8 @@ export const products: Product[] = [
     price: 899,
     mrp: 1199,
     category: "Performance",
-    image: B.vitalshock,
-    gallery: [B.vitalshock, B.leanshot, B.aminoshot],
+    image: U.capletsAllInOne,
+    gallery: [U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
     description:
       "60 caplets of pure Caffeine Anhydrous for instant energy and performance. Push your limits with every dose.",
     benefits: ["Instant energy", "Sharper focus", "Performance boost", "60 caplets per bottle"],
@@ -213,8 +213,8 @@ export const products: Product[] = [
     price: 999,
     mrp: 1299,
     category: "Performance",
-    image: B.vitalshock,
-    gallery: [B.vitalshock, B.leanshot, B.aminoshot],
+    image: U.capletsAllInOne,
+    gallery: [U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
     description:
       "60 caplets of L-Citrulline Malate and L-Arginine for nitric oxide pumps, strength and lean muscle building.",
     benefits: ["Bigger pumps", "Lean muscle support", "Strength gains", "60 caplets per bottle"],
@@ -230,8 +230,8 @@ export const products: Product[] = [
     price: 1299,
     mrp: 1599,
     category: "Essentials",
-    image: B.vitalshock,
-    gallery: [B.vitalshock, B.leanshot, B.glutashot],
+    image: U.capletsAllInOne,
+    gallery: [U.capletsAllInOne, B.vitalshock, B.leanshot, B.glutashot],
     description:
       "60 caplets of Korean Red Ginseng Extract to fuel your day with sustained energy and vitality.",
     benefits: ["Fuel your day", "Sustained energy", "Daily vitality", "60 caplets per bottle"],
