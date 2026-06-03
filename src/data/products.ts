@@ -163,8 +163,8 @@ export const products: Product[] = [
     price: 4499,
     mrp: 5499,
     category: "Muscle",
-    image: B.superwhey,
-    gallery: [B.superwhey, U.proFront, U.proBack, B.plasmamass, B.leanshot],
+    image: B.superwheyLifestyle,
+    gallery: [B.superwheyLifestyle, B.superwhey, U.proFront, U.proBack, B.plasmamass, B.leanshot],
     description:
       "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
     benefits: [
@@ -209,7 +209,7 @@ export const products: Product[] = [
     mrp: 1199,
     category: "Performance",
     image: U.capletsAllInOne,
-    gallery: [U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
+    gallery: [B.caffeineLifestyle, U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
     description:
       "60 caplets of pure Caffeine Anhydrous for instant energy and performance. Push your limits with every dose.",
     benefits: ["Instant energy", "Sharper focus", "Performance boost", "60 caplets per bottle"],
@@ -226,7 +226,7 @@ export const products: Product[] = [
     mrp: 1299,
     category: "Performance",
     image: U.hyperNoCaplets,
-    gallery: [U.hyperNoCaplets, U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
+    gallery: [B.hypernoLifestyle, U.hyperNoCaplets, U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
     description:
       "60 caplets of L-Citrulline Malate and L-Arginine for nitric oxide pumps, strength and lean muscle building.",
     benefits: ["Bigger pumps", "Lean muscle support", "Strength gains", "60 caplets per bottle"],
