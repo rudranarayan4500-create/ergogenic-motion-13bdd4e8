@@ -30,12 +30,8 @@ import {
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/products", label: "Products" },
-  { to: "/ingredients", label: "Ingredients" },
-  { to: "/gallery", label: "Gallery" },
-  { to: "/resources", label: "Resources" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/products", label: "Shop" },
+  { to: "/contact", label: "Contact Us" },
 ];
 
 export const SiteHeader = () => {
@@ -224,16 +220,16 @@ export const SiteHeader = () => {
                   <ShoppingBag
                     className={cn(
                       "h-5 w-5 transition-colors",
-                      (bellShake || cartItems > 0) && "text-red-500"
+                      (bellShake || cartItems > 0) && "text-primary"
                     )}
                   />
                   {cartItems > 0 && (
-                    <span className="absolute -top-2 -right-2 min-w-4 h-4 px-1 rounded-full bg-red-600 text-white text-[9px] font-black grid place-items-center border border-black">
+                    <span className="absolute -top-2 -right-2 min-w-4 h-4 px-1 rounded-full bg-primary text-primary-foreground text-[9px] font-black grid place-items-center border border-background">
                       {cartItems}
                     </span>
                   )}
                   {bellShake && (
-                    <Bell className="absolute -top-3 -right-3 h-4 w-4 text-red-500 animate-bounce drop-shadow-[0_0_8px_rgba(239,68,68,0.9)]" />
+                    <Bell className="absolute -top-3 -right-3 h-4 w-4 text-primary animate-bounce drop-shadow-[0_0_8px_hsl(217_91%_50%_/_0.9)]" />
                   )}
                 </span>
               </Link>
@@ -294,7 +290,7 @@ export const SiteHeader = () => {
             {/* CTA */}
             <Button
               asChild
-              className="hidden md:flex h-11 px-6 rounded-full bg-primary hover:bg-primary/90 text-black font-bold shadow-[0_0_30px_rgba(255,0,0,0.35)]"
+              className="hidden md:flex h-11 px-6 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-[0_0_30px_hsl(217_91%_50%_/_0.35)]"
             >
               <Link to="/products">
                 Shop Now
