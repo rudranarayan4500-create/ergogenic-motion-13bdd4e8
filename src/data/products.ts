@@ -61,7 +61,7 @@ export const products: Product[] = [
     mrp: 2499,
     category: "Recovery",
     image: B.aminoshot,
-    gallery: [B.aminoshot, B.aminoshotAlt, B.glutashot],
+    gallery: [B.aminoshot, U.proBack, B.aminoshotAlt, B.glutashot],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
