@@ -2,6 +2,7 @@ import leanShot from "@/assets/product-leanshot.png";
 import plasmaMass from "@/assets/product-plasmamass.png";
 import superWhey from "@/assets/product-superwhey.png";
 import myogenetix from "@/assets/product-myogenetix.png";
+import aminoshotHero from "@/assets/aminoshot-hero.png.asset.json";
 import ergo11 from "@/assets/brand/ergo-11.png.asset.json";
 import ergo12 from "@/assets/brand/ergo-12.png.asset.json";
 import ergo13 from "@/assets/brand/ergo-13.png.asset.json";
@@ -11,7 +12,7 @@ import ergo16 from "@/assets/brand/ergo-16.png.asset.json";
 import ergo17 from "@/assets/brand/ergo-17.png.asset.json";
 
 const B = {
-  aminoshot: ergo11.url,
+  aminoshot: aminoshotHero.url,
   aminoshotAlt: ergo13.url,
   glutashot: ergo12.url,
   vitalshock: ergo14.url,
@@ -60,7 +61,7 @@ export const products: Product[] = [
     mrp: 2499,
     category: "Recovery",
     image: B.aminoshot,
-    gallery: [B.aminoshot, B.aminoshotAlt, B.glutashot],
+    gallery: [B.aminoshot, U.proBack, B.aminoshotAlt, B.glutashot],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
