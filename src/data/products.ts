@@ -2,11 +2,6 @@ import leanShot from "@/assets/product-leanshot.png";
 import plasmaMass from "@/assets/product-plasmamass.png";
 import superWhey from "@/assets/product-superwhey.png";
 import myogenetix from "@/assets/product-myogenetix.png";
-import aminoshotHero from "@/assets/aminoshot-hero.png.asset.json";
-import aminoshotLifestyle from "@/assets/aminoshot-lifestyle.png.asset.json";
-import caffeineLifestyle from "@/assets/caffeine-lifestyle.png.asset.json";
-import hypernoLifestyle from "@/assets/hyperno-lifestyle.png.asset.json";
-import superwheyLifestyle from "@/assets/superwhey-lifestyle.png.asset.json";
 import ergo11 from "@/assets/brand/ergo-11.png.asset.json";
 import ergo12 from "@/assets/brand/ergo-12.png.asset.json";
 import ergo13 from "@/assets/brand/ergo-13.png.asset.json";
@@ -16,17 +11,13 @@ import ergo16 from "@/assets/brand/ergo-16.png.asset.json";
 import ergo17 from "@/assets/brand/ergo-17.png.asset.json";
 
 const B = {
-  aminoshot: aminoshotHero.url,
-  aminoshotLifestyle: aminoshotLifestyle.url,
+  aminoshot: ergo11.url,
   aminoshotAlt: ergo13.url,
   glutashot: ergo12.url,
   vitalshock: ergo14.url,
   leanshot: ergo15.url,
   superwhey: ergo16.url,
   plasmamass: ergo17.url,
-  caffeineLifestyle: caffeineLifestyle.url,
-  hypernoLifestyle: hypernoLifestyle.url,
-  superwheyLifestyle: superwheyLifestyle.url,
 };
 
 // User-supplied product imagery (Supabase storage public URLs)
@@ -69,7 +60,7 @@ export const products: Product[] = [
     mrp: 2499,
     category: "Recovery",
     image: B.aminoshot,
-    gallery: [B.aminoshot, B.aminoshotLifestyle, U.proBack, B.aminoshotAlt, B.glutashot],
+    gallery: [B.aminoshot, B.aminoshotAlt, B.glutashot],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
@@ -163,8 +154,8 @@ export const products: Product[] = [
     price: 4499,
     mrp: 5499,
     category: "Muscle",
-    image: B.superwheyLifestyle,
-    gallery: [B.superwheyLifestyle, B.superwhey, U.proFront, U.proBack, B.plasmamass, B.leanshot],
+    image: B.superwhey,
+    gallery: [B.superwhey, U.proFront, U.proBack, B.plasmamass, B.leanshot],
     description:
       "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
     benefits: [
@@ -209,7 +200,7 @@ export const products: Product[] = [
     mrp: 1199,
     category: "Performance",
     image: U.capletsAllInOne,
-    gallery: [B.caffeineLifestyle, U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
+    gallery: [U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
     description:
       "60 caplets of pure Caffeine Anhydrous for instant energy and performance. Push your limits with every dose.",
     benefits: ["Instant energy", "Sharper focus", "Performance boost", "60 caplets per bottle"],
@@ -226,7 +217,7 @@ export const products: Product[] = [
     mrp: 1299,
     category: "Performance",
     image: U.hyperNoCaplets,
-    gallery: [B.hypernoLifestyle, U.hyperNoCaplets, U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
+    gallery: [U.hyperNoCaplets, U.capletsAllInOne, B.vitalshock, B.leanshot, B.aminoshot],
     description:
       "60 caplets of L-Citrulline Malate and L-Arginine for nitric oxide pumps, strength and lean muscle building.",
     benefits: ["Bigger pumps", "Lean muscle support", "Strength gains", "60 caplets per bottle"],
