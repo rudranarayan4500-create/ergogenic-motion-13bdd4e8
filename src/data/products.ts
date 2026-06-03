@@ -4,6 +4,9 @@ import superWhey from "@/assets/product-superwhey.png";
 import myogenetix from "@/assets/product-myogenetix.png";
 import aminoshotHero from "@/assets/aminoshot-hero.png.asset.json";
 import aminoshotLifestyle from "@/assets/aminoshot-lifestyle.png.asset.json";
+import caffeineLifestyle from "@/assets/caffeine-lifestyle.png.asset.json";
+import hypernoLifestyle from "@/assets/hyperno-lifestyle.png.asset.json";
+import superwheyLifestyle from "@/assets/superwhey-lifestyle.png.asset.json";
 import ergo11 from "@/assets/brand/ergo-11.png.asset.json";
 import ergo12 from "@/assets/brand/ergo-12.png.asset.json";
 import ergo13 from "@/assets/brand/ergo-13.png.asset.json";
@@ -21,6 +24,9 @@ const B = {
   leanshot: ergo15.url,
   superwhey: ergo16.url,
   plasmamass: ergo17.url,
+  caffeineLifestyle: caffeineLifestyle.url,
+  hypernoLifestyle: hypernoLifestyle.url,
+  superwheyLifestyle: superwheyLifestyle.url,
 };
 
 // User-supplied product imagery (Supabase storage public URLs)
