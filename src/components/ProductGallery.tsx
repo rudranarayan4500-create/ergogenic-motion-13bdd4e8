@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
 
 export type MediaItem = { url: string; kind?: "image" | "video" };
@@ -8,18 +8,47 @@ const detectKind = (m: MediaItem): "image" | "video" =>
 
 export const ProductGallery = ({ items, alt }: { items: MediaItem[]; alt: string }) => {
   const [i, setI] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
   if (!items.length) return null;
   const active = items[i];
   const kind = detectKind(active);
   const go = (d: number) => setI((p) => (p + d + items.length) % items.length);
 
+  const resetZoom = () => {
+    setIsZoomed(false);
+    setZoomOrigin({ x: 50, y: 50 });
+  };
+
+  const handleZoomMove = (event: MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+    setIsZoomed(true);
+    setZoomOrigin({ x, y });
+  };
+
   return (
     <div>
-      <div className="relative bg-card rounded-xl overflow-hidden border border-white/10 aspect-square group">
+      <div
+        className="relative bg-card rounded-xl overflow-hidden border border-white/10 aspect-square group"
+        onMouseMove={kind === "image" ? handleZoomMove : undefined}
+        onMouseLeave={kind === "image" ? resetZoom : undefined}
+      >
         {kind === "video" ? (
           <video key={active.url} src={active.url} controls className="h-full w-full object-cover bg-black" />
         ) : (
-          <img key={active.url} src={active.url} alt={alt} className="h-full w-full object-cover animate-fade-in transition-transform duration-500 ease-out group-hover:scale-150 cursor-zoom-in" />
+          <img
+            key={active.url}
+            src={active.url}
+            alt={alt}
+            className="h-full w-full object-cover animate-fade-in cursor-zoom-in transition-transform duration-200 ease-out will-change-transform"
+            style={{
+              transform: isZoomed ? "scale(1.9)" : "scale(1)",
+              transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+            }}
+          />
         )}
         {items.length > 1 && (
           <>

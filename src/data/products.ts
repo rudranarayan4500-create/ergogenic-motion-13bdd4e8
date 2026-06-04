@@ -117,7 +117,7 @@ export const products: Product[] = [
     mrp: 2799,
     category: "Performance",
     image: U.viper3,
-    gallery: [U.viper3, U.viper3Action],
+    gallery: [U.viper3, U.viper3, U.viper3Action],
     description:
       "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
     benefits: [
