@@ -153,7 +153,8 @@ export const products: Product[] = [
     mrp: 2399,
     category: "Performance",
     image: B.leanshot,
-    gallery: [B.leanshot, B.aminoshot, B.vitalshock],
+    image: U.leanShotFront,
+    gallery: [U.leanShotFront, U.leanShotBack, B.leanshot, B.aminoshot, B.vitalshock],
     description:
       "Lean Shot supports fat metabolism, energy, focus and vitality. Tropical Mango flavour.",
     benefits: ["Fat loss support", "Energy & endurance", "Focus & clarity", "Overall vitality"],
