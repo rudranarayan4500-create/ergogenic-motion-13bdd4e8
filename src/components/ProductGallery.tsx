@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
 
 export type MediaItem = { url: string; kind?: "image" | "video" };
@@ -20,7 +20,7 @@ export const ProductGallery = ({ items, alt }: { items: MediaItem[]; alt: string
     setZoomOrigin({ x: 50, y: 50 });
   };
 
-  const handleZoomMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleZoomMove = (event: MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
