@@ -38,6 +38,12 @@ const U = {
   creatineAlt: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//57e762da-d2b6-4a92-80e3-90a506d1c65a.png",
   viper3: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//2e56399e-ae10-4ff1-a19b-1cd020f9eabc.png",
   hyperNoCaplets: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 7.38.06 PM-2.jpeg",
+  hyperNoNew: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 005721-2.png",
+  superWheyFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 010121-2.png",
+  superWheyBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 161708-2.png",
+  caffeineNew: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 004448.png",
+  leanShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 162442.png",
+  leanShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//16e12056-a386-4d09-adc4-ee8a0277c454.png",
 };
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
