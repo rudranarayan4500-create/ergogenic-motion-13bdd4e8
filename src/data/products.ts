@@ -78,7 +78,7 @@ export const products: Product[] = [
     mrp: 2499,
     category: "Recovery",
     image: B.aminoshot,
-    gallery: [B.aminoshot, B.aminoshotLifestyle, U.proBack, B.aminoshotAlt, B.glutashot],
+    gallery: [B.aminoshot, U.aminoShotBack, B.aminoshotLifestyle],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
@@ -100,7 +100,7 @@ export const products: Product[] = [
     mrp: 2099,
     category: "Recovery",
     image: B.glutashot,
-    gallery: [B.glutashot, B.aminoshotAlt, B.vitalshock],
+    gallery: [B.glutashot, U.glutaShotBack],
     description:
       "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour.",
     benefits: ["Muscle repair", "Hydration & wellness", "Immunity support", "Easy mixing"],
@@ -117,7 +117,7 @@ export const products: Product[] = [
     mrp: 2799,
     category: "Performance",
     image: U.viper3,
-    gallery: [U.viper3, B.leanshot, B.aminoshot, B.plasmamass],
+    gallery: [U.viper3, U.viper3Action],
     description:
       "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
     benefits: [
@@ -139,7 +139,7 @@ export const products: Product[] = [
     mrp: 1899,
     category: "Performance",
     image: U.creatine,
-    gallery: [U.creatine, U.creatineAlt, B.leanshot, B.plasmamass, B.superwhey],
+    gallery: [U.creatine, U.creatineAlt],
     description:
       "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
     benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
@@ -156,7 +156,7 @@ export const products: Product[] = [
     mrp: 2399,
     category: "Performance",
     image: U.leanShotFront,
-    gallery: [U.leanShotFront, U.leanShotBack, B.leanshot, B.aminoshot, B.vitalshock],
+    gallery: [U.leanShotFront, U.leanShotBack],
     description:
       "Lean Shot supports fat metabolism, energy, focus and vitality. Tropical Mango flavour.",
     benefits: ["Fat loss support", "Energy & endurance", "Focus & clarity", "Overall vitality"],
@@ -173,7 +173,7 @@ export const products: Product[] = [
     mrp: 5499,
     category: "Muscle",
     image: U.superWheyFront,
-    gallery: [U.superWheyFront, U.superWheyBack, B.superwheyLifestyle, B.superwhey, U.proFront, U.proBack],
+    gallery: [U.superWheyFront, U.superWheyBack, B.superwheyLifestyle],
     description:
       "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
     benefits: [
@@ -196,7 +196,7 @@ export const products: Product[] = [
     mrp: 4699,
     category: "Muscle",
     image: B.plasmamass,
-    gallery: [B.plasmamass, U.proFront, U.proBack, B.superwhey, B.leanshot],
+    gallery: [B.plasmamass, U.proFront, U.proBack],
     description:
       "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size.",
     benefits: [
@@ -218,7 +218,7 @@ export const products: Product[] = [
     mrp: 1199,
     category: "Performance",
     image: U.caffeineNew,
-    gallery: [U.caffeineNew, B.caffeineLifestyle, U.capletsAllInOne, B.vitalshock, B.aminoshot],
+    gallery: [U.caffeineNew, B.caffeineLifestyle, U.capletsAllInOne],
     description:
       "60 caplets of pure Caffeine Anhydrous for instant energy and performance. Push your limits with every dose.",
     benefits: ["Instant energy", "Sharper focus", "Performance boost", "60 caplets per bottle"],
@@ -235,7 +235,7 @@ export const products: Product[] = [
     mrp: 1299,
     category: "Performance",
     image: U.hyperNoNew,
-    gallery: [U.hyperNoNew, B.hypernoLifestyle, U.hyperNoCaplets, U.capletsAllInOne, B.vitalshock],
+    gallery: [U.hyperNoNew, B.hypernoLifestyle, U.hyperNoCaplets],
     description:
       "60 caplets of L-Citrulline Malate and L-Arginine for nitric oxide pumps, strength and lean muscle building.",
     benefits: ["Bigger pumps", "Lean muscle support", "Strength gains", "60 caplets per bottle"],
@@ -252,7 +252,7 @@ export const products: Product[] = [
     mrp: 1599,
     category: "Essentials",
     image: U.capletsAllInOne,
-    gallery: [U.capletsAllInOne, B.vitalshock, B.leanshot, B.glutashot],
+    gallery: [U.capletsAllInOne],
     description:
       "60 caplets of Korean Red Ginseng Extract to fuel your day with sustained energy and vitality.",
     benefits: ["Fuel your day", "Sustained energy", "Daily vitality", "60 caplets per bottle"],
