@@ -138,8 +138,10 @@ export const products: Product[] = [
     price: 1499,
     mrp: 1899,
     category: "Performance",
-    image: U.creatine,
-    gallery: [U.creatine, U.creatineAlt],
+image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png",
+gallery: [
+  "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png"
+],
     description:
       "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
     benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
