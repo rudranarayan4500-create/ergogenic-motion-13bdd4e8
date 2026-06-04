@@ -152,7 +152,6 @@ export const products: Product[] = [
     price: 1899,
     mrp: 2399,
     category: "Performance",
-    image: B.leanshot,
     image: U.leanShotFront,
     gallery: [U.leanShotFront, U.leanShotBack, B.leanshot, B.aminoshot, B.vitalshock],
     description:
