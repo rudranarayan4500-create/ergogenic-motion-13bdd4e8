@@ -44,6 +44,9 @@ const U = {
   caffeineNew: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 004448.png",
   leanShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 162442.png",
   leanShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//16e12056-a386-4d09-adc4-ee8a0277c454.png",
+  aminoShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 162740.png",
+  glutaShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 163441-2.png",
+  viper3Action: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//9a8b5609-5707-4131-90a1-6a161292fc56.png",
 };
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
