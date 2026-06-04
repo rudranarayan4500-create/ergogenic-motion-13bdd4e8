@@ -19,7 +19,7 @@ export const ProductGallery = ({ items, alt }: { items: MediaItem[]; alt: string
         {kind === "video" ? (
           <video key={active.url} src={active.url} controls className="h-full w-full object-cover bg-black" />
         ) : (
-          <img key={active.url} src={active.url} alt={alt} className="h-full w-full object-cover animate-fade-in" />
+          <img key={active.url} src={active.url} alt={alt} className="h-full w-full object-cover animate-fade-in transition-transform duration-500 ease-out group-hover:scale-150 cursor-zoom-in" />
         )}
         {items.length > 1 && (
           <>
