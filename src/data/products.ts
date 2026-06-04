@@ -131,23 +131,36 @@ export const products: Product[] = [
     rating: 4.9,
     reviews: 1342,
   },
-  {
-    id: "ergo-micropower-creatine",
-    name: "Micro-Power Creatine",
-    tagline: "Micronized creatine for strength & power",
-    price: 1499,
-    mrp: 1899,
-    category: "Performance",
-    image: U.creatine,
-    gallery: [U.creatine, U.creatineAlt],
-    description:
-      "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
-    benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
-    howToUse: "Mix 1 scoop with water or your shake daily.",
-    ingredients: ["Creatine Monohydrate (Micronized)"],
-    rating: 4.9,
-    reviews: 980,
-  },
+Here is the updated code block with the image URL integrated directly into your JSON object.
+
+I have replaced the placeholder variables U.creatine and U.creatineAlt with the specific Supabase image link you provided so it functions correctly in your code.
+
+JSON
+{
+  "id": "ergo-micropower-creatine",
+  "name": "Micro-Power Creatine",
+  "tagline": "Micronized creatine for strength & power",
+  "price": 1499,
+  "mrp": 1899,
+  "category": "Performance",
+  "image": "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png",
+  "gallery": [
+    "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png"
+  ],
+  "description": "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
+  "benefits": [
+    "5g micronized creatine",
+    "Strength & power",
+    "Faster recovery",
+    "Lean muscle support"
+  ],
+  "howToUse": "Mix 1 scoop with water or your shake daily.",
+  "ingredients": [
+    "Creatine Monohydrate (Micronized)"
+  ],
+  "rating": 4.9,
+  "reviews": 980
+},
   {
     id: "ergo-lean-shot",
     name: "Lean Shot Thermogenic",
