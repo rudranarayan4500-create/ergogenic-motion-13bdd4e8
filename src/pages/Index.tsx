@@ -9,7 +9,6 @@ import {
   Leaf,
   ShieldCheck,
   Sparkles,
-  Star,
   Truck,
   X,
   Zap,
@@ -47,15 +46,6 @@ const ingredients = [
   { name: "L-Glutamine", icon: HeartPulse, desc: "Supports recovery, immunity and gut health after demanding training." },
   { name: "L-Citrulline", icon: FlaskConical, desc: "Boosts nitric oxide for sustained pumps, blood flow and endurance." },
   { name: "Digestive Enzymes", icon: Leaf, desc: "Improves protein absorption and reduces bloating between meals." },
-];
-
-const experts = [
-  { name: "Dr. Anand Kapoor", role: "Sports Nutrition Lead", desc: "PhD in Exercise Physiology with 15 years guiding elite athletes." },
-  { name: "Dr. Ritika Mehra", role: "Clinical R&D", desc: "Formulator for over 40 ergogenic blends across pro sports teams." },
-  { name: "Coach Daniel Roy", role: "Performance Coach", desc: "International strength coach focused on evidence-based protocols." },
-  { name: "Sneha Iyer", role: "Quality & Compliance", desc: "Leads our independent third-party lab verification program." },
-  { name: "Karan Bhalla", role: "Athlete Programs", desc: "Works directly with national-level athletes on supplementation." },
-  { name: "Dr. Maya Sharma", role: "Biochemist", desc: "Designs absorption-optimized matrices for our flagship products." },
 ];
 
 const partners = ["IRON REALM", "FORGE GYMS", "ATHLETIC LAB", "PEAK FITNESS", "VOLT TRAINING", "PRO STRENGTH"];
@@ -102,14 +92,6 @@ const Index = () => {
             <Button asChild size="lg" variant="outline" className="h-12 px-8 border-border text-foreground hover:bg-muted bg-transparent">
               <Link to="/ingredients">Explore Science</Link>
             </Button>
-          </div>
-          <div className="mt-10 inline-flex items-center gap-3 text-sm text-muted-foreground animate-[fade-in_1s_ease-out_1.2s_both]">
-            <div className="flex -space-x-2">
-              {[11, 47, 15, 32].map((i) => (
-                <img key={i} src={`https://i.pravatar.cc/40?img=${i}`} className="h-8 w-8 rounded-full border-2 border-[hsl(var(--background))]" alt="" />
-              ))}
-            </div>
-            <span><strong className="text-foreground">15,000+ Customers</strong> trust Ergogenic</span>
           </div>
         </div>
       </section>
@@ -296,37 +278,6 @@ const Index = () => {
                   <p className="mt-4 font-semibold text-foreground">{t}</p>
                 </div>
               </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* EXPERTS — infinite marquee */}
-      <section className="py-24 bg-muted/40 border-y border-border overflow-hidden">
-        <ScrollReveal className="container mb-10 text-center">
-          <p className="text-xs tracking-[0.4em] text-primary mb-3">MEET OUR EXPERTS</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground">The minds behind the formulas</h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">Scientists, coaches and athletes who shape every Ergogenic blend.</p>
-        </ScrollReveal>
-        <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[hsl(var(--background))] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[hsl(var(--background))] to-transparent z-10 pointer-events-none" />
-          <div className="marquee gap-5">
-            {[...experts, ...experts].map((e, i) => (
-              <div key={i} className="w-[300px] shrink-0 bg-card border border-border rounded-xl p-6 hover-lift">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={`https://i.pravatar.cc/120?img=${[12, 47, 8, 32, 15, 44][i % 6]}`}
-                    alt={e.name}
-                    className="h-14 w-14 rounded-full ring-2 ring-primary/40 object-cover"
-                  />
-                  <div>
-                    <p className="font-semibold text-foreground">{e.name}</p>
-                    <p className="text-[10px] text-primary uppercase tracking-widest mt-0.5">{e.role}</p>
-                  </div>
-                </div>
-                <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{e.desc}</p>
-              </div>
             ))}
           </div>
         </div>
