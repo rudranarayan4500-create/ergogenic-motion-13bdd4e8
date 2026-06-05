@@ -255,7 +255,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FEATURED PRODUCTS DESIGNED WITH ALTERNATING PICTURE SHOWCASES */}
+      {/* FEATURED PRODUCTS: ALTERNATING VISUAL PRESENTATIONS */}
       <section className="py-24 bg-muted/40 border-y border-border overflow-hidden">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-20">
@@ -270,7 +270,7 @@ const Index = () => {
                 <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
                   <img 
                     src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f579410b-7a2a-4db6-a058-59078cc70e1f.png" 
-                    alt="Flagship Performance Protein" 
+                    alt="Flagship Performance Protein Product Shot" 
                     className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
@@ -308,7 +308,7 @@ const Index = () => {
                 <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
                   <img 
                     src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f4f9f244-d122-42e5-a192-62d4475c6d26.png" 
-                    alt="Intra-Workout Matrix" 
+                    alt="Intra-Workout Performance Product Shot" 
                     className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
@@ -344,9 +344,15 @@ const Index = () => {
 
       {/* INGREDIENTS WITH PREMIUM WATERMARK ASSET OVERLAYS */}
       <section className="py-24 relative overflow-hidden">
-        {/* Absolute Raw Watermark Elements featuring your specific raw formula component graphics */}
-        <div className="absolute -top-12 -left-20 w-80 h-80 opacity-15 pointer-events-none select-none mix-blend-screen bg-contain bg-no-repeat bg-center" style={{ backgroundImage: `url('https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png')` }} />
-        <div className="absolute -bottom-16 -right-16 w-96 h-96 opacity-10 pointer-events-none select-none mix-blend-screen bg-contain bg-no-repeat bg-center" style={{ backgroundImage: `url('https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png')` }} />
+        {/* Layered Content Watermarks derived from exact formula layout guidelines */}
+        <div 
+          className="absolute -top-12 -left-20 w-80 h-80 opacity-15 pointer-events-none select-none mix-blend-screen bg-contain bg-no-repeat bg-center" 
+          style={{ backgroundImage: `url('https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png')` }} 
+        />
+        <div 
+          className="absolute -bottom-16 -right-16 w-96 h-96 opacity-10 pointer-events-none select-none mix-blend-screen bg-contain bg-no-repeat bg-center" 
+          style={{ backgroundImage: `url('https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png')` }} 
+        />
         
         <div className="container relative z-10">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
