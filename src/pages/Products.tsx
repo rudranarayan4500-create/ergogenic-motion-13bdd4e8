@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { 
   ChevronRight, Star, SlidersHorizontal, RotateCcw, Search,
   Activity, ShieldCheck, ArrowDown, Zap, Dumbbell, Sparkles, HeartPulse, 
-  ShieldAlert, ChevronDown, ChevronUp 
+  ChevronDown, ChevronUp 
 } from "lucide-react";
 import { categories, products, type Category } from "@/data/products";
 import { cn } from "@/lib/utils";
@@ -148,23 +148,23 @@ const Products = () => {
   };
 
   return (
-    <div className="bg-background text-foreground min-h-screen selection:bg-primary selection:text-black overflow-x-hidden antialiased">
+    <div className="bg-background text-foreground min-h-screen selection:bg-slate-950 selection:text-white overflow-x-hidden antialiased">
       
       {/* ==================== SECTION 1: HERO BANNER ==================== */}
       <header className="py-24 md:py-32 bg-background border-b border-border relative overflow-hidden flex flex-col items-center justify-center text-center px-4">
-        <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-primary/[0.03] rounded-full blur-[140px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-slate-100 rounded-full blur-[140px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
 
         <div className="max-w-4xl mx-auto space-y-6 relative z-10">
           <motion.span 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="text-xs font-mono tracking-[0.3em] text-primary uppercase block font-black"
+            className="text-xs font-mono tracking-[0.3em] text-slate-500 uppercase block font-black"
           >
-            Ergogenic Labs · Technical Inventory
+            Product Lines
           </motion.span>
 
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none text-foreground select-none">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none text-slate-900 select-none">
             {"THE COMPLETE PRODUCTS".split("").map((letter, idx) => (
               <motion.span
                 key={`typewriter-char-${idx}`}
@@ -178,7 +178,7 @@ const Products = () => {
             <motion.span
               animate={{ opacity: [1, 0, 1] }}
               transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
-              className="inline-block w-1.5 h-8 sm:h-12 md:h-16 bg-primary ml-1 translate-y-1"
+              className="inline-block w-1.5 h-8 sm:h-12 md:h-16 bg-slate-900 ml-1 translate-y-1"
             />
           </h1>
 
@@ -186,13 +186,7 @@ const Products = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              backgroundImage: "linear-gradient(110deg, #737373, 40%, #ffffff, 50%, #ffffff, 60%, #737373)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundSize: "200% 100%",
-            }}
-            className="text-sm sm:text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed animate-[shimmer_5s_infinite_linear]"
+            className="text-sm sm:text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed text-slate-600"
           >
             Engineered clean formulations focused on transparent profiles and everyday fitness support.
           </motion.p>
@@ -203,7 +197,7 @@ const Products = () => {
             transition={{ delay: 1.5, duration: 0.5 }}
             className="flex justify-center pt-4"
           >
-            <ArrowDown className="animate-bounce text-primary h-5 w-5" />
+            <ArrowDown className="animate-bounce text-slate-400 h-5 w-5" />
           </motion.div>
         </div>
       </header>
@@ -214,16 +208,16 @@ const Products = () => {
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 items-start">
             
             {/* UNIFIED LEFT SIDEBAR FILTER ARCHITECTURE */}
-            <aside className="xl:col-span-3 space-y-2 pr-2 sticky top-24 max-h-[85vh] overflow-y-auto scrollbar-none text-left border-b xl:border-b-0 xl:border-r border-border pb-8 xl:pb-0">
-              <div className="flex items-center justify-between pb-4 border-b border-border mb-2">
-                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-foreground">
-                  <SlidersHorizontal className="h-3.5 w-3.5 text-primary" />
+            <aside className="xl:col-span-3 space-y-2 pr-2 sticky top-24 max-h-[85vh] overflow-y-auto scrollbar-none text-left border-b xl:border-b-0 xl:border-r border-slate-200 pb-8 xl:pb-0">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-200 mb-2">
+                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-900">
+                  <SlidersHorizontal className="h-3.5 w-3.5 text-slate-900" />
                   <span>Filter Matrix ({activeFilterCount})</span>
                 </div>
                 {activeFilterCount > 0 && (
                   <button 
                     onClick={resetFilters}
-                    className="text-[10px] font-mono uppercase text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+                    className="text-[10px] font-mono uppercase text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1"
                   >
                     <RotateCcw className="h-3 w-3" /> Clear Matrix
                   </button>
@@ -231,8 +225,8 @@ const Products = () => {
               </div>
 
               {/* SIDEBAR ACCORDION 1: SEARCH BLOCK */}
-              <div className="border-b border-border py-3">
-                <button onClick={() => toggleFilterSection("search")} className="w-full flex items-center justify-between text-xs font-black uppercase tracking-wider text-foreground">
+              <div className="border-b border-slate-200 py-3">
+                <button onClick={() => toggleFilterSection("search")} className="w-full flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-900">
                   <span>Search Products</span>
                   {expandedFilters.search ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
@@ -245,9 +239,9 @@ const Products = () => {
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           placeholder="Search products..."
-                          className="w-full bg-muted/30 border border-border rounded-xl h-11 pl-10 pr-4 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/40 transition-colors"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl h-11 pl-10 pr-4 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 transition-colors"
                         />
-                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                       </div>
                     </motion.div>
                   )}
@@ -255,17 +249,17 @@ const Products = () => {
               </div>
 
               {/* SIDEBAR ACCORDION 2: COMPONENT CLASS BUTTONS */}
-              <div className="border-b border-border py-3">
-                <button onClick={() => toggleFilterSection("category")} className="w-full flex items-center justify-between text-xs font-black uppercase tracking-wider text-foreground">
-                  <span>System Class Lines</span>
+              <div className="border-b border-slate-200 py-3">
+                <button onClick={() => toggleFilterSection("category")} className="w-full flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-900">
+                  <span>Product Lines</span>
                   {expandedFilters.category ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
                 <AnimatePresence initial={true}>
                   {expandedFilters.category && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden pt-3 max-h-[220px] overflow-y-auto scrollbar-none space-y-1">
-                      <button onClick={() => handleCategoryChange(null)} className={cn("w-full text-left py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border border-transparent", !activeCategory ? "bg-muted text-primary border-primary/10" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground")}>All Core Lines</button>
+                      <button onClick={() => handleCategoryChange(null)} className={cn("w-full text-left py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border border-transparent", !activeCategory ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900")}>All Lines</button>
                       {categories.map((c) => (
-                        <button key={c.name} onClick={() => handleCategoryChange(c.name)} className={cn("w-full text-left py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider truncate border border-transparent transition-all", activeCategory === c.name ? "bg-muted text-primary border-primary/10" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground")}>
+                        <button key={c.name} onClick={() => handleCategoryChange(c.name)} className={cn("w-full text-left py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider truncate border border-transparent transition-all", activeCategory === c.name ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900")}>
                           {c.name}
                         </button>
                       ))}
@@ -275,72 +269,56 @@ const Products = () => {
               </div>
 
               {/* SIDEBAR ACCORDION 3: RANGE SLIDER FOR PRICING */}
-              <div className="border-b border-border py-3">
-                <button onClick={() => toggleFilterSection("price")} className="w-full flex items-center justify-between text-xs font-black uppercase tracking-wider text-foreground">
-                  <span>Price Cap Bounds</span>
+              <div className="border-b border-slate-200 py-3">
+                <button onClick={() => toggleFilterSection("price")} className="w-full flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-900">
+                  <span>Price Ranges</span>
                   {expandedFilters.price ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
                 <AnimatePresence initial={true}>
                   {expandedFilters.price && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden pt-4 pb-1 space-y-2">
-                      <input type="range" min="900" max="7000" step="100" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} className="w-full accent-primary bg-muted h-1 rounded-full cursor-pointer" />
-                      <div className="flex justify-between text-[11px] font-mono text-muted-foreground font-bold"><span>₹900</span><span className="text-primary">₹{maxPrice.toLocaleString()}</span></div>
+                      <input type="range" min="900" max="7000" step="100" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} className="w-full accent-slate-900 bg-slate-100 h-1 rounded-full cursor-pointer" />
+                      <div className="flex justify-between text-[11px] font-mono text-slate-500 font-bold"><span>₹900</span><span className="text-slate-900">₹{maxPrice.toLocaleString()}</span></div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
               {/* SIDEBAR ACCORDION 4: DEMOGRAPHICS */}
-              <div className="border-b border-border py-3">
-                <button onClick={() => toggleFilterSection("gender")} className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-muted-foreground transition-colors">
+              <div className="border-b border-slate-200 py-3">
+                <button onClick={() => toggleFilterSection("gender")} className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors">
                   <span>Target Demographics</span>
                   {expandedFilters.gender ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
                 <AnimatePresence>
                   {expandedFilters.gender && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden pt-3 space-y-2 text-xs text-muted-foreground font-medium font-mono uppercase">
-                      <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" defaultChecked className="accent-primary rounded bg-muted/30 border-border" /> Unisex Core</label>
-                      <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="accent-primary rounded bg-muted/30 border-border" /> Men Allocation</label>
-                      <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="accent-primary rounded bg-muted/50 border-border" /> Women Allocation</label>
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden pt-3 space-y-2 text-xs text-slate-600 font-medium font-mono uppercase">
+                      <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" defaultChecked className="accent-slate-900 rounded bg-slate-50 border-slate-200" /> Unisex Core</label>
+                      <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="accent-slate-900 rounded bg-slate-50 border-slate-200" /> Men Allocation</label>
+                      <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="accent-slate-900 rounded bg-slate-50 border-slate-200" /> Women Allocation</label>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
-
-              {/* SIDEBAR ACCORDION 5: BRAND */}
-              <div className="border-b border-border py-3">
-                <button onClick={() => toggleFilterSection("brand")} className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  <span>Manufacturing Brand</span>
-                  {expandedFilters.brand ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </button>
-              </div>
-
-              {/* SIDEBAR ACCORDION 6: SIZE */}
-              <div className="border-b border-border py-3">
-                <button onClick={() => toggleFilterSection("size")} className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  <span>Container Weight Vol</span>
-                  {expandedFilters.size ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </button>
               </div>
             </aside>
 
             {/* RIGHT DISPLAY GRID: RESULTS */}
             <div className="xl:col-span-9 space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-border text-xs text-muted-foreground">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-200 text-xs text-slate-500">
                 <span className="font-mono font-bold tracking-wider uppercase">
-                  Active Catalogue Index Allocation: <span className="text-neutral-200 font-sans font-black">{filteredProducts.length}</span> Products Loaded
+                  Products Found: <span className="text-slate-900 font-sans font-black">{filteredProducts.length}</span>
                 </span>
                 
                 <div className="flex items-center gap-2">
-                  <span className="uppercase tracking-wider font-bold">Sort System:</span>
+                  <span className="uppercase tracking-wider font-bold">Sort By:</span>
                   <select 
                     value={sortBy} onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-muted/30 border border-border rounded-lg text-[11px] font-bold uppercase tracking-wide text-neutral-200 focus:outline-none focus:border-primary/40 cursor-pointer transition-colors px-2.5 py-1.5"
+                    className="bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold uppercase tracking-wide text-slate-700 focus:outline-none focus:border-slate-400 cursor-pointer transition-colors px-2.5 py-1.5"
                   >
-                    <option value="featured">Featured Setup</option>
+                    <option value="featured">Featured</option>
                     <option value="price-low">Price: Low to High</option>
                     <option value="price-high">Price: High to Low</option>
-                    <option value="rating">Assay Rating Score</option>
+                    <option value="rating">Rating</option>
                   </select>
                 </div>
               </div>
@@ -362,7 +340,7 @@ const Products = () => {
                         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                         className="group flex flex-col text-left relative"
                       >
-                        <div className="w-full aspect-square relative bg-[#0d0d0d] rounded-2xl mb-3.5 flex items-center justify-center overflow-hidden border border-border">
+                        <div className="w-full aspect-square relative bg-slate-50 rounded-2xl mb-3.5 flex items-center justify-center overflow-hidden border border-slate-200">
                           <Link to={`/products/${p.id}`} className="w-full h-full block cursor-pointer">
                             <img
                               src={p.image} alt={p.name} loading="lazy"
@@ -371,35 +349,35 @@ const Products = () => {
                           </Link>
 
                           {isNewArrival && (
-                            <div className="absolute top-3 left-3 bg-white text-black font-mono font-black text-[9px] tracking-widest px-2.5 py-1 uppercase rounded shadow-lg">
+                            <div className="absolute top-3 left-3 bg-slate-900 text-white font-mono font-black text-[9px] tracking-widest px-2.5 py-1 uppercase rounded shadow-sm">
                               New Arrival
                             </div>
                           )}
                           {isPriceDrop && (
-                            <div className="absolute top-3 left-3 bg-primary text-black font-mono font-black text-[9px] tracking-widest px-2.5 py-1 uppercase rounded shadow-lg">
+                            <div className="absolute top-3 left-3 bg-emerald-600 text-white font-mono font-black text-[9px] tracking-widest px-2.5 py-1 uppercase rounded shadow-sm">
                               Price Drop
                             </div>
                           )}
                         </div>
 
                         <div className="space-y-1 px-1">
-                          <h3 className="text-sm font-black tracking-tight text-neutral-200 group-hover:text-primary transition-colors line-clamp-1">
+                          <h3 className="text-sm font-black tracking-tight text-slate-800 group-hover:text-slate-900 transition-colors line-clamp-1">
                             <Link to={`/products/${p.id}`}>{p.name}</Link>
                           </h3>
                           
-                          <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+                          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
                             <div className="flex items-center text-amber-500">
-                              <Star className="h-3 w-3 fill-current stroke-none" /> 
-                              <span className="text-foreground ml-0.5 font-sans">{p.rating || 4.5}</span>
+                              <Star className="h-3 w-3 fill-amber-500 stroke-none" /> 
+                              <span className="text-slate-700 ml-0.5 font-sans">{p.rating || 4.5}</span>
                             </div>
-                            <span className="text-neutral-800">|</span>
-                            <span className="font-medium text-muted-foreground font-mono">{p.reviews || 12} Reviews</span>
+                            <span className="text-slate-300">|</span>
+                            <span className="font-medium text-slate-500 font-mono">{p.reviews || 12} Reviews</span>
                           </div>
 
                           <div className="flex items-center gap-2 pt-0.5 text-xs">
-                            <span className="font-black text-foreground text-sm font-mono">₹{p.price.toLocaleString()}</span>
-                            <span className="text-muted-foreground line-through font-medium font-mono">₹{p.mrp.toLocaleString()}</span>
-                            <span className="text-primary font-black text-[11px]">
+                            <span className="font-black text-slate-900 text-sm font-mono">₹{p.price.toLocaleString()}</span>
+                            <span className="text-slate-400 line-through font-medium font-mono">₹{p.mrp.toLocaleString()}</span>
+                            <span className="text-emerald-600 font-black text-[11px]">
                               {Math.round((1 - p.price / p.mrp) * 100)}% OFF
                             </span>
                           </div>
@@ -411,9 +389,9 @@ const Products = () => {
               </motion.div>
 
               {filteredProducts.length === 0 && (
-                <div className="text-center py-24 border border-dashed border-border rounded-2xl bg-muted/30/20">
-                  <p className="text-muted-foreground text-xs font-medium uppercase tracking-widest animate-pulse">No matching product lines found inside active query boundaries.</p>
-                  <button onClick={resetFilters} className="text-primary text-[10px] uppercase font-bold tracking-widest mt-4 hover:underline">Reset Choice Matrix</button>
+                <div className="text-center py-24 border border-dashed border-slate-200 rounded-2xl bg-slate-50">
+                  <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">No matching product lines found inside active filter parameters.</p>
+                  <button onClick={resetFilters} className="text-slate-900 text-[10px] uppercase font-bold tracking-widest mt-4 hover:underline">Reset Selection</button>
                 </div>
               )}
             </div>
@@ -422,14 +400,14 @@ const Products = () => {
       </section>
 
       {/* ==================== SECTION 3: FEATURE HIGHLIGHTS ==================== */}
-      <section className="py-28 bg-muted/30 border-t border-border relative">
-        <div className="absolute top-1/2 left-1/2 w-[550px] h-[550px] bg-primary/[0.02] rounded-full blur-[150px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
+      <section className="py-28 bg-slate-50/50 border-t border-slate-200 relative">
+        <div className="absolute top-1/2 left-1/2 w-[550px] h-[550px] bg-slate-100 rounded-full blur-[150px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
         
         <div className="container max-w-7xl mx-auto px-4 space-y-40 relative z-10">
           <div className="text-center max-w-2xl mx-auto space-y-4">
-            <span className="text-xs font-mono tracking-widest text-primary uppercase block">Deep Performance Architecture</span>
-            <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase">INNOVATION HIGHLIGHTS</h2>
-            <p className="text-muted-foreground text-xs md:text-sm max-w-lg mx-auto font-light">Explore biological trace configurations designed to secure baseline nutrient absorption spikes efficiently.</p>
+            <span className="text-xs font-mono tracking-widest text-slate-400 uppercase block">Product Innovations</span>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-slate-900">INNOVATION HIGHLIGHTS</h2>
+            <p className="text-slate-500 text-xs md:text-sm max-w-lg mx-auto font-light">Explore structured compound profiles designed to support workout progression clean and efficiently.</p>
           </div>
 
           {filteredProducts.slice(0, 3).map((p, idx) => {
@@ -442,47 +420,38 @@ const Products = () => {
                 whileInView="whileInView"
                 viewport={{ once: true, margin: "-120px" }}
                 className={cn(
-                  "flex flex-col gap-16 items-center justify-between w-full p-8 md:p-16 rounded-3xl bg-background border border-border relative overflow-hidden group",
+                  "flex flex-col gap-16 items-center justify-between w-full p-8 md:p-16 rounded-3xl bg-white border border-slate-200 relative overflow-hidden group shadow-sm",
                   isEven ? "lg:flex-row" : "lg:flex-row-reverse"
                 )}
               >
-                <div className={cn(
-                  "absolute w-[360px] h-[360px] rounded-[50%] blur-[120px] opacity-20 group-hover:opacity-40 transition-opacity duration-1000 pointer-events-none -z-10",
-                  isEven ? "-right-20 -top-20 bg-primary/20" : "-left-20 -bottom-20 bg-primary/20"
-                )} />
-
                 <motion.div variants={textGlideUpVariants} className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-muted/80 border border-border rounded-md">
-                    <Activity className="h-3.5 w-3.5 text-primary" />
-                    <span className="text-[9px] uppercase tracking-widest font-mono text-foreground font-bold">Phase 0{idx + 1} Matrix Deployment</span>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 border border-slate-200 rounded-md">
+                    <Activity className="h-3.5 w-3.5 text-slate-700" />
+                    <span className="text-[9px] uppercase tracking-widest font-mono text-slate-600 font-bold">Featured Line 0{idx + 1}</span>
                   </div>
                   
-                  <h3 className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-foreground leading-none group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-slate-900 transition-colors duration-300">
                     {p.name}
                   </h3>
                   
-                  <p className="text-muted-foreground text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
+                  <p className="text-slate-600 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
                     {p.tagline} Carefully crafted using quality parameters to ensure consistent nutritional value, fitting seamlessly into your structured fitness targets.
                   </p>
 
-                  <div className="grid grid-cols-3 gap-3 pt-2 text-left">
-                    <div className="p-3 bg-muted/30 border border-border rounded-xl">
-                      <span className="block text-[8px] font-mono text-muted-foreground uppercase">Rating Index</span>
-                      <span className="text-base font-black text-foreground flex items-center gap-1 mt-0.5 font-mono">{p.rating} <Star className="h-3 w-3 fill-primary text-primary" /></span>
+                  <div className="grid grid-cols-2 gap-3 pt-2 text-left max-w-xs mx-auto lg:mx-0">
+                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                      <span className="block text-[8px] font-mono text-slate-400 uppercase">Rating Index</span>
+                      <span className="text-base font-black text-slate-800 flex items-center gap-1 mt-0.5 font-mono">{p.rating} <Star className="h-3 w-3 fill-amber-500 text-amber-500" /></span>
                     </div>
-                    <div className="p-3 bg-muted/30 border border-border rounded-xl">
-                      <span className="block text-[8px] font-mono text-muted-foreground uppercase">Purity Core</span>
-                      <span className="text-xs font-black text-primary block mt-0.5 uppercase tracking-wide">99.2% Iso</span>
-                    </div>
-                    <div className="p-3 bg-muted/30 border border-border rounded-xl">
-                      <span className="block text-[8px] font-mono text-muted-foreground uppercase">Bioavailability</span>
-                      <span className="text-xs font-black text-foreground block mt-0.5 uppercase">Max Stack</span>
+                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                      <span className="block text-[8px] font-mono text-slate-400 uppercase">Product Status</span>
+                      <span className="text-xs font-black text-emerald-600 block mt-1.5 uppercase tracking-wide">Purity Checked</span>
                     </div>
                   </div>
 
                   <div className="pt-4">
                     <Link to={`/products/${p.id}`}>
-                      <Button className="bg-primary hover:bg-primary/90 text-black font-black text-xs uppercase tracking-widest rounded-xl px-6 h-12 transition-all group-hover:translate-x-1">
+                      <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-widest rounded-xl px-6 h-12 transition-all">
                         Inspect Product <ChevronRight className="h-3 w-3 ml-1" />
                       </Button>
                     </Link>
@@ -491,10 +460,9 @@ const Products = () => {
 
                 <motion.div variants={imageScrollZoomVariants} className="w-full lg:w-1/2 flex items-center justify-center relative">
                   <Link to={`/products/${p.id}`} className="relative w-full max-w-[300px] md:max-w-[350px] aspect-square block cursor-pointer">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/10 to-transparent blur-[70px] pointer-events-none group-hover:scale-125 transition-transform duration-700" />
                     <img
                       src={p.image} alt={p.name} loading="lazy"
-                      className="w-full h-full object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)] transition-all duration-700 ease-out group-hover:scale-110 group-hover:-translate-y-4 group-hover:rotate-2"
+                      className="w-full h-full object-contain transition-all duration-700 ease-out"
                     />
                   </Link>
                 </motion.div>
@@ -504,87 +472,88 @@ const Products = () => {
         </div>
       </section>
 
-      {/* ==================== SECTION 4: SUBSCRIPTIONS ==================== */}
-      <section className="py-24 bg-background border-t border-border relative">
+      {/* ==================== SECTION 4: PREMIUM WHITE/BLUE SUBSCRIPTIONS ==================== */}
+      <section className="py-24 bg-background border-t border-slate-200 relative">
         <div className="container max-w-6xl mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase font-bold">
-              <Zap className="h-3 w-3" /> System Subscriptions Matrix
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-50 border border-blue-100 rounded-full text-[10px] font-mono tracking-widest text-blue-700 uppercase font-bold">
+              <Zap className="h-3 w-3" /> Auto-Delivery Matrix
             </div>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">CHOOSE YOUR SUBSCRIPTION PASS</h2>
-            <p className="text-muted-foreground text-xs md:text-sm">Unlock automated nutritional drops dispatched straight into continuous priority logistics pipelines.</p>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-slate-900">CHOOSE YOUR SUBSCRIPTION PLAN</h2>
+            <p className="text-slate-500 text-xs md:text-sm">Unlock automated recurring product deliveries dispatched straight to your doorstep on schedule.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
-            {/* ELITE PASS CARD */}
-            <div className="bg-gradient-to-b from-neutral-950 to-neutral-900 border border-primary/20 p-8 rounded-3xl flex flex-col justify-between relative overflow-hidden group">
-              <div className="absolute top-0 right-0 bg-primary text-black font-black font-mono px-4 py-1 rounded-bl-xl text-[9px] uppercase tracking-widest">
-                Recommended Lineup
+            
+            {/* ELITE PLAN CARD — High-Visibility White & Blue Architecture */}
+            <div className="bg-white border-2 border-blue-600 p-8 rounded-3xl flex flex-col justify-between relative overflow-hidden group shadow-md">
+              <div className="absolute top-0 right-0 bg-blue-600 text-white font-black font-mono px-4 py-1 rounded-bl-xl text-[9px] uppercase tracking-widest">
+                Recommended
               </div>
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-primary/10 rounded-xl border border-primary/20">
-                    <Sparkles className="h-6 w-6 text-primary" />
+                  <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                    <Sparkles className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-black uppercase tracking-tight text-foreground leading-none">CULT-ELITE ACCELERATOR</h3>
-                    <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mt-1">Full Compound Bundle System</span>
+                    <h3 className="text-2xl font-black uppercase tracking-tight text-slate-900 leading-none">CULT-ELITE ACCELERATOR</h3>
+                    <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block mt-1">Full Compound Bundle System</span>
                   </div>
                 </div>
 
-                <p className="text-muted-foreground text-xs font-light leading-relaxed">
+                <p className="text-slate-600 text-xs font-medium leading-relaxed">
                   Grants ongoing automated recurring drop-cycles containing core micro-filtered isolates and performance stack configurations safely.
                 </p>
 
-                <ul className="space-y-2 text-xs font-medium text-foreground">
-                  <li className="flex items-center gap-2"><Dumbbell className="h-3.5 w-3.5 text-primary" /> Access rights across Partner Center Gym Networks</li>
-                  <li className="flex items-center gap-2"><Zap className="h-3.5 w-3.5 text-primary" /> Custom 1-on-1 AI Digital Macro Tracker Profiles</li>
-                  <li className="flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5 text-primary" /> Guaranteed High-Priority Supply Allocation Locking</li>
+                <ul className="space-y-2 text-xs font-bold text-slate-700">
+                  <li className="flex items-center gap-2.5"><Dumbbell className="h-4 w-4 text-blue-600 shrink-0" /> Access rights across Partner Center Gym Networks</li>
+                  <li className="flex items-center gap-2.5"><Zap className="h-4 w-4 text-blue-600 shrink-0" /> Custom 1-on-1 AI Digital Macro Tracker Profiles</li>
+                  <li className="flex items-center gap-2.5"><ShieldCheck className="h-4 w-4 text-blue-600 shrink-0" /> Guaranteed High-Priority Supply Allocation Locking</li>
                 </ul>
               </div>
 
-              <div className="pt-8 border-t border-border mt-8 flex items-end justify-between">
+              <div className="pt-8 border-t border-slate-200 mt-8 flex items-end justify-between">
                 <div>
-                  <span className="block text-[10px] uppercase font-mono text-muted-foreground">Subscription Cost</span>
-                  <span className="text-3xl font-black text-foreground tracking-tight font-mono">₹4,499<span className="text-xs font-light text-muted-foreground">/mo</span></span>
+                  <span className="block text-[10px] uppercase font-mono text-slate-400 font-bold">Subscription Cost</span>
+                  <span className="text-3xl font-black text-slate-900 tracking-tight font-mono">₹4,499<span className="text-xs font-light text-slate-500">/mo</span></span>
                 </div>
-                <Button className="bg-primary text-black font-black uppercase text-xs tracking-wider px-6 rounded-xl h-11">
-                  Activate Pass
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase text-xs tracking-wider px-6 rounded-xl h-12 shadow-sm">
+                  Activate Plan
                 </Button>
               </div>
             </div>
 
-            {/* BASE PRO PASS CARD */}
-            <div className="bg-muted/30 border border-border p-8 rounded-3xl flex flex-col justify-between group">
+            {/* BASE PRO PLAN CARD */}
+            <div className="bg-slate-50 border border-slate-200 p-8 rounded-3xl flex flex-col justify-between group shadow-sm">
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-muted rounded-xl border border-border">
-                    <HeartPulse className="h-6 w-6 text-muted-foreground" />
+                  <div className="p-3 bg-white rounded-xl border border-slate-200">
+                    <HeartPulse className="h-6 w-6 text-slate-700" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-black uppercase tracking-tight text-muted-foreground leading-none">CULT-PRO BASELINE</h3>
-                    <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mt-1">Core Micronutrient Foundations</span>
+                    <h3 className="text-2xl font-black uppercase tracking-tight text-slate-800 leading-none">CULT-PRO BASELINE</h3>
+                    <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block mt-1">Core Micronutrient Foundations</span>
                   </div>
                 </div>
 
-                <p className="text-muted-foreground text-xs font-light leading-relaxed">
+                <p className="text-slate-600 text-xs font-medium leading-relaxed">
                   Tailored to automate baseline replenishment supplies across fundamental mineral packs, multivitamin traces, and daily multi-stacks.
                 </p>
 
-                <ul className="space-y-2 text-xs font-medium text-muted-foreground">
-                  <li className="flex items-center gap-2"><Dumbbell className="h-3.5 w-3.5 text-muted-foreground" /> Standard Logistics Fulfillment Timelines</li>
-                  <li className="flex items-center gap-2"><Zap className="h-3.5 w-3.5 text-muted-foreground" /> Auto-Replenish Courier Tracking Records</li>
-                  <li className="flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5 text-muted-foreground" /> Complete Batch Verification Certification Logs</li>
+                <ul className="space-y-2 text-xs font-bold text-slate-600">
+                  <li className="flex items-center gap-2.5"><Dumbbell className="h-4 w-4 text-slate-400 shrink-0" /> Standard Logistics Fulfillment Timelines</li>
+                  <li className="flex items-center gap-2.5"><Zap className="h-4 w-4 text-slate-400 shrink-0" /> Auto-Replenish Courier Tracking Records</li>
+                  <li className="flex items-center gap-2.5"><ShieldCheck className="h-4 w-4 text-slate-400 shrink-0" /> Complete Batch Verification Certification Logs</li>
                 </ul>
               </div>
 
-              <div className="pt-8 border-t border-border mt-8 flex items-end justify-between">
+              <div className="pt-8 border-t border-slate-200 mt-8 flex items-end justify-between">
                 <div>
-                  <span className="block text-[10px] uppercase font-mono text-muted-foreground">Subscription Cost</span>
-                  <span className="text-3xl font-black text-foreground tracking-tight font-mono">₹2,199<span className="text-xs font-light text-muted-foreground">/mo</span></span>
+                  <span className="block text-[10px] uppercase font-mono text-slate-400 font-bold">Subscription Cost</span>
+                  <span className="text-3xl font-black text-slate-900 tracking-tight font-mono">₹2,199<span className="text-xs font-light text-slate-500">/mo</span></span>
                 </div>
-                <Button variant="outline" className="border-border text-foreground hover:bg-white hover:text-black font-black uppercase text-xs tracking-wider px-6 rounded-xl h-11">
-                  Deploy Pro Pass
+                <Button variant="outline" className="border-slate-300 text-slate-700 bg-white hover:bg-slate-100 font-black uppercase text-xs tracking-wider px-6 rounded-xl h-12">
+                  Deploy Plan
                 </Button>
               </div>
             </div>
@@ -593,31 +562,31 @@ const Products = () => {
       </section>
 
       {/* ==================== SECTION 5: TRANSPARENCY LEDGER ==================== */}
-      <section className="py-24 bg-muted/30 border-t border-border">
+      <section className="py-24 bg-slate-50/50 border-t border-slate-200">
         <div className="container max-w-5xl mx-auto px-4">
-          <div className="bg-background border border-border rounded-3xl p-8 md:p-12 grid md:grid-cols-[1fr_2px_1fr] gap-8 items-center">
+          <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 grid md:grid-cols-[1fr_2px_1fr] gap-8 items-center shadow-sm">
             <div className="space-y-4 text-left">
-              <div className="h-8 w-8 rounded-lg bg-muted border border-border flex items-center justify-center">
-                <ShieldCheck className="h-4 w-4 text-primary" />
+              <div className="h-8 w-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center">
+                <ShieldCheck className="h-4 w-4 text-slate-800" />
               </div>
-              <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-foreground">THE TRANSPARENCY ASSURANCES</h3>
-              <p className="text-muted-foreground text-xs md:text-sm font-light leading-relaxed">
-                We believe you have the absolute right to evaluate raw structural matrix details completely. Independent third-party testing logs tracking internal purity margins remain completely accessible.
+              <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-900">THE TRANSPARENCY ASSURANCES</h3>
+              <p className="text-slate-600 text-xs md:text-sm font-light leading-relaxed">
+                We focus on straightforward manufacturing clarity. Verification testing metrics, raw item breakdowns, and clear macro details across all product layers remain completely accessible to ensure your peace of mind.
               </p>
             </div>
 
-            <div className="h-full w-full bg-muted hidden md:block" />
+            <div className="h-full w-full bg-slate-100 hidden md:block" />
 
             <div className="space-y-4 text-left">
-              <h4 className="text-xs uppercase font-mono font-black tracking-widest text-muted-foreground">Audit Protocol Controls</h4>
+              <h4 className="text-xs uppercase font-mono font-black tracking-widest text-muted-foreground">Quality Controls</h4>
               <div className="space-y-3">
                 <div className="flex items-start gap-2 text-xs">
-                  <span className="text-primary font-bold font-mono">01/</span>
-                  <p className="text-foreground font-light"><strong className="text-foreground font-bold">Audited Composition:</strong> Formulated using highly strict guidelines matching standard composition targets accurately.</p>
+                  <span className="text-slate-900 font-bold font-mono">01/</span>
+                  <p className="text-slate-600 font-light"><strong className="text-slate-800 font-bold">Thoroughly Audited Process:</strong> Formulated using highly strict guidelines matching standard composition targets accurately.</p>
                 </div>
                 <div className="flex items-start gap-2 text-xs">
-                  <span className="text-primary font-bold font-mono">02/</span>
-                  <p className="text-foreground font-light"><strong className="text-foreground font-bold">Label Accuracy Lock:</strong> Purity measurements printed transparently across our containers match active ingredient contents precisely.</p>
+                  <span className="text-slate-900 font-bold font-mono">02/</span>
+                  <p className="text-slate-600 font-light"><strong className="text-slate-800 font-bold">Precise Label Matching:</strong> Content weights and compound listings align directly with the printed specs present on our product pack labels.</p>
                 </div>
               </div>
             </div>
