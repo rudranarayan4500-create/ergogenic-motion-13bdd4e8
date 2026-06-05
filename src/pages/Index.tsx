@@ -103,7 +103,7 @@ const Index = () => {
                 <img key={i} src={`https://i.pravatar.cc/40?img=${i}`} className="h-8 w-8 rounded-full border-2 border-[hsl(var(--background))]" alt="" />
               ))}
             </div>
-            <span><strong className="text-foreground">15,000+ Customers</strong> trust Ergogenic</span>
+            
           </div>
         </div>
       </section>
