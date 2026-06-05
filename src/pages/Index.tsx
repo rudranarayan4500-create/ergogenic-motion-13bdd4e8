@@ -28,6 +28,7 @@ import { CountdownTimer } from "@/components/CountdownTimer";
 import { TypewriterText } from "@/components/TypewriterText";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { categories, products } from "@/data/products";
+import { ProductShowcaseSlider } from "@/components/ProductShowcaseSlider";
 
 const trustItems = [
   "Lab Tested",
