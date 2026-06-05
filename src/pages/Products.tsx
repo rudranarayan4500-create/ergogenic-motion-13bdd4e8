@@ -245,22 +245,22 @@ const Products = () => {
       <div className="bg-muted/30 border-b border-border py-8">
         <div className="container max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div className="space-y-1">
-            <span className="block text-2xl md:text-4xl font-black text-foreground tracking-tight">500K+</span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground font-bold block">Athletes Served</span>
+            <span className="block text-2xl md:text-4xl font-black text-foreground tracking-tight"></span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground font-bold block"></span>
           </div>
           <div className="space-y-1">
-            <span className="block text-2xl md:text-4xl font-black text-primary tracking-tight">100%</span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground font-bold block">Label Disclosures</span>
+            <span className="block text-2xl md:text-4xl font-black text-primary tracking-tight"></span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground font-bold block"></span>
           </div>
           <div className="space-y-1">
-            <span className="block text-2xl md:text-4xl font-black text-foreground tracking-tight">WADA / ISO</span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground font-bold block">Certified Batches</span>
+            <span className="block text-2xl md:text-4xl font-black text-foreground tracking-tight"></span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground font-bold block"></span>
           </div>
           <div className="space-y-1">
             <span className="block text-2xl md:text-4xl font-black font-mono tracking-tighter text-orange-500 tabular-nums">
               {timeLeft}
             </span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground font-extrabold block">Fulfillment Dispatch Countdown</span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-muted-foreground font-extrabold block"></span>
           </div>
         </div>
       </div>
@@ -296,7 +296,7 @@ const Products = () => {
               {/* SIDEBAR ACCORDION 1: TEXT QUERY SEARCH BLOCK */}
               <div className="border-b border-border py-3">
                 <button onClick={() => toggleFilterSection("search")} className="w-full flex items-center justify-between text-xs font-black uppercase tracking-wider text-foreground">
-                  <span>Search Arsenal</span>
+                  <span>Search Products</span>
                   {expandedFilters.search ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
                 <AnimatePresence initial={true}>
