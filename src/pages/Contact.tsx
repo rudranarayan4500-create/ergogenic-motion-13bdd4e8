@@ -24,20 +24,20 @@ const Contact = () => {
               { i: Mail, t: "Email", d: "support@ergogenic.in", s: "We reply within 24 hours" },
               { i: MapPin, t: "Address", d: "Sector 18, Gurugram, India", s: "HQ & Fulfilment Center" },
             ].map((c) => (
-              <div key={c.t} className="flex gap-4 p-5 bg-card border border-white/10 rounded-xl">
+              <div key={c.t} className="flex gap-4 p-5 bg-card border border-border rounded-xl">
                 <div className="h-11 w-11 rounded-lg bg-primary/15 grid place-items-center text-primary shrink-0">
                   <c.i className="h-5 w-5" />
                 </div>
                 <div>
                   <p className="font-semibold">{c.t}</p>
-                  <p className="text-white/85 mt-1">{c.d}</p>
-                  <p className="text-xs text-white/50 mt-1">{c.s}</p>
+                  <p className="text-foreground mt-1">{c.d}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{c.s}</p>
                 </div>
               </div>
             ))}
           </div>
           <form
-            className="lg:col-span-2 p-8 bg-card border border-white/10 rounded-xl space-y-5"
+            className="lg:col-span-2 p-8 bg-card border border-border rounded-xl space-y-5"
             onSubmit={async (e) => {
               e.preventDefault();
               setBusy(true);
@@ -57,20 +57,20 @@ const Contact = () => {
             <div className="grid md:grid-cols-2 gap-5">
               <div>
                 <Label>Name</Label>
-                <Input name="name" required className="mt-1.5 bg-background border-white/15" placeholder="Your name" />
+                <Input name="name" required className="mt-1.5 bg-background border-border" placeholder="Your name" />
               </div>
               <div>
                 <Label>Email</Label>
-                <Input name="email" required type="email" className="mt-1.5 bg-background border-white/15" placeholder="you@email.com" />
+                <Input name="email" required type="email" className="mt-1.5 bg-background border-border" placeholder="you@email.com" />
               </div>
             </div>
             <div>
               <Label>Subject</Label>
-              <Input name="subject" required className="mt-1.5 bg-background border-white/15" placeholder="How can we help?" />
+              <Input name="subject" required className="mt-1.5 bg-background border-border" placeholder="How can we help?" />
             </div>
             <div>
               <Label>Message</Label>
-              <Textarea name="message" required rows={6} className="mt-1.5 bg-background border-white/15" placeholder="Tell us about your goal..." />
+              <Textarea name="message" required rows={6} className="mt-1.5 bg-background border-border" placeholder="Tell us about your goal..." />
             </div>
             <Button disabled={busy} type="submit" size="lg" className="bg-primary hover:bg-primary/90 shadow-glow">{busy ? "Sending…" : "Send Message"}</Button>
           </form>

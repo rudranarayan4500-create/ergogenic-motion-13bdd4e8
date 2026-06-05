@@ -145,29 +145,34 @@ const Index = () => {
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
             <p className="text-xs tracking-[0.4em] text-primary mb-3">BUILD YOUR STACK</p>
             <h2 className="text-3xl md:text-5xl font-bold text-foreground">Engineered for every goal</h2>
-            <p className="mt-4 text-muted-foreground">Choose the category that matches your mission. Every product is dosed for results, not marketing.</p>
+            <p className="mt-4 text-muted-foreground">Every product is dosed for results, not marketing. Tap a card to explore.</p>
           </ScrollReveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {categories.map((c, i) => {
-              const Icon = [Dumbbell, Zap, HeartPulse, Leaf][i];
-              return (
-                <ScrollReveal key={c.name} delay={i * 100}>
-                  <Link
-                    to={`/products?cat=${c.name}`}
-                    className="group relative bg-[hsl(var(--card))] border border-border rounded-xl p-7 hover-lift overflow-hidden block"
-                  >
-                    <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary/10 blur-3xl group-hover:bg-primary/30 transition-colors" />
-                    <Icon className="h-8 w-8 text-primary" />
-                    <h3 className="mt-5 text-xl font-bold text-foreground">{c.name}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{c.description}</p>
-                    <div className="mt-6 inline-flex items-center text-sm text-primary">
-                      Explore <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </Link>
-                </ScrollReveal>
-              );
-            })}
+        </div>
+        <div className="relative overflow-hidden group">
+          <div className="marquee gap-6 [animation-duration:60s] group-hover:[animation-play-state:paused]">
+            {[...products, ...products].map((p, i) => (
+              <Link
+                key={`${p.id}-${i}`}
+                to={`/products/${p.id}`}
+                className="shrink-0 w-[260px] bg-card border border-border rounded-xl overflow-hidden hover-lift block"
+              >
+                <div className="aspect-[4/5] bg-muted overflow-hidden">
+                  <img src={p.image} alt={p.name} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
+                </div>
+                <div className="p-4">
+                  <p className="text-[10px] tracking-[0.3em] text-primary uppercase">{p.category}</p>
+                  <h3 className="mt-1.5 font-bold text-foreground leading-tight line-clamp-1">{p.name}</h3>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{p.tagline}</p>
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="text-base font-bold text-foreground">₹{p.price.toLocaleString()}</span>
+                    <span className="inline-flex items-center text-xs text-primary">Shop <ChevronRight className="h-3.5 w-3.5 ml-0.5" /></span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background to-transparent" />
         </div>
       </section>
 
