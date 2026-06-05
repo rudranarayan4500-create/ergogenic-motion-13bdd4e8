@@ -25,7 +25,7 @@ import { Counter } from "@/components/Counter";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { TypewriterText } from "@/components/TypewriterText";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { products } from "@/data/products";
+import { categories, products } from "@/data/products";
 import { ProductShowcaseSlider } from "@/components/ProductShowcaseSlider";
 
 const trustItems = [
@@ -50,6 +50,8 @@ const ingredients = [
 const partners = ["IRON REALM", "FORGE GYMS", "ATHLETIC LAB", "PEAK FITNESS", "VOLT TRAINING", "PRO STRENGTH"];
 
 const Index = () => {
+  const featured = products.slice(0, 4);
+
   return (
     <div className="bg-background text-foreground">
       {/* HERO */}
@@ -265,7 +267,7 @@ const Index = () => {
             {/* Showcase 1: Left Image, Right Text */}
             <div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center">
               <ScrollReveal direction="left" className="md:col-span-6">
-                <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl">
+                <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
                   <img 
                     src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f579410b-7a2a-4db6-a058-59078cc70e1f.png" 
                     alt="Flagship Performance Protein" 
@@ -303,7 +305,7 @@ const Index = () => {
                 </div>
               </ScrollReveal>
               <ScrollReveal direction="right" className="md:col-span-6 order-1 md:order-2">
-                <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl">
+                <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
                   <img 
                     src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f4f9f244-d122-42e5-a192-62d4475c6d26.png" 
                     alt="Intra-Workout Matrix" 
@@ -340,9 +342,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* INGREDIENTS DESIGNED WITH PROVIDED RICH BACKGROUND IMAGES */}
+      {/* INGREDIENTS WITH PREMIUM WATERMARK ASSET OVERLAYS */}
       <section className="py-24 relative overflow-hidden">
-        {/* Absolute Background Elements featuring provided premium ingredients visuals */}
+        {/* Absolute Raw Watermark Elements featuring your specific raw formula component graphics */}
         <div className="absolute -top-12 -left-20 w-80 h-80 opacity-15 pointer-events-none select-none mix-blend-screen bg-contain bg-no-repeat bg-center" style={{ backgroundImage: `url('https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png')` }} />
         <div className="absolute -bottom-16 -right-16 w-96 h-96 opacity-10 pointer-events-none select-none mix-blend-screen bg-contain bg-no-repeat bg-center" style={{ backgroundImage: `url('https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png')` }} />
         
