@@ -16,8 +16,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Logo } from "@/components/Logo";
-import { Counter } from "@/components/Counter";
-import { CountdownTimer } from "@/components/CountdownTimer";
 import { TypewriterText } from "@/components/TypewriterText";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { products } from "@/data/products";
@@ -35,40 +33,46 @@ const ingredients = [
 const Index = () => {
   return (
     <div className="bg-background text-foreground">
-      {/* HERO */}
+      {/* HERO SECTION — Optimized for clarity using 30% Dark, 40% Blue, 20% White style layers */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+        {/* Video Background */}
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-20"
+          className="absolute inset-0 h-full w-full object-cover opacity-35"
           src="/videos/hero.mp4"
           autoPlay
           muted
           loop
           playsInline
         />
-        <div className="absolute inset-0 bg-grid-light opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,hsl(var(--primary)/0.18),transparent_60%)]" />
+        
+        {/* Visual Grading Overlays */}
+        <div className="absolute inset-0 bg-black/30 pointer-events-none" /> {/* 30% Dark */}
+        <div className="absolute inset-0 bg-blue-900/40 pointer-events-none mix-blend-multiply" /> {/* 40% Blue */}
+        <div className="absolute inset-0 bg-white/20 pointer-events-none" /> {/* 20% White */}
+        <div className="absolute inset-0 bg-grid-light opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
+
         <div className="container relative z-10 py-32 text-center animate-fade-in">
           <div className="flex justify-center mb-8">
             <Logo className="h-10 md:h-12" />
           </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] text-white drop-shadow-md">
             FUEL{" "}
             <span className="text-gradient-red">
               <TypewriterText text="EVOLVED" speed={120} delay={400} />
             </span>
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-foreground max-w-2xl mx-auto overflow-hidden">
+          <p className="mt-6 text-lg md:text-xl text-white font-medium max-w-2xl mx-auto overflow-hidden drop-shadow-sm">
             <span className="inline-block animate-[fade-in_1.2s_ease-out_0.8s_both]">
               Performance-focused nutrition engineered for your fitness goals.
               Transparently dosed, made for evolution.
             </span>
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-[fade-in_1s_ease-out_1s_both]">
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-base h-12 px-8 shadow-glow">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-base h-12 px-8 shadow-glow text-white font-bold">
               <Link to="/products">Shop Now <ChevronRight className="ml-1 h-4 w-4" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-12 px-8 border-border text-foreground hover:bg-muted bg-transparent">
+            <Button asChild size="lg" variant="outline" className="h-12 px-8 border-white/30 text-white hover:bg-white/10 bg-transparent font-bold backdrop-blur-sm">
               <Link to="/ingredients">Explore Science</Link>
             </Button>
           </div>
@@ -241,28 +245,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* STATS COUNTER GRID */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.12),transparent_60%)]" />
-        <div className="container relative grid grid-cols-2 lg:grid-cols-3 gap-8 text-center justify-center max-w-4xl">
-          {[
-            { v: 27, s: "g", l: "Protein per serving" },
-            { v: 100, s: "%", l: "Label Accuracy" },
-            { v: 4.9, s: "/5", l: "Avg. rating", float: true },
-          ].map((stat, i) => (
-            <ScrollReveal key={i} delay={i * 100}>
-              <div className="border border-border rounded-xl p-8 bg-card/50 backdrop-blur">
-                <div className="text-4xl md:text-5xl font-bold text-gradient-red">
-                  {stat.float ? "4.9" : <Counter to={stat.v} suffix={stat.s} />}
-                  {stat.float && stat.s}
-                </div>
-                <p className="mt-3 text-sm text-muted-foreground uppercase tracking-widest">{stat.l}</p>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
-      </section>
-
       {/* INGREDIENTS ARSENAL */}
       <section className="py-24 relative overflow-hidden">
         <div className="container relative z-10">
@@ -285,21 +267,6 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* OFFER + COUNTDOWN */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-transparent to-primary/30" />
-        <div className="absolute inset-0 bg-grid-light opacity-40" />
-        <ScrollReveal className="container relative text-center">
-          <p className="text-xs tracking-[0.4em] text-primary mb-3">LIMITED TIME</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground">Limited batch pricing available</h2>
-          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">Save on flagship products. Offer ends in:</p>
-          <div className="mt-10"><CountdownTimer /></div>
-          <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 h-12 px-8 shadow-glow">
-            <Link to="/products">Claim Offer</Link>
-          </Button>
-        </ScrollReveal>
       </section>
 
       {/* FAQ */}
