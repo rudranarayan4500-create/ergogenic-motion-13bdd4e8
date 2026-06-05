@@ -72,7 +72,7 @@ const Index = () => {
           <div className="flex justify-center mb-8">
             <Logo className="h-10 md:h-12" />
           </div>
-          <p className="text-xs md:text-sm tracking-[0.5em] text-primary mb-5">SCIENCE IN MOTION</p>
+          <p className="text-xs md:text-sm tracking-[0.5em] text-primary mb-5">WHERE PERSONAL TRANSFORMATIONS MET PURPOSE</p>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]">
             FUEL{" "}
             <span className="text-gradient-red">
@@ -108,6 +108,113 @@ const Index = () => {
               <span className="opacity-50">◆</span>
             </span>
           ))}
+        </div>
+      </section>
+
+      {/* BRAND HIGHLIGHT: INDIA'S HOME-GROWN PREMIER BRAND */}
+      <section className="py-20 relative bg-muted/20 border-b border-border">
+        <div className="container text-center max-w-3xl">
+          <ScrollReveal>
+            <span className="text-xs font-bold tracking-[0.4em] text-primary bg-primary/10 px-3 py-1 rounded-full uppercase">
+              The Standard
+            </span>
+            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight mt-6 leading-tight text-foreground">
+              India's Home-Grown Premier <br />
+              <span className="text-gradient-red">Supplements Brand</span>
+            </h2>
+            <p className="mt-6 text-muted-foreground text-lg leading-relaxed">
+              We reject cheap imports and second-hand contract formulations. Engineered locally from seed to shaker, we deliver international benchmark standards crafted right here at home.
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* THE TASTE BREAKTHROUGH: WORLD'S BEST-TASTING WHEY */}
+      <section className="py-24 relative border-b border-border">
+        <div className="container grid md:grid-cols-2 gap-12 items-center">
+          <ScrollReveal direction="left">
+            <span className="text-xs font-bold tracking-[0.3em] text-primary uppercase bg-primary/10 px-3 py-1 rounded-full">MUST TRY</span>
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground mt-4 leading-tight">
+              The World's Best-Tasting <br />Whey Protein
+            </h2>
+            <p className="mt-6 text-muted-foreground text-base md:text-lg leading-relaxed">
+              Most whey protein out there taste like mud: thick, chalky, gritty, and far from delicious. The result? You end up dreading it instead of loving it.
+            </p>
+            <p className="mt-4 text-foreground font-medium text-base md:text-lg leading-relaxed bg-muted/60 p-4 border-l-2 border-primary rounded-r-xl">
+              Fuelled Whey is the most delicious whey out there. So you don't have to chug your whey to reach your goals.
+            </p>
+          </ScrollReveal>
+          <ScrollReveal direction="right" className="flex justify-center">
+            <div className="w-full max-w-md aspect-[4/3] bg-gradient-to-br from-card to-muted border border-border rounded-xl flex flex-col justify-center p-8 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-bl">Premium Matrix</div>
+              <Dumbbell className="h-12 w-12 text-primary mb-4" />
+              <h3 className="text-xl font-bold">Zero Flavor Fatigue</h3>
+              <p className="text-sm text-muted-foreground mt-2">Instantized solubility engineered to mix clean under 20 seconds without sediment clumping.</p>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* REPLICATING THE COMPARISON ROW LAYOUT FROM image_9830af.png */}
+      <section className="py-24 bg-muted/30 border-b border-border">
+        <div className="container">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Box Component (Table Interface derived from image_9830af.png) */}
+            <div className="lg:col-span-7 overflow-x-auto rounded-xl border border-border bg-background shadow-xl">
+              <table className="w-full text-left border-collapse min-w-[500px]">
+                <thead>
+                  <tr className="border-b border-border bg-muted/40">
+                    <th className="p-5 text-sm font-bold uppercase tracking-wider text-muted-foreground"></th>
+                    <th className="p-5 text-center text-lg font-bold text-foreground bg-primary/10 border-x border-border/80 relative">
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[9px] px-2 py-0.5 rounded-full uppercase tracking-widest font-black">Active</span>
+                      Fuelled
+                    </th>
+                    <th className="p-5 text-center text-sm font-semibold text-muted-foreground/60">Ordinary Supplements</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {[
+                    ["Premium Ingredients", true],
+                    ["Evidence-Based Formulation", true],
+                    ["Third-Party Tested", true],
+                    ["Seriously Delicious", true],
+                    ["No BS", true],
+                  ].map(([feature, val], idx) => (
+                    <tr key={idx} className="hover:bg-muted/20 transition-colors">
+                      <td className="p-5 text-sm font-bold text-foreground">{feature as string}</td>
+                      <td className="p-5 text-center bg-primary/15 border-x border-border/80">
+                        <div className="h-6 w-6 rounded-full bg-primary/20 text-primary border border-primary/40 flex items-center justify-center mx-auto shadow-sm">
+                          ✓
+                        </div>
+                      </td>
+                      <td className="p-5 text-center text-muted-foreground/40 font-light">
+                        ✕
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Right Text Component (Typography block derived from image_9830af.png) */}
+            <div className="lg:col-span-5 flex flex-col justify-center">
+              <ScrollReveal direction="right">
+                <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight leading-[1.1] uppercase">
+                  Stop Using Shady Supplements <br />That Don't Work
+                </h2>
+                <p className="mt-6 text-muted-foreground text-sm md:text-base leading-relaxed">
+                  Most supplements out there are worthless, if not downright ineffective. Ineffective ingredients, ineffective doses, proprietary blends, duplicacy - just some of the things that the supplement industry relies on to maximize profits at the expense of your health, performance and results.
+                </p>
+                <div className="mt-8">
+                  <Link to="/ingredients" className="inline-flex items-center text-xs font-black tracking-widest text-foreground hover:text-primary transition-colors border-b-2 border-foreground hover:border-primary pb-1 uppercase">
+                    Learn About Our Evidence-Based Approach
+                  </Link>
+                </div>
+              </ScrollReveal>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -155,7 +262,7 @@ const Index = () => {
           <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
             <ScrollReveal direction="left">
               <p className="text-xs tracking-[0.4em] text-primary mb-3">FEATURED PRODUCTS</p>
-              <h2 className="text-3xl md:text-5xl font-bold max-w-xl text-foreground">Top-rated by 15,000+ athletes</h2>
+              <h2 className="text-3xl md:text-5xl font-bold max-w-xl text-foreground">Top-rated by elite athletes</h2>
             </ScrollReveal>
             <Button asChild variant="outline" className="border-border bg-transparent hover:bg-muted text-foreground">
               <Link to="/products">View all products <ChevronRight className="ml-1 h-4 w-4" /></Link>
@@ -163,7 +270,7 @@ const Index = () => {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featured.map((p, i) => (
-              <ScrollReveal key={p.id} delay={i * 80}>
+              <ScrollReveal key={p.id} border-muted="true" delay={i * 80}>
                 <ProductCard p={p} />
               </ScrollReveal>
             ))}
@@ -177,7 +284,7 @@ const Index = () => {
         <div className="container relative grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
           {[
             { v: 27, s: "g", l: "Protein per serving" },
-            { v: 15000, s: "+", l: "Happy customers" },
+            { v: 100, s: "%", l: "Label Accuracy" },
             { v: 4.9, s: "/5", l: "Avg. rating", float: true },
             { v: 0, s: "%", l: "Amino spiking" },
           ].map((stat, i) => (
@@ -191,46 +298,6 @@ const Index = () => {
               </div>
             </ScrollReveal>
           ))}
-        </div>
-      </section>
-
-      {/* COMPARISON */}
-      <section className="py-24 bg-muted/40 border-y border-border">
-        <div className="container">
-          <ScrollReveal className="text-center max-w-2xl mx-auto mb-12">
-            <p className="text-xs tracking-[0.4em] text-primary mb-3">THE DIFFERENCE</p>
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground">Ergogenic vs. The Rest</h2>
-            <p className="mt-4 text-muted-foreground">We built Ergogenic to fix what the supplement industry got wrong.</p>
-          </ScrollReveal>
-          <ScrollReveal>
-            <div className="overflow-hidden rounded-xl border border-border">
-              <table className="w-full text-left">
-                <thead className="bg-muted/50">
-                  <tr>
-                    <th className="p-5 font-semibold text-foreground">Feature</th>
-                    <th className="p-5 font-semibold text-primary">Ergogenic</th>
-                    <th className="p-5 font-semibold text-muted-foreground">Typical brands</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {[
-                    ["Transparent ingredient panel", true, false],
-                    ["Clinical dosing on every active", true, false],
-                    ["Zero amino spiking guarantee", true, false],
-                    ["Independent third-party lab tested", true, false],
-                    ["No proprietary blends", true, false],
-                    ["FSSAI Approved", true, true],
-                  ].map(([feat, a, b], i) => (
-                    <tr key={i} className="hover:bg-muted/50">
-                      <td className="p-5 text-foreground">{feat as string}</td>
-                      <td className="p-5">{a ? <CheckCircle2 className="h-5 w-5 text-primary" /> : <X className="h-5 w-5 text-foreground/40" />}</td>
-                      <td className="p-5">{b ? <CheckCircle2 className="h-5 w-5 text-foreground/40" /> : <X className="h-5 w-5 text-foreground/40" />}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </ScrollReveal>
         </div>
       </section>
 
@@ -346,7 +413,7 @@ const Index = () => {
             Train harder. <span className="text-gradient-red">Recover smarter.</span>
           </h2>
           <p className="mt-5 text-muted-foreground text-lg">
-            Join 15,000+ athletes who trust Ergogenic for transparent, performance-grade nutrition.
+            Join thousands of athletes who trust Ergogenic for transparent, performance-grade nutrition.
           </p>
           <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 h-12 px-10 shadow-glow">
             <Link to="/products">Explore Products <ChevronRight className="ml-1 h-4 w-4" /></Link>
