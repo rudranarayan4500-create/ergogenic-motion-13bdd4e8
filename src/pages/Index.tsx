@@ -33,54 +33,41 @@ const ingredients = [
 const Index = () => {
   return (
     <div className="bg-background text-foreground">
-      {/* HERO SECTION — Re-engineered with crisp text contrast and high visibility */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-[#0a1128]">
-        {/* Video Background */}
+      {/* HERO SECTION — Restored to original layout setup */}
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden">
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-45 mix-blend-screen"
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
           src="/videos/hero.mp4"
           autoPlay
           muted
           loop
           playsInline
         />
+        <div className="absolute inset-0 bg-grid-light opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,hsl(var(--primary)/0.18),transparent_60%)]" />
         
-        {/* Balanced Contrast Blend Wall (30% Dark, 40% Blue, 20% White Overlay Structure) */}
-        <div 
-          className="absolute inset-0 pointer-events-none" 
-          style={{
-            background: "linear-gradient(135deg, rgba(10, 10, 12, 0.85) 30%, rgba(20, 40, 95, 0.75) 70%, rgba(255, 255, 255, 0.2) 100%)"
-          }}
-        />
-        <div className="absolute inset-0 bg-black/40 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-
-        <div className="container relative z-20 py-32 text-center animate-fade-in max-w-5xl mx-auto px-4">
-          <div className="flex justify-center mb-8 filter drop-shadow-[0_4px_12px_rgba(255,255,255,0.1)]">
-            <Logo className="h-10 md:h-12 brightness-200 contrast-200" />
+        <div className="container relative z-10 py-32 text-center animate-fade-in">
+          <div className="flex justify-center mb-8">
+            <Logo className="h-10 md:h-12" />
           </div>
-          
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]">
             FUEL{" "}
-            <span className="text-red-500 inline-block drop-shadow-[0_2px_8px_rgba(239,68,68,0.4)]">
+            <span className="text-gradient-red">
               <TypewriterText text="EVOLVED" speed={120} delay={400} />
             </span>
           </h1>
-          
-          <p className="mt-6 text-lg md:text-2xl text-white font-semibold max-w-2xl mx-auto tracking-normal leading-relaxed drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]">
+          <p className="mt-6 text-lg md:text-xl text-foreground max-w-2xl mx-auto overflow-hidden">
             <span className="inline-block animate-[fade-in_1.2s_ease-out_0.8s_both]">
               Performance-focused nutrition engineered for your fitness goals.
               Transparently dosed, made for evolution.
             </span>
           </p>
-          
-          <div className="mt-10 flex flex-col sm:flex-row gap-5 justify-center items-center animate-[fade-in_1s_ease-out_1s_both]">
-            <Button asChild size="lg" className="bg-red-600 hover:bg-red-700 text-white font-extrabold text-base h-14 px-10 rounded-xl shadow-[0_4px_20px_rgba(220,38,38,0.4)] transition-all transform hover:-translate-y-0.5 w-full sm:w-auto">
-              <Link to="/products" className="flex items-center justify-center">
-                Shop Now <ChevronRight className="ml-1.5 h-5 w-5 stroke-[3]" />
-              </Link>
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-[fade-in_1s_ease-out_1s_both]">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-base h-12 px-8 shadow-glow">
+              <Link to="/products">Shop Now <ChevronRight className="ml-1 h-4 w-4" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-14 px-10 border-white/60 text-white hover:bg-white/20 hover:text-white bg-black/40 font-extrabold text-base rounded-xl backdrop-blur-md transition-all transform hover:-translate-y-0.5 w-full sm:w-auto">
+            <Button asChild size="lg" variant="outline" className="h-12 px-8 border-border text-foreground hover:bg-muted bg-transparent">
               <Link to="/ingredients">Explore Science</Link>
             </Button>
           </div>
