@@ -21,12 +21,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Logo } from "@/components/Logo";
-import { ProductCard } from "@/components/ProductCard";
 import { Counter } from "@/components/Counter";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { TypewriterText } from "@/components/TypewriterText";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { categories, products } from "@/data/products";
+import { products } from "@/data/products";
 import { ProductShowcaseSlider } from "@/components/ProductShowcaseSlider";
 
 const trustItems = [
@@ -51,8 +50,6 @@ const ingredients = [
 const partners = ["IRON REALM", "FORGE GYMS", "ATHLETIC LAB", "PEAK FITNESS", "VOLT TRAINING", "PRO STRENGTH"];
 
 const Index = () => {
-  const featured = products.slice(0, 4);
-
   return (
     <div className="bg-background text-foreground">
       {/* HERO */}
@@ -256,24 +253,66 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FEATURED PRODUCTS */}
-      <section className="py-24 bg-muted/40 border-y border-border">
+      {/* FEATURED PRODUCTS DESIGNED WITH ALTERNATING PICTURE SHOWCASES */}
+      <section className="py-24 bg-muted/40 border-y border-border overflow-hidden">
         <div className="container">
-          <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
-            <ScrollReveal direction="left">
-              <p className="text-xs tracking-[0.4em] text-primary mb-3">FEATURED PRODUCTS</p>
-              <h2 className="text-3xl md:text-5xl font-bold max-w-xl text-foreground">Top-rated by elite athletes</h2>
-            </ScrollReveal>
-            <Button asChild variant="outline" className="border-border bg-transparent hover:bg-muted text-foreground">
-              <Link to="/products">View all products <ChevronRight className="ml-1 h-4 w-4" /></Link>
-            </Button>
+          <div className="text-center max-w-2xl mx-auto mb-20">
+            <p className="text-xs tracking-[0.4em] text-primary mb-3">FEATURED LINEUP</p>
+            <h2 className="text-3xl md:text-5xl font-black text-foreground uppercase tracking-tight">Top-rated by elite athletes</h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featured.map((p, i) => (
-              <ScrollReveal key={p.id} border-muted="true" delay={i * 80}>
-                <ProductCard p={p} />
+          
+          <div className="space-y-28">
+            {/* Showcase 1: Left Image, Right Text */}
+            <div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center">
+              <ScrollReveal direction="left" className="md:col-span-6">
+                <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl">
+                  <img 
+                    src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f579410b-7a2a-4db6-a058-59078cc70e1f.png" 
+                    alt="Flagship Performance Protein" 
+                    className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                </div>
               </ScrollReveal>
-            ))}
+              <ScrollReveal direction="right" className="md:col-span-6 space-y-5">
+                <span className="text-[10px] bg-primary/15 text-primary px-3 py-1 rounded-full font-bold uppercase tracking-widest">Premium Whey Line</span>
+                <h3 className="text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">Advanced Iso-Whey Blend</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Engineered with continuous cross-flow microfiltration matrices to process pure isolates rapidly. Maximizes essential tissue fuel absorption benchmarks safely under physical load strains.
+                </p>
+                <div className="pt-2">
+                  <Button asChild size="lg" className="shadow-glow bg-primary hover:bg-primary/90 text-white">
+                    <Link to="/products">Buy Now <ChevronRight className="ml-1 h-4 w-4" /></Link>
+                  </Button>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Showcase 2: Right Image, Left Text */}
+            <div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center">
+              <ScrollReveal direction="left" className="md:col-span-6 order-2 md:order-1 space-y-5">
+                <span className="text-[10px] bg-primary/15 text-primary px-3 py-1 rounded-full font-bold uppercase tracking-widest">Intra-Workout Performance</span>
+                <h3 className="text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">Anabolic Hydration Recovery</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Formulated with targeted performance amino matrices to actively preserve muscle tissue integration. Designed cleanly to sustain threshold capacity across heavy endurance cycles.
+                </p>
+                <div className="pt-2">
+                  <Button asChild size="lg" className="shadow-glow bg-primary hover:bg-primary/90 text-white">
+                    <Link to="/products">Explore Stack <ChevronRight className="ml-1 h-4 w-4" /></Link>
+                  </Button>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal direction="right" className="md:col-span-6 order-1 md:order-2">
+                <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl">
+                  <img 
+                    src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f4f9f244-d122-42e5-a192-62d4475c6d26.png" 
+                    alt="Intra-Workout Matrix" 
+                    className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                </div>
+              </ScrollReveal>
+            </div>
           </div>
         </div>
       </section>
@@ -301,9 +340,13 @@ const Index = () => {
         </div>
       </section>
 
-      {/* INGREDIENTS */}
-      <section className="py-24">
-        <div className="container">
+      {/* INGREDIENTS DESIGNED WITH PROVIDED RICH BACKGROUND IMAGES */}
+      <section className="py-24 relative overflow-hidden">
+        {/* Absolute Background Elements featuring provided premium ingredients visuals */}
+        <div className="absolute -top-12 -left-20 w-80 h-80 opacity-15 pointer-events-none select-none mix-blend-screen bg-contain bg-no-repeat bg-center" style={{ backgroundImage: `url('https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png')` }} />
+        <div className="absolute -bottom-16 -right-16 w-96 h-96 opacity-10 pointer-events-none select-none mix-blend-screen bg-contain bg-no-repeat bg-center" style={{ backgroundImage: `url('https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png')` }} />
+        
+        <div className="container relative z-10">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
             <p className="text-xs tracking-[0.4em] text-primary mb-3">TECH ARSENAL</p>
             <h2 className="text-3xl md:text-5xl font-bold text-foreground">The science behind every scoop</h2>
@@ -312,7 +355,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {ingredients.map((ing, i) => (
               <ScrollReveal key={ing.name} delay={i * 80}>
-                <div className="bg-card border border-border rounded-xl p-6 hover-lift h-full">
+                <div className="bg-card/80 backdrop-blur-sm border border-border rounded-xl p-6 hover-lift h-full transition-all duration-300 hover:border-primary/30">
                   <div className="h-12 w-12 rounded-lg bg-primary/15 grid place-items-center text-primary">
                     <ing.icon className="h-6 w-6" />
                   </div>
@@ -413,7 +456,7 @@ const Index = () => {
             Train harder. <span className="text-gradient-red">Recover smarter.</span>
           </h2>
           <p className="mt-5 text-muted-foreground text-lg">
-            Join thousands of athletes who trust Ergogenic for transparent, performance-grade nutrition.
+            Join thousands of elite athletes who trust Ergogenic for transparent, performance-grade nutrition.
           </p>
           <Button asChild size="lg" className="mt-10 bg-primary hover:bg-primary/90 h-12 px-10 shadow-glow">
             <Link to="/products">Explore Products <ChevronRight className="ml-1 h-4 w-4" /></Link>
