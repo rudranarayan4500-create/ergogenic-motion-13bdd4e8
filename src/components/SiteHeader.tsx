@@ -121,7 +121,7 @@ export const SiteHeader = () => {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-500",
           scrolled
-            ? "bg-background/90 backdrop-blur-2xl border-b border-border shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+            ? "bg-background/90 backdrop-blur-2xl border-b border-border shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
             : "bg-transparent border-transparent"
         )}
       >

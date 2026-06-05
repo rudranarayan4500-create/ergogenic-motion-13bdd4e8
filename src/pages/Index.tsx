@@ -80,16 +80,16 @@ const Index = () => {
       {/* HERO */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden">
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
           src="/videos/hero.mp4"
           autoPlay
           muted
           loop
           playsInline
         />
-        <div className="absolute inset-0 bg-grid-light opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-[hsl(var(--background))]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,hsl(var(--primary)/0.25),transparent_60%)]" />
+        <div className="absolute inset-0 bg-grid-light opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,hsl(var(--primary)/0.18),transparent_60%)]" />
         <div className="container relative z-10 py-32 text-center animate-fade-in">
           <div className="flex justify-center mb-8">
             <Logo className="h-10 md:h-12" />
@@ -281,7 +281,7 @@ const Index = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-gradient-to-br from-[hsl(var(--background))] via-[hsl(0_0%_8%)] to-[hsl(357_60%_12%)] border-y border-border overflow-hidden">
+      <section className="py-24 bg-muted/30 border-y border-border overflow-hidden">
         <ScrollReveal className="container mb-12 text-center">
           <p className="text-xs tracking-[0.4em] text-primary mb-3">SUCCESS STORIES</p>
           <h2 className="text-3xl md:text-5xl font-bold text-foreground">Hear From Our Success Stories</h2>
@@ -295,7 +295,7 @@ const Index = () => {
               return (
                 <ScrollReveal key={i} delay={i * 70}>
                   <div className={`group ${tilts[i]} ${offsets[i]} transition-all duration-500 hover:rotate-0 hover:translate-y-0`}>
-                    <div className="relative bg-[hsl(0_0%_8%)] border border-border rounded-2xl p-6 shadow-[0_25px_60px_-15px_hsl(357_96%_46%/0.25)] hover:shadow-[0_30px_80px_-10px_hsl(357_96%_46%/0.55)] hover:border-primary/40 transition-all">
+                    <div className="relative bg-card border border-border rounded-2xl p-6 shadow-[0_10px_30px_-15px_hsl(217_91%_50%/0.25)] hover:shadow-[0_20px_50px_-10px_hsl(217_91%_50%/0.35)] hover:border-primary/40 transition-all">
                       <div className="absolute -top-3 -right-3 h-10 w-10 rounded-full bg-primary grid place-items-center text-primary-foreground text-xl font-serif shadow-lg">"</div>
                       <div className="flex items-center gap-3">
                         <img src={t.img} alt={t.name} className="h-12 w-12 rounded-full ring-2 ring-primary/40" />
