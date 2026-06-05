@@ -6,8 +6,8 @@ import { addToCart } from "@/lib/cart";
 import { toast } from "@/hooks/use-toast";
 
 export const ProductCard = ({ p }: { p: Product }) => (
-  <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-white/10 hover-lift">
-    <Link to={`/products/${p.id}`} className="block aspect-[4/5] overflow-hidden bg-black">
+  <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-border hover-lift">
+    <Link to={`/products/${p.id}`} className="block aspect-[4/5] overflow-hidden bg-muted">
       <img
         src={p.image}
         alt={p.name}

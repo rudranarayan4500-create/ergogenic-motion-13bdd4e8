@@ -121,7 +121,7 @@ export const SiteHeader = () => {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-500",
           scrolled
-            ? "bg-black/85 backdrop-blur-2xl border-b border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+            ? "bg-background/90 backdrop-blur-2xl border-b border-border shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
             : "bg-transparent border-transparent"
         )}
       >
@@ -159,17 +159,17 @@ export const SiteHeader = () => {
                   cn(
                     "relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300",
                     isActive
-                      ? "text-white"
+                      ? "text-foreground"
                       : scrolled
-                      ? "text-white/70 hover:text-white"
-                      : "text-white/90 hover:text-white"
+                      ? "text-muted-foreground hover:text-foreground"
+                      : "text-foreground/90 hover:text-foreground"
                   )
                 }
               >
                 {({ isActive }) => (
                   <>
                     {isActive && (
-                      <span className="absolute inset-0 rounded-full bg-white/10 border border-white/10 backdrop-blur-md" />
+                      <span className="absolute inset-0 rounded-full bg-muted border border-border backdrop-blur-md" />
                     )}
 
                     <span className="relative z-10">
@@ -211,8 +211,8 @@ export const SiteHeader = () => {
               className={cn(
                 "rounded-full transition-all duration-300 relative",
                 scrolled
-                  ? "hover:bg-white/10 text-white"
-                  : "hover:bg-white/10 text-white"
+                  ? "hover:bg-muted text-foreground"
+                  : "hover:bg-muted text-foreground"
               )}
             >
               <Link to="/cart">
@@ -242,26 +242,26 @@ export const SiteHeader = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-full text-white hover:bg-white/10"
+                    className="rounded-full text-foreground hover:bg-muted"
                   >
                     <LogOut className="h-5 w-5" />
                   </Button>
                 </AlertDialogTrigger>
 
-                <AlertDialogContent className="bg-[#0b0b0b] border border-white/10 text-white rounded-3xl">
+                <AlertDialogContent className="bg-[#0b0b0b] border border-border text-foreground rounded-3xl">
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-2xl font-black">
                       Sign out?
                     </AlertDialogTitle>
 
-                    <AlertDialogDescription className="text-white/60">
+                    <AlertDialogDescription className="text-muted-foreground">
                       You’ll need to log back in to access
                       orders, reviews and admin features.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
 
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="border-white/10 bg-white/5 text-white hover:bg-white/10">
+                    <AlertDialogCancel className="border-border bg-muted/50 text-foreground hover:bg-muted">
                       Cancel
                     </AlertDialogCancel>
 
@@ -279,7 +279,7 @@ export const SiteHeader = () => {
                 asChild
                 variant="ghost"
                 size="icon"
-                className="rounded-full text-white hover:bg-white/10"
+                className="rounded-full text-foreground hover:bg-muted"
               >
                 <Link to="/auth">
                   <User className="h-5 w-5" />
@@ -300,7 +300,7 @@ export const SiteHeader = () => {
             {/* MOBILE MENU */}
             <button
               onClick={() => setOpen((v) => !v)}
-              className="lg:hidden h-11 w-11 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+              className="lg:hidden h-11 w-11 rounded-full flex items-center justify-center text-foreground hover:bg-muted transition-colors"
             >
               {open ? (
                 <X className="h-5 w-5" />
@@ -323,14 +323,14 @@ export const SiteHeader = () => {
       >
         {/* BACKDROP */}
         <div
-          className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+          className="absolute inset-0 bg-background/80 backdrop-blur-xl"
           onClick={() => setOpen(false)}
         />
 
         {/* PANEL */}
         <div
           className={cn(
-            "absolute top-0 right-0 h-full w-[85%] max-w-[360px] bg-[#050505] border-l border-white/10 p-6 transition-transform duration-500",
+            "absolute top-0 right-0 h-full w-[85%] max-w-[360px] bg-[#050505] border-l border-border p-6 transition-transform duration-500",
             open
               ? "translate-x-0"
               : "translate-x-full"
@@ -341,7 +341,7 @@ export const SiteHeader = () => {
 
             <button
               onClick={() => setOpen(false)}
-              className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white"
+              className="h-10 w-10 rounded-full bg-muted/50 border border-border flex items-center justify-center text-foreground"
             >
               <X className="h-5 w-5" />
             </button>
@@ -359,7 +359,7 @@ export const SiteHeader = () => {
                     "px-5 py-4 rounded-2xl text-base font-semibold transition-all duration-300",
                     isActive
                       ? "bg-primary text-black"
-                      : "text-white/70 hover:text-white hover:bg-white/5"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   )
                 }
               >
