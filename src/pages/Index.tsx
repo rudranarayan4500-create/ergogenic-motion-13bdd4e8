@@ -265,130 +265,59 @@ const Index = () => {
           
           <div className="space-y-28">
             {/* Showcase 1: Left Image, Right Text */}
-            {/* Showcase 3: Elite Athlete Rated */}
-<div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center">
-  <ScrollReveal direction="left" className="md:col-span-6">
-    <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
-      <img 
-        src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png"
-        alt="Top Rated Elite Athlete Supplement"
-        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
-    </div>
-  </ScrollReveal>
+            <div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center">
+              <ScrollReveal direction="left" className="md:col-span-6">
+                <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
+                  <img 
+                    src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f579410b-7a2a-4db6-a058-59078cc70e1f.png" 
+                    alt="Flagship Performance Protein Product Shot" 
+                    className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                </div>
+              </ScrollReveal>
+              <ScrollReveal direction="right" className="md:col-span-6 space-y-5">
+                <span className="text-[10px] bg-primary/15 text-primary px-3 py-1 rounded-full font-bold uppercase tracking-widest">Premium Whey Line</span>
+                <h3 className="text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">Advanced Iso-Whey Blend</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Engineered with continuous cross-flow microfiltration matrices to process pure isolates rapidly. Maximizes essential tissue fuel absorption benchmarks safely under physical load strains.
+                </p>
+                <div className="pt-2">
+                  <Button asChild size="lg" className="shadow-glow bg-primary hover:bg-primary/90 text-white">
+                    <Link to="/products">Buy Now <ChevronRight className="ml-1 h-4 w-4" /></Link>
+                  </Button>
+                </div>
+              </ScrollReveal>
+            </div>
 
-  <ScrollReveal direction="right" className="md:col-span-6 space-y-5">
-    <span className="text-[10px] bg-primary/15 text-primary px-3 py-1 rounded-full font-bold uppercase tracking-widest">
-      Trusted By Champions
-    </span>
-
-    <h3 className="text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">
-      Top-Rated by Elite Athletes
-    </h3>
-
-    <p className="text-muted-foreground leading-relaxed">
-      Preferred by high-performance athletes for clean recovery, rapid absorption, and advanced endurance support. Built to optimize strength output while maintaining premium ingredient integrity.
-    </p>
-
-    <div className="flex flex-wrap gap-3 pt-2">
-      <div className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-semibold text-primary">
-        Clinically Formulated
-      </div>
-
-      <div className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-semibold text-primary">
-        Fast Recovery Support
-      </div>
-
-      <div className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-semibold text-primary">
-        Athlete Approved
-      </div>
-    </div>
-
-    <div className="pt-2">
-      <Button
-        asChild
-        size="lg"
-        className="shadow-glow bg-primary hover:bg-primary/90 text-white"
-      >
-        <Link to="/products">
-          Shop Collection
-          <ChevronRight className="ml-1 h-4 w-4" />
-        </Link>
-      </Button>
-    </div>
-  </ScrollReveal>
-</div>
-
-{/* Ingredients Section */}
-<div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center mt-24">
-  <ScrollReveal
-    direction="left"
-    className="md:col-span-6 order-2 md:order-1 space-y-5"
-  >
-    <span className="text-[10px] bg-primary/15 text-primary px-3 py-1 rounded-full font-bold uppercase tracking-widest">
-      Premium Ingredients
-    </span>
-
-    <h3 className="text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">
-      Science-Backed Ingredient Matrix
-    </h3>
-
-    <p className="text-muted-foreground leading-relaxed">
-      Every formula is developed with high-purity ingredients selected to support lean muscle growth, hydration balance, endurance output, and post-workout recovery efficiency.
-    </p>
-
-    <ul className="space-y-3 text-muted-foreground">
-      <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-primary" />
-        Ultra-filtered whey isolate proteins
-      </li>
-
-      <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-primary" />
-        Essential amino acid complexes
-      </li>
-
-      <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-primary" />
-        Electrolyte hydration support blend
-      </li>
-
-      <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-primary" />
-        Clean digestion-focused formulation
-      </li>
-    </ul>
-
-    <div className="pt-2">
-      <Button
-        asChild
-        size="lg"
-        className="shadow-glow bg-primary hover:bg-primary/90 text-white"
-      >
-        <Link to="/products">
-          View Ingredients
-          <ChevronRight className="ml-1 h-4 w-4" />
-        </Link>
-      </Button>
-    </div>
-  </ScrollReveal>
-
-  <ScrollReveal
-    direction="right"
-    className="md:col-span-6 order-1 md:order-2"
-  >
-    <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
-      <img
-        src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png"
-        alt="Premium Ingredients Formula"
-        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-
-      <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
-    </div>
-  </ScrollReveal>
-</div>
+            {/* Showcase 2: Right Image, Left Text */}
+            <div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center">
+              <ScrollReveal direction="left" className="md:col-span-6 order-2 md:order-1 space-y-5">
+                <span className="text-[10px] bg-primary/15 text-primary px-3 py-1 rounded-full font-bold uppercase tracking-widest">Intra-Workout Performance</span>
+                <h3 className="text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">Anabolic Hydration Recovery</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Formulated with targeted performance amino matrices to actively preserve muscle tissue integration. Designed cleanly to sustain threshold capacity across heavy endurance cycles.
+                </p>
+                <div className="pt-2">
+                  <Button asChild size="lg" className="shadow-glow bg-primary hover:bg-primary/90 text-white">
+                    <Link to="/products">Explore Stack <ChevronRight className="ml-1 h-4 w-4" /></Link>
+                  </Button>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal direction="right" className="md:col-span-6 order-1 md:order-2">
+                <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
+                  <img 
+                    src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f4f9f244-d122-42e5-a192-62d4475c6d26.png" 
+                    alt="Intra-Workout Performance Product Shot" 
+                    className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* STATS */}
       <section className="py-20 relative overflow-hidden">
