@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { CircleCheck as CheckCircle2, ChevronRight, FlaskConical, Minus, Plus, ShieldCheck, Sparkles, Star, Truck, MessageSquare, Flame } from "lucide-react";
+import { CircleCheck as CheckCircle2, ChevronRight, FlaskConical, Minus, Plus, ShieldCheck, Sparkles, Star, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
@@ -127,12 +127,6 @@ const ProductDetail = () => {
   const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Micronized Pure Creatine Monohydrate"];
   const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["ATP Regeneration Acceleration", "Intracellular Hydration Support", "Explosive Output Scaling"];
   const productFlavours = (product as any).flavours || ["Standard Edition"];
-
-  const verificationComments = [
-    { user: "RDSP_CyberSecurity", role: "Verified Lead", text: "HPLC test profile came back solid. Distribution homogeneity is exactly matching the clinical allocation charts.", timestamp: "2 hours ago" },
-    { user: "Kalyan_B", role: "Beta Athlete", text: "Zero digestion bloat spikes even across extreme intra-workout load shifts. Pure amino allocation factor is real.", timestamp: "5 hours ago" },
-    { user: "Khushi_Jalan", role: "Lab Analyst", text: "100% transparent matrix ledger verification cleared. No spikes or hidden proprietary shortcuts.", timestamp: "1 day ago" }
-  ];
 
   return (
     <div className="bg-[#FFFFFF] text-slate-900 min-h-screen antialiased selection:bg-slate-900 selection:text-white">
@@ -261,7 +255,7 @@ const ProductDetail = () => {
       <section className="py-20 bg-slate-50/50 relative">
         <div className="container max-w-6xl mx-auto px-4 space-y-24">
 
-          {/* Key Benefits Section — Left Multi-Angle Photos Deck, Right Text & Commentary Feed */}
+          {/* Key Benefits Section — Left Multi-Angle Photos Deck, Right Text */}
           {productBenefits.length > 0 && (
             <div data-scroll-section data-scroll-index="0" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
               
@@ -300,7 +294,7 @@ const ProductDetail = () => {
                 )}
               </div>
 
-              {/* Right Column: Key Benefits Text Parameters & Comments Ledger */}
+              {/* Right Column: Key Benefits Text Parameters */}
               <div className="lg:col-span-7 space-y-8">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
@@ -315,32 +309,6 @@ const ProductDetail = () => {
                       <div key={benefit} className="flex items-center gap-3 p-4 rounded-xl border bg-white border-slate-200 shadow-sm transition-colors hover:border-slate-300">
                         <CheckCircle2 className="h-5 w-5 text-slate-800 shrink-0" />
                         <span className="font-bold text-sm text-slate-700">{benefit}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Integrated Verified Hype Commentary Ledger Feed */}
-                <div className="border-t border-slate-200 pt-6 space-y-4">
-                  <h3 className="text-xs uppercase tracking-[0.25em] text-slate-400 font-black flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4 text-slate-700" /> Batch Operational Commentary Log
-                  </h3>
-                  
-                  <div className="space-y-3">
-                    {verificationComments.map((comment, cIdx) => (
-                      <div key={cIdx} className="bg-white border border-slate-200 rounded-xl p-4 space-y-1.5 hover:border-slate-300 transition-colors shadow-sm">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-mono text-slate-900 font-bold flex items-center gap-1">
-                            <Flame className="h-3 w-3 text-amber-500 fill-amber-500" /> @{comment.user}
-                          </span>
-                          <div className="flex items-center gap-2 text-slate-400">
-                            <span className="text-[9px] bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded text-slate-600 font-bold">{comment.role}</span>
-                            <span>{comment.timestamp}</span>
-                          </div>
-                        </div>
-                        <p className="text-slate-600 text-xs leading-relaxed font-medium">
-                          "{comment.text}"
-                        </p>
                       </div>
                     ))}
                   </div>
