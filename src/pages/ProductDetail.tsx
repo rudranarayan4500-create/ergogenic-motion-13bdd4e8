@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { CircleCheck as CheckCircle2, ChevronRight, FlaskConical, Minus, Plus, ShieldCheck, Sparkles, Star, Truck } from "lucide-react";
+import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
@@ -23,7 +23,6 @@ const ProductDetail = () => {
   const [, setScrollPositions] = useState<{ [key: number]: ScrollPosition }>({});
   const scrollHandlerRef = useRef<(() => void) | null>(null);
 
-  // Safe validation anchor prioritizing matching slug structures before falling back on dynamic targets
   const product = useMemo(() => {
     const found = products.find((p) => p.id === id || p.slug === id);
     if (!found && id === "pure-creatine") {
@@ -31,12 +30,12 @@ const ProductDetail = () => {
         id: "pure-creatine",
         slug: "pure-creatine",
         name: "Pure Creatine Micronized",
-        category: "Performance",
+        category: "Fitness",
         rating: 4.9,
         reviews: 1750,
         price: 1299,
         mrp: 1599,
-        tagline: "200-mesh pure micronized athletic phosphagen compound built to maximize systemic muscular cell hydration thresholds.",
+        tagline: "Pure micronized creatine monohydrate designed to support muscle hydration and endurance.",
         image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg"
       };
     }
@@ -78,7 +77,6 @@ const ProductDetail = () => {
     };
   }, []);
 
-  // Multi-angle product picture deck integration matching your exact portfolio assets
   const gallery: MediaItem[] = useMemo(() => {
     if (extraMedia.length) return extraMedia;
     
@@ -102,15 +100,15 @@ const ProductDetail = () => {
     if (!product) return [];
     if (product.id === "pure-creatine") {
       return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg", tag: "Pure Micronized Mesh" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", tag: "Seal Integrity Check" }
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg", tag: "Product View" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", tag: "Product Detail" }
       ];
     }
     const g = (product as any).gallery as string[] | undefined;
     if (g && g.length > 1) {
-      return g.slice(0, 3).map((url, i) => ({ url, tag: ["Front Angle", "Detail Shot", "Lifestyle"][i] || "Studio" }));
+      return g.slice(0, 3).map((url, i) => ({ url, tag: ["Front View", "Detail View", "Side View"][i] || "Product View" }));
     }
-    return [{ url: product.image, tag: "Front Angle Core" }];
+    return [{ url: product.image, tag: "Product View" }];
   }, [product]);
 
   if (!product) return <Navigate to="/products" replace />;
@@ -124,9 +122,9 @@ const ProductDetail = () => {
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
   };
 
-  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Micronized Pure Creatine Monohydrate"];
-  const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["ATP Regeneration Acceleration", "Intracellular Hydration Support", "Explosive Output Scaling"];
-  const productFlavours = (product as any).flavours || ["Standard Edition"];
+  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Pure Creatine Monohydrate"];
+  const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["Supports Power Output", "Promotes Muscle Hydration", "Assists Recovery"];
+  const productFlavours = (product as any).flavours || ["Unflavored"];
 
   return (
     <div className="bg-[#FFFFFF] text-slate-900 min-h-screen antialiased selection:bg-slate-900 selection:text-white">
@@ -141,7 +139,7 @@ const ProductDetail = () => {
           <nav className="text-xs mb-8 flex items-center gap-1.5 uppercase tracking-[0.2em] font-bold text-slate-400">
             <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
             <ChevronRight className="h-3 w-3 text-slate-300" />
-            <Link to="/products" className="hover:text-slate-900 transition-colors">Arsenal</Link>
+            <Link to="/products" className="hover:text-slate-900 transition-colors">Products</Link>
             <ChevronRight className="h-3 w-3 text-slate-300" />
             <span className="text-slate-600">{product.name}</span>
           </nav>
@@ -151,7 +149,6 @@ const ProductDetail = () => {
             {/* Image Frame Canvas — Left Side */}
             <div className="w-full lg:w-5/12 order-2 lg:order-1">
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 relative group overflow-hidden shadow-sm min-h-[400px] flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full blur-3xl opacity-10 pointer-events-none transition-opacity duration-500 group-hover:opacity-20" style={{ background: "radial-gradient(circle, var(--primary) / 0.2, transparent 65%)" }} />
                 <div className="w-full h-full object-contain max-h-[450px]">
                   <ProductGallery items={gallery} alt={product.name} />
                 </div>
@@ -171,13 +168,9 @@ const ProductDetail = () => {
 
               <div className="flex items-center gap-3 text-sm">
                 <div className="flex items-center gap-0.5 px-2.5 py-1 rounded-lg border bg-white border-slate-200 shadow-sm">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
-                  ))}
+                  <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
                   <span className="ml-1.5 font-mono font-black text-slate-900">{product.rating}</span>
                 </div>
-                <span className="text-slate-300">·</span>
-                <span className="font-bold text-slate-500">{product.reviews} Verified Batch Reviews</span>
               </div>
 
               <p className="text-base md:text-lg leading-relaxed text-slate-600 font-medium max-w-2xl">
@@ -186,10 +179,10 @@ const ProductDetail = () => {
 
               {/* Flavor Options */}
               <div className="space-y-2 pt-2">
-                <span className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-400 block">Available Flavor Variations</span>
+                <span className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-400 block">Available Flavors</span>
                 <div className="flex flex-wrap gap-2">
                   {productFlavours.map((flavour) => (
-                    <span key={flavour} className="text-xs px-3.5 py-1.5 rounded-xl font-bold border bg-slate-50 border-slate-200 text-slate-700 transition-colors hover:bg-slate-100">
+                    <span key={flavour} className="text-xs px-3.5 py-1.5 rounded-xl font-bold border bg-slate-50 border-slate-200 text-slate-700">
                       {flavour}
                     </span>
                   ))}
@@ -227,44 +220,24 @@ const ProductDetail = () => {
               </div>
 
               <Button asChild variant="outline" size="lg" className="w-full font-black uppercase tracking-wider text-xs h-12 rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-all">
-                <Link to="/checkout">Instant Buy Now</Link>
+                <Link to="/checkout">Buy Now</Link>
               </Button>
-
-              {/* Logistics Badging Row */}
-              <div className="grid grid-cols-3 gap-3 text-xs pt-6 border-t text-slate-600 border-slate-200">
-                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-slate-50 border-slate-200">
-                  <Truck className="h-5 w-5 text-slate-800" />
-                  <span className="font-bold uppercase tracking-wider text-[10px] text-slate-700">Free Delivery</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-slate-50 border-slate-200">
-                  <ShieldCheck className="h-5 w-5 text-slate-800" />
-                  <span className="font-bold uppercase tracking-wider text-[10px] text-slate-700">Lab Verified</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-slate-50 border-slate-200">
-                  <CheckCircle2 className="h-5 w-5 text-slate-800" />
-                  <span className="font-bold uppercase tracking-wider text-[10px] text-slate-700">FSSAI Approved</span>
-                </div>
-              </div>
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* Premium Analytical Detail Blocks */}
+      {/* Product Information Blocks */}
       <section className="py-20 bg-slate-50/50 relative">
         <div className="container max-w-6xl mx-auto px-4 space-y-24">
 
-          {/* Key Benefits Section — Left Multi-Angle Photos Deck, Right Text */}
+          {/* Key Benefits Section */}
           {productBenefits.length > 0 && (
             <div data-scroll-section data-scroll-index="0" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
               
-              {/* Left Column: Multi-Angle Snapshot Grid */}
+              {/* Left Column: Image Previews */}
               <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
-                <span className="text-[9px] uppercase tracking-widest font-black text-slate-800 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-md block w-fit">
-                  Multi-Angle Stack Formations
-                </span>
-                
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {productSnapshots.map((pic, pIdx) => (
                     <div key={pIdx} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between">
@@ -280,9 +253,6 @@ const ProductDetail = () => {
                 
                 {reviewVideos.length > 0 && (
                   <div className="space-y-2 pt-2">
-                    <span className="text-[9px] uppercase tracking-widest font-black text-slate-400 block">
-                      Video Analysis Verification
-                    </span>
                     <div className="grid grid-cols-2 gap-2">
                       {reviewVideos.map((vid, vIdx) => (
                         <div key={vIdx} className="aspect-video bg-slate-900 rounded-xl border border-slate-200 overflow-hidden shadow-sm">
@@ -294,19 +264,13 @@ const ProductDetail = () => {
                 )}
               </div>
 
-              {/* Right Column: Key Benefits Text Parameters */}
+              {/* Right Column: Benefits List */}
               <div className="lg:col-span-7 space-y-8">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Sparkles className="h-6 w-6 text-slate-800" />
-                    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Key Benefits</h2>
-                  </div>
-                  <p className="text-base leading-relaxed text-slate-500 font-medium">
-                    Scientifically formulated for maximum performance profiles. Every compound inclusion is dosed matching verified active clinical parameters.
-                  </p>
+                  <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Product Benefits</h2>
                   <div className="grid sm:grid-cols-2 gap-3">
                     {productBenefits.map((benefit) => (
-                      <div key={benefit} className="flex items-center gap-3 p-4 rounded-xl border bg-white border-slate-200 shadow-sm transition-colors hover:border-slate-300">
+                      <div key={benefit} className="flex items-center gap-3 p-4 rounded-xl border bg-white border-slate-200 shadow-sm">
                         <CheckCircle2 className="h-5 w-5 text-slate-800 shrink-0" />
                         <span className="font-bold text-sm text-slate-700">{benefit}</span>
                       </div>
@@ -318,62 +282,47 @@ const ProductDetail = () => {
             </div>
           )}
 
-          {/* Active Ingredients Section */}
+          {/* Ingredients Section */}
           {productIngredients.length > 0 && (
             <div data-scroll-section data-scroll-index="1" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               <div className="lg:col-span-7 space-y-6 order-2 lg:order-1">
-                <div className="flex items-center gap-3">
-                  <FlaskConical className="h-6 w-6 text-slate-800" />
-                  <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Active Ingredients</h2>
-                </div>
-                <p className="text-base leading-relaxed text-slate-500 font-medium">
-                  Full transparency parameters across all molecular compounds. Zero proprietary masking clusters — just pure, functional nutrition.
-                </p>
+                <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Ingredients</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {productIngredients.map((ingredient, idx) => (
-                    <div key={ingredient} className="flex items-center justify-between p-4 rounded-xl border bg-white border-slate-200 hover:border-slate-400 shadow-sm transition-all duration-300 group/item">
+                    <div key={ingredient} className="flex items-center justify-between p-4 rounded-xl border bg-white border-slate-200 shadow-sm transition-all duration-300 group/item">
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="h-7 w-7 rounded-lg text-xs font-mono font-black flex items-center justify-center shrink-0 bg-slate-100 border border-slate-200 text-slate-800 group-hover/item:bg-slate-900 group-hover/item:text-white transition-colors">
+                        <span className="h-7 w-7 rounded-lg text-xs font-mono font-black flex items-center justify-center shrink-0 bg-slate-100 border border-slate-200 text-slate-800">
                           {String(idx + 1).padStart(2, "0")}
                         </span>
-                        <span className="font-bold text-sm truncate text-slate-700 group-hover/item:text-slate-900 transition-colors">{ingredient}</span>
+                        <span className="font-bold text-sm truncate text-slate-700">{ingredient}</span>
                       </div>
-                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded shrink-0 ml-2 text-slate-600 bg-slate-50 border border-slate-200">
-                        Active
-                      </span>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="lg:col-span-5 rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm order-1 lg:order-2">
-                <ProductGallery items={gallery.filter(m => m.kind === "image")} alt={`${product.name} packaging blueprint`} />
+                <ProductGallery items={gallery.filter(m => m.kind === "image")} alt={product.name} />
               </div>
             </div>
           )}
 
-          {/* Administration Protocol */}
+          {/* Usage Protocol */}
           <div data-scroll-section data-scroll-index="2" className="p-8 md:p-12 border rounded-2xl bg-white border-slate-200 shadow-sm relative overflow-hidden">
-            <div className="flex items-center gap-3 mb-6">
-              <Truck className="h-6 w-6 text-slate-800" />
-              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Administration Protocol</h2>
-            </div>
-            <div className="leading-relaxed text-base mb-8 text-slate-500 font-medium">
-              <p>
-                Mix allocations precisely calculated relative to your targeted baseline performance markers, macronutrient tracking maps, and ongoing mechanical load thresholds.
-              </p>
+            <div className="mb-6">
+              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Usage Directions</h2>
             </div>
             <div className="grid sm:grid-cols-3 gap-4">
               <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Timing Sequence</strong>
-                <p className="text-sm font-medium text-slate-600">Administer pre, intra, or within a 45-minute window post-workout for maximum synthesis response tracking.</p>
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Suggested Timing</strong>
+                <p className="text-sm font-medium text-slate-600">Take before, during, or immediately after your training session.</p>
               </div>
               <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Matrix Stacking</strong>
-                <p className="text-sm font-medium text-slate-600">Can be cleanly stacked alongside complementary single-agent allocations without risk of cross-compound degradation parameters.</p>
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Mixing</strong>
+                <p className="text-sm font-medium text-slate-600">Can be mixed with water, juice, or your preferred fitness shakes.</p>
               </div>
               <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Storage Parameters</strong>
-                <p className="text-sm font-medium text-slate-600">Keep container firmly sealed inside a cool, stabilized moisture-free tracking climate zone environment.</p>
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Storage</strong>
+                <p className="text-sm font-medium text-slate-600">Keep container tightly closed and store in a cool, dry place.</p>
               </div>
             </div>
           </div>
@@ -382,7 +331,7 @@ const ProductDetail = () => {
           <div data-scroll-section data-scroll-index="3" className="pt-4">
             <div className="flex items-center gap-3 mb-8">
               <Star className="h-6 w-6 text-amber-500 fill-amber-500" />
-              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">User Reviews Ledger</h2>
+              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Product Reviews</h2>
             </div>
             <ProductReviews slug={product.id} />
           </div>
@@ -393,7 +342,7 @@ const ProductDetail = () => {
       {/* Related Products */}
       <section className="py-20 border-t border-slate-200 bg-white">
         <div className="container max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8 text-slate-900">Complete Your Stack Configuration</h2>
+          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8 text-slate-900">Recommended Products</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {related.map((p) => (
               <ProductCard key={p.id} p={p} />
@@ -405,7 +354,7 @@ const ProductDetail = () => {
       {/* Sticky Buy Bottom Bar */}
       <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden backdrop-blur-md border-t p-4 flex items-center justify-between gap-4 bg-white/90 border-slate-200 shadow-lg">
         <div>
-          <span className="text-[10px] uppercase tracking-widest block font-bold text-slate-400">Allocation Price</span>
+          <span className="text-[10px] uppercase tracking-widest block font-bold text-slate-400">Price</span>
           <p className="font-black text-xl text-slate-900 font-mono">₹{product.price.toLocaleString()}</p>
         </div>
         <Button onClick={add} className="bg-slate-900 text-white font-black uppercase tracking-wider text-xs h-12 px-6 rounded-xl flex-1 shadow-sm">
