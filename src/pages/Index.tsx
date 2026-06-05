@@ -313,6 +313,55 @@ const Index = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
                 </div>
+                {/* Showcase 3 */}
+<div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center">
+  <ScrollReveal
+    direction="left"
+    className="md:col-span-6 order-2 md:order-1 space-y-5"
+  >
+    <span className="text-[10px] bg-primary/15 text-primary px-3 py-1 rounded-full font-bold uppercase tracking-widest">
+      Premium Ingredients
+    </span>
+
+    <h3 className="text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">
+      Clean Performance Formula
+    </h3>
+
+    <p className="text-muted-foreground leading-relaxed">
+      Crafted with advanced ingredient systems focused on muscle recovery,
+      hydration efficiency, and sustained athletic output during high-intensity
+      training sessions.
+    </p>
+
+    <div className="pt-2">
+      <Button
+        asChild
+        size="lg"
+        className="shadow-glow bg-primary hover:bg-primary/90 text-white"
+      >
+        <Link to="/products">
+          View Formula
+          <ChevronRight className="ml-1 h-4 w-4" />
+        </Link>
+      </Button>
+    </div>
+  </ScrollReveal>
+
+  <ScrollReveal
+    direction="right"
+    className="md:col-span-6 order-1 md:order-2"
+  >
+    <div className="relative bg-card rounded-2xl border border-border overflow-hidden group shadow-xl max-w-md mx-auto">
+      <img
+        src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png"
+        alt="Premium Ingredients Formula"
+        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+    </div>
+  </ScrollReveal>
+</div>
               </ScrollReveal>
             </div>
           </div>
