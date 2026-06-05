@@ -28,6 +28,7 @@ import { CountdownTimer } from "@/components/CountdownTimer";
 import { TypewriterText } from "@/components/TypewriterText";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { categories, products } from "@/data/products";
+import { ProductShowcaseSlider } from "@/components/ProductShowcaseSlider";
 
 const trustItems = [
   "Lab Tested",
@@ -125,6 +126,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* PRODUCT SHOWCASE SLIDER */}
+      <ProductShowcaseSlider />
 
       {/* TRUST BAR */}
       <section className="bg-primary text-primary-foreground py-4 overflow-hidden border-y border-border">
