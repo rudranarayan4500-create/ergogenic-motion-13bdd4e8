@@ -255,7 +255,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FEATURED PRODUCTS: ALTERNATING VISUAL PRESENTATIONS */}
+      {/* FEATURED PRODUCTS DESIGNED WITH ALTERNATING PICTURE SHOWCASES */}
       <section className="py-24 bg-muted/40 border-y border-border overflow-hidden">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-20">
