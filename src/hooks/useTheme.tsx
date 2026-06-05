@@ -6,11 +6,7 @@ type Ctx = { theme: Theme; setTheme: (t: Theme) => void; toggle: () => void };
 const ThemeCtx = createContext<Ctx>({ theme: "dark", setTheme: () => {}, toggle: () => {} });
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "dark";
-    const stored = localStorage.getItem("theme") as Theme | null;
-    return stored === "dark" ? "dark" : "light";
-  });
+  const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
     const root = document.documentElement;
