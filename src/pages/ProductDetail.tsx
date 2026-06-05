@@ -135,29 +135,29 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="bg-[#030303] text-white min-h-screen antialiased selection:bg-primary selection:text-black">
+    <div className="bg-[#FFFFFF] text-slate-900 min-h-screen antialiased selection:bg-slate-900 selection:text-white">
       
       {/* Hero Section */}
-      <section className="py-8 md:py-16 border-b border-white/5 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff01_1px,transparent_1px),linear-gradient(to_bottom,#ffffff01_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      <section className="py-8 md:py-16 border-b border-slate-200 relative overflow-hidden bg-white">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
         
         <div className="container max-w-6xl mx-auto px-4 relative z-10">
           
           {/* Breadcrumbs Navigation */}
-          <nav className="text-xs mb-8 flex items-center gap-1.5 uppercase tracking-[0.2em] font-bold text-neutral-500">
-            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-            <ChevronRight className="h-3 w-3 text-neutral-700" />
-            <Link to="/products" className="hover:text-primary transition-colors">Arsenal</Link>
-            <ChevronRight className="h-3 w-3 text-neutral-700" />
-            <span className="text-neutral-200">{product.name}</span>
+          <nav className="text-xs mb-8 flex items-center gap-1.5 uppercase tracking-[0.2em] font-bold text-slate-400">
+            <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
+            <ChevronRight className="h-3 w-3 text-slate-300" />
+            <Link to="/products" className="hover:text-slate-900 transition-colors">Arsenal</Link>
+            <ChevronRight className="h-3 w-3 text-slate-300" />
+            <span className="text-slate-600">{product.name}</span>
           </nav>
 
           <div className="flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-16">
             
             {/* Image Frame Canvas — Left Side */}
             <div className="w-full lg:w-5/12 order-2 lg:order-1">
-              <div className="rounded-2xl border border-white/5 bg-neutral-900/20 backdrop-blur-md p-6 relative group overflow-hidden shadow-2xl min-h-[400px] flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full blur-3xl opacity-30 pointer-events-none transition-opacity duration-500 group-hover:opacity-50" style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.2), transparent 65%)" }} />
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 relative group overflow-hidden shadow-sm min-h-[400px] flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full blur-3xl opacity-10 pointer-events-none transition-opacity duration-500 group-hover:opacity-20" style={{ background: "radial-gradient(circle, var(--primary) / 0.2, transparent 65%)" }} />
                 <div className="w-full h-full object-contain max-h-[450px]">
                   <ProductGallery items={gallery} alt={product.name} />
                 </div>
@@ -167,35 +167,35 @@ const ProductDetail = () => {
             {/* Product Meta Details — Right Side */}
             <div className="w-full lg:w-7/12 order-1 lg:order-2 space-y-6">
               <div className="space-y-3">
-                <span className="text-xs tracking-[0.25em] uppercase font-black px-3 py-1 bg-primary/10 border border-primary/20 text-primary rounded inline-block">
+                <span className="text-xs tracking-[0.25em] uppercase font-black px-3 py-1 bg-slate-100 border border-slate-200 text-slate-800 rounded inline-block">
                   {product.category}
                 </span>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-none text-white">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-none text-slate-900">
                   {product.name}
                 </h1>
               </div>
 
               <div className="flex items-center gap-3 text-sm">
-                <div className="flex items-center gap-0.5 px-2.5 py-1 rounded-lg border bg-neutral-950 border-white/5">
+                <div className="flex items-center gap-0.5 px-2.5 py-1 rounded-lg border bg-white border-slate-200 shadow-sm">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-primary text-primary" />
+                    <Star key={i} className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
                   ))}
-                  <span className="ml-1.5 font-mono font-black text-neutral-200">{product.rating}</span>
+                  <span className="ml-1.5 font-mono font-black text-slate-900">{product.rating}</span>
                 </div>
-                <span className="text-neutral-700">·</span>
-                <span className="font-bold text-neutral-400">{product.reviews} Verified Batch Reviews</span>
+                <span className="text-slate-300">·</span>
+                <span className="font-bold text-slate-500">{product.reviews} Verified Batch Reviews</span>
               </div>
 
-              <p className="text-base md:text-lg leading-relaxed text-neutral-300 font-medium max-w-2xl">
+              <p className="text-base md:text-lg leading-relaxed text-slate-600 font-medium max-w-2xl">
                 {product.tagline}
               </p>
 
               {/* Flavor Options */}
               <div className="space-y-2 pt-2">
-                <span className="text-[10px] uppercase font-black tracking-[0.2em] text-neutral-500 block">Available Flavor Variations</span>
+                <span className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-400 block">Available Flavor Variations</span>
                 <div className="flex flex-wrap gap-2">
                   {productFlavours.map((flavour) => (
-                    <span key={flavour} className="text-xs px-3.5 py-1.5 rounded-xl font-bold border bg-neutral-950 border-white/5 text-neutral-300 transition-colors hover:border-white/10">
+                    <span key={flavour} className="text-xs px-3.5 py-1.5 rounded-xl font-bold border bg-slate-50 border-slate-200 text-slate-700 transition-colors hover:bg-slate-100">
                       {flavour}
                     </span>
                   ))}
@@ -203,52 +203,52 @@ const ProductDetail = () => {
               </div>
 
               {/* Pricing Blocks */}
-              <div className="flex items-baseline gap-4 pt-4 border-t border-white/5">
-                <span className="text-4xl md:text-5xl font-black tracking-tight text-primary font-mono">
+              <div className="flex items-baseline gap-4 pt-4 border-t border-slate-200">
+                <span className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 font-mono">
                   ₹{product.price.toLocaleString()}
                 </span>
-                <span className="text-lg line-through font-bold text-neutral-500 font-mono">
+                <span className="text-lg line-through font-bold text-slate-400 font-mono">
                   ₹{product.mrp.toLocaleString()}
                 </span>
-                <span className="text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider border text-primary bg-primary/10 border-primary/20">
+                <span className="text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider border text-emerald-700 bg-emerald-50 border-emerald-200">
                   Save {Math.round((1 - product.price / product.mrp) * 100)}%
                 </span>
               </div>
 
               {/* Controls */}
               <div className="pt-4 flex flex-col sm:flex-row gap-4">
-                <div className="flex items-center justify-between border rounded-xl p-1 shrink-0 h-14 border-white/5 bg-neutral-950">
-                  <button onClick={() => setQty(Math.max(1, qty - 1))} className="p-3 rounded-lg text-neutral-400 hover:text-white hover:bg-white/5 transition-colors">
+                <div className="flex items-center justify-between border rounded-xl p-1 shrink-0 h-14 border-slate-200 bg-slate-50">
+                  <button onClick={() => setQty(Math.max(1, qty - 1))} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 transition-colors">
                     <Minus className="h-4 w-4" />
                   </button>
-                  <span className="w-12 text-center font-mono font-black text-base">{qty}</span>
-                  <button onClick={() => setQty(qty + 1)} className="p-3 rounded-lg text-neutral-400 hover:text-white hover:bg-white/5 transition-colors">
+                  <span className="w-12 text-center font-mono font-black text-base text-slate-900">{qty}</span>
+                  <button onClick={() => setQty(qty + 1)} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 transition-colors">
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
 
-                <Button onClick={add} size="lg" className="bg-primary text-black hover:bg-primary/90 flex-1 font-black uppercase tracking-wider text-xs h-14 rounded-xl shadow-2xl shadow-primary/10">
+                <Button onClick={add} size="lg" className="bg-slate-900 text-white hover:bg-slate-800 flex-1 font-black uppercase tracking-wider text-xs h-14 rounded-xl shadow-md">
                   Add to Cart
                 </Button>
               </div>
 
-              <Button asChild variant="outline" size="lg" className="w-full font-black uppercase tracking-wider text-xs h-12 rounded-xl border-white/10 bg-transparent hover:bg-white/5 text-neutral-200 hover:text-white transition-all">
+              <Button asChild variant="outline" size="lg" className="w-full font-black uppercase tracking-wider text-xs h-12 rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-all">
                 <Link to="/checkout">Instant Buy Now</Link>
               </Button>
 
               {/* Logistics Badging Row */}
-              <div className="grid grid-cols-3 gap-3 text-xs pt-6 border-t text-neutral-400 border-white/5">
-                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-neutral-950 border-white/5">
-                  <Truck className="h-5 w-5 text-primary" />
-                  <span className="font-bold uppercase tracking-wider text-[10px]">Free Delivery</span>
+              <div className="grid grid-cols-3 gap-3 text-xs pt-6 border-t text-slate-600 border-slate-200">
+                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-slate-50 border-slate-200">
+                  <Truck className="h-5 w-5 text-slate-800" />
+                  <span className="font-bold uppercase tracking-wider text-[10px] text-slate-700">Free Delivery</span>
                 </div>
-                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-neutral-950 border-white/5">
-                  <ShieldCheck className="h-5 w-5 text-primary" />
-                  <span className="font-bold uppercase tracking-wider text-[10px]">Lab Verified</span>
+                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-slate-50 border-slate-200">
+                  <ShieldCheck className="h-5 w-5 text-slate-800" />
+                  <span className="font-bold uppercase tracking-wider text-[10px] text-slate-700">Lab Verified</span>
                 </div>
-                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-neutral-950 border-white/5">
-                  <CheckCircle2 className="h-5 w-5 text-primary" />
-                  <span className="font-bold uppercase tracking-wider text-[10px]">FSSAI Approved</span>
+                <div className="flex flex-col items-center text-center gap-2 p-4 border rounded-xl bg-slate-50 border-slate-200">
+                  <CheckCircle2 className="h-5 w-5 text-slate-800" />
+                  <span className="font-bold uppercase tracking-wider text-[10px] text-slate-700">FSSAI Approved</span>
                 </div>
               </div>
             </div>
@@ -258,7 +258,7 @@ const ProductDetail = () => {
       </section>
 
       {/* Premium Analytical Detail Blocks */}
-      <section className="py-20 bg-neutral-955/20 relative">
+      <section className="py-20 bg-slate-50/50 relative">
         <div className="container max-w-6xl mx-auto px-4 space-y-24">
 
           {/* Key Benefits Section — Left Multi-Angle Photos Deck, Right Text & Commentary Feed */}
@@ -267,17 +267,17 @@ const ProductDetail = () => {
               
               {/* Left Column: Multi-Angle Snapshot Grid */}
               <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
-                <span className="text-[9px] uppercase tracking-widest font-black text-primary px-2.5 py-1 bg-primary/10 border border-primary/20 rounded-md block w-fit">
+                <span className="text-[9px] uppercase tracking-widest font-black text-slate-800 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-md block w-fit">
                   Multi-Angle Stack Formations
                 </span>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {productSnapshots.map((pic, pIdx) => (
-                    <div key={pIdx} className="rounded-2xl border border-white/5 bg-neutral-900/40 p-3 shadow-xl relative group overflow-hidden flex flex-col items-center justify-between">
+                    <div key={pIdx} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between">
                       <div className="aspect-square w-full max-h-[140px] flex items-center justify-center p-2">
                         <img src={pic.url} alt={pic.tag} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" />
                       </div>
-                      <span className="text-[10px] font-mono tracking-wider text-neutral-500 block text-center mt-2 border-t border-white/5 pt-1.5 w-full">
+                      <span className="text-[10px] font-mono tracking-wider text-slate-400 block text-center mt-2 border-t border-slate-100 pt-1.5 w-full">
                         {pic.tag}
                       </span>
                     </div>
@@ -286,12 +286,12 @@ const ProductDetail = () => {
                 
                 {reviewVideos.length > 0 && (
                   <div className="space-y-2 pt-2">
-                    <span className="text-[9px] uppercase tracking-widest font-black text-neutral-400 block">
+                    <span className="text-[9px] uppercase tracking-widest font-black text-slate-400 block">
                       Video Analysis Verification
                     </span>
                     <div className="grid grid-cols-2 gap-2">
                       {reviewVideos.map((vid, vIdx) => (
-                        <div key={vIdx} className="aspect-video bg-black rounded-xl border border-white/5 overflow-hidden shadow-lg">
+                        <div key={vIdx} className="aspect-video bg-slate-900 rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                           <video src={vid.url} controls muted loop autoPlay playsInline className="w-full h-full object-cover" />
                         </div>
                       ))}
@@ -304,41 +304,41 @@ const ProductDetail = () => {
               <div className="lg:col-span-7 space-y-8">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <Sparkles className="h-6 w-6 text-primary" />
-                    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-white">Key Benefits</h2>
+                    <Sparkles className="h-6 w-6 text-slate-800" />
+                    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Key Benefits</h2>
                   </div>
-                  <p className="text-base leading-relaxed text-neutral-400 font-medium">
+                  <p className="text-base leading-relaxed text-slate-500 font-medium">
                     Scientifically formulated for maximum performance profiles. Every compound inclusion is dosed matching verified active clinical parameters.
                   </p>
                   <div className="grid sm:grid-cols-2 gap-3">
                     {productBenefits.map((benefit) => (
-                      <div key={benefit} className="flex items-center gap-3 p-4 rounded-xl border bg-neutral-950/60 border-white/5 transition-colors hover:border-white/10">
-                        <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
-                        <span className="font-bold text-sm text-neutral-200">{benefit}</span>
+                      <div key={benefit} className="flex items-center gap-3 p-4 rounded-xl border bg-white border-slate-200 shadow-sm transition-colors hover:border-slate-300">
+                        <CheckCircle2 className="h-5 w-5 text-slate-800 shrink-0" />
+                        <span className="font-bold text-sm text-slate-700">{benefit}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Integrated Verified Hype Commentary Ledger Feed */}
-                <div className="border-t border-white/5 pt-6 space-y-4">
-                  <h3 className="text-xs uppercase tracking-[0.25em] text-neutral-400 font-black flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4 text-primary" /> Batch Operational Commentary Log
+                <div className="border-t border-slate-200 pt-6 space-y-4">
+                  <h3 className="text-xs uppercase tracking-[0.25em] text-slate-400 font-black flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4 text-slate-700" /> Batch Operational Commentary Log
                   </h3>
                   
                   <div className="space-y-3">
                     {verificationComments.map((comment, cIdx) => (
-                      <div key={cIdx} className="bg-neutral-950/40 border border-white/5 rounded-xl p-4 space-y-1.5 hover:border-white/10 transition-colors">
+                      <div key={cIdx} className="bg-white border border-slate-200 rounded-xl p-4 space-y-1.5 hover:border-slate-300 transition-colors shadow-sm">
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-mono text-primary font-bold flex items-center gap-1">
-                            <Flame className="h-3 w-3" /> @{comment.user}
+                          <span className="font-mono text-slate-900 font-bold flex items-center gap-1">
+                            <Flame className="h-3 w-3 text-amber-500 fill-amber-500" /> @{comment.user}
                           </span>
-                          <div className="flex items-center gap-2 text-neutral-500">
-                            <span className="text-[9px] bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-neutral-300 font-bold">{comment.role}</span>
+                          <div className="flex items-center gap-2 text-slate-400">
+                            <span className="text-[9px] bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded text-slate-600 font-bold">{comment.role}</span>
                             <span>{comment.timestamp}</span>
                           </div>
                         </div>
-                        <p className="text-neutral-300 text-xs leading-relaxed font-medium">
+                        <p className="text-slate-600 text-xs leading-relaxed font-medium">
                           "{comment.text}"
                         </p>
                       </div>
@@ -355,57 +355,57 @@ const ProductDetail = () => {
             <div data-scroll-section data-scroll-index="1" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               <div className="lg:col-span-7 space-y-6 order-2 lg:order-1">
                 <div className="flex items-center gap-3">
-                  <FlaskConical className="h-6 w-6 text-primary" />
-                  <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-white">Active Ingredients</h2>
+                  <FlaskConical className="h-6 w-6 text-slate-800" />
+                  <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Active Ingredients</h2>
                 </div>
-                <p className="text-base leading-relaxed text-neutral-400 font-medium">
+                <p className="text-base leading-relaxed text-slate-500 font-medium">
                   Full transparency parameters across all molecular compounds. Zero proprietary masking clusters — just pure, functional nutrition.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {productIngredients.map((ingredient, idx) => (
-                    <div key={ingredient} className="flex items-center justify-between p-4 rounded-xl border bg-neutral-955/60 border-white/5 hover:border-primary/30 transition-all duration-300 group/item">
+                    <div key={ingredient} className="flex items-center justify-between p-4 rounded-xl border bg-white border-slate-200 hover:border-slate-400 shadow-sm transition-all duration-300 group/item">
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="h-7 w-7 rounded-lg text-xs font-mono font-black flex items-center justify-center shrink-0 bg-primary/10 border border-primary/20 text-primary group-hover/item:bg-primary group-hover/item:text-black transition-colors">
+                        <span className="h-7 w-7 rounded-lg text-xs font-mono font-black flex items-center justify-center shrink-0 bg-slate-100 border border-slate-200 text-slate-800 group-hover/item:bg-slate-900 group-hover/item:text-white transition-colors">
                           {String(idx + 1).padStart(2, "0")}
                         </span>
-                        <span className="font-bold text-sm truncate text-neutral-200 group-hover/item:text-white transition-colors">{ingredient}</span>
+                        <span className="font-bold text-sm truncate text-slate-700 group-hover/item:text-slate-900 transition-colors">{ingredient}</span>
                       </div>
-                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded shrink-0 ml-2 text-primary bg-primary/5 border border-primary/10">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded shrink-0 ml-2 text-slate-600 bg-slate-50 border border-slate-200">
                         Active
                       </span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="lg:col-span-5 rounded-3xl border border-white/5 bg-neutral-900/10 p-4 shadow-2xl order-1 lg:order-2">
+              <div className="lg:col-span-5 rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm order-1 lg:order-2">
                 <ProductGallery items={gallery.filter(m => m.kind === "image")} alt={`${product.name} packaging blueprint`} />
               </div>
             </div>
           )}
 
           {/* Administration Protocol */}
-          <div data-scroll-section data-scroll-index="2" className="p-8 md:p-12 border rounded-2xl bg-neutral-950/40 border-white/5 shadow-2xl relative overflow-hidden">
+          <div data-scroll-section data-scroll-index="2" className="p-8 md:p-12 border rounded-2xl bg-white border-slate-200 shadow-sm relative overflow-hidden">
             <div className="flex items-center gap-3 mb-6">
-              <Truck className="h-6 w-6 text-primary" />
-              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-white">Administration Protocol</h2>
+              <Truck className="h-6 w-6 text-slate-800" />
+              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Administration Protocol</h2>
             </div>
-            <div className="leading-relaxed text-base mb-8 text-neutral-400 font-medium">
+            <div className="leading-relaxed text-base mb-8 text-slate-500 font-medium">
               <p>
                 Mix allocations precisely calculated relative to your targeted baseline performance markers, macronutrient tracking maps, and ongoing mechanical load thresholds.
               </p>
             </div>
             <div className="grid sm:grid-cols-3 gap-4">
-              <div className="p-6 rounded-xl border bg-black/40 border-white/5">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-primary font-black">Timing Sequence</strong>
-                <p className="text-sm font-medium text-neutral-300">Administer pre, intra, or within a 45-minute window post-workout for maximum synthesis response tracking.</p>
+              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Timing Sequence</strong>
+                <p className="text-sm font-medium text-slate-600">Administer pre, intra, or within a 45-minute window post-workout for maximum synthesis response tracking.</p>
               </div>
-              <div className="p-6 rounded-xl border bg-black/40 border-white/5">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-primary font-black">Matrix Stacking</strong>
-                <p className="text-sm font-medium text-neutral-300">Can be cleanly stacked alongside complementary single-agent allocations without risk of cross-compound degradation parameters.</p>
+              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Matrix Stacking</strong>
+                <p className="text-sm font-medium text-slate-600">Can be cleanly stacked alongside complementary single-agent allocations without risk of cross-compound degradation parameters.</p>
               </div>
-              <div className="p-6 rounded-xl border bg-black/40 border-white/5">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-primary font-black">Storage Parameters</strong>
-                <p className="text-sm font-medium text-neutral-300">Keep container firmly sealed inside a cool, stabilized moisture-free tracking climate zone environment.</p>
+              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Storage Parameters</strong>
+                <p className="text-sm font-medium text-slate-600">Keep container firmly sealed inside a cool, stabilized moisture-free tracking climate zone environment.</p>
               </div>
             </div>
           </div>
@@ -413,8 +413,8 @@ const ProductDetail = () => {
           {/* User Reviews */}
           <div data-scroll-section data-scroll-index="3" className="pt-4">
             <div className="flex items-center gap-3 mb-8">
-              <Star className="h-6 w-6 text-primary fill-primary" />
-              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-white">User Reviews Ledger</h2>
+              <Star className="h-6 w-6 text-amber-500 fill-amber-500" />
+              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">User Reviews Ledger</h2>
             </div>
             <ProductReviews slug={product.id} />
           </div>
@@ -423,9 +423,9 @@ const ProductDetail = () => {
       </section>
 
       {/* Related Products */}
-      <section className="py-20 border-t border-white/5 bg-black">
+      <section className="py-20 border-t border-slate-200 bg-white">
         <div className="container max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8 text-white">Complete Your Stack Configuration</h2>
+          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8 text-slate-900">Complete Your Stack Configuration</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {related.map((p) => (
               <ProductCard key={p.id} p={p} />
@@ -435,12 +435,12 @@ const ProductDetail = () => {
       </section>
 
       {/* Sticky Buy Bottom Bar */}
-      <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden backdrop-blur-md border-t p-4 flex items-center justify-between gap-4 bg-neutral-950/90 border-white/5">
+      <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden backdrop-blur-md border-t p-4 flex items-center justify-between gap-4 bg-white/90 border-slate-200 shadow-lg">
         <div>
-          <span className="text-[10px] uppercase tracking-widest block font-bold text-neutral-500">Allocation Price</span>
-          <p className="font-black text-xl text-white font-mono">₹{product.price.toLocaleString()}</p>
+          <span className="text-[10px] uppercase tracking-widest block font-bold text-slate-400">Allocation Price</span>
+          <p className="font-black text-xl text-slate-900 font-mono">₹{product.price.toLocaleString()}</p>
         </div>
-        <Button onClick={add} className="bg-primary text-black font-black uppercase tracking-wider text-xs h-12 px-6 rounded-xl flex-1 shadow-glow">
+        <Button onClick={add} className="bg-slate-900 text-white font-black uppercase tracking-wider text-xs h-12 px-6 rounded-xl flex-1 shadow-sm">
           Add to Cart
         </Button>
       </div>
