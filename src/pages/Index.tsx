@@ -127,6 +127,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* PRODUCT SHOWCASE SLIDER */}
+      <ProductShowcaseSlider />
+
       {/* TRUST BAR */}
       <section className="bg-primary text-primary-foreground py-4 overflow-hidden border-y border-border">
         <div className="marquee gap-12 whitespace-nowrap text-sm font-semibold tracking-widest uppercase">
