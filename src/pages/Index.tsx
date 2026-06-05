@@ -49,25 +49,6 @@ const ingredients = [
   { name: "Digestive Enzymes", icon: Leaf, desc: "Improves protein absorption and reduces bloating between meals." },
 ];
 
-const testimonials = [
-  { name: "Arjun S.", role: "Powerlifter", text: "Super Whey mixes effortlessly and the gains are real. Best whey I've used in 8 years of training.", img: "https://i.pravatar.cc/120?img=11" },
-  { name: "Neha R.", role: "CrossFit Athlete", text: "Lean Shot gave me clean energy without crash. My conditioning has never been better.", img: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 7.38.06 PM.jpeg" },
-  { name: "Rohit M.", role: "Bodybuilder", text: "Plasma Mass actually delivers clean calories. Up 6kg in three months without any bloat.", img: "https://i.pravatar.cc/120?img=15" },
-  { name: "Kavya P.", role: "Marathon Runner", text: "BCAA Recover is now a non-negotiable in my long runs. Recovery is dramatically better.", img: "https://i.pravatar.cc/120?img=32" },
-  { name: "Vikram T.", role: "Strength Coach", text: "Finally a brand that publishes lab reports. I recommend Ergogenic to all my athletes.", img: "https://i.pravatar.cc/120?img=12" },
-  { name: "Priya K.", role: "Fitness Coach", text: "The taste, the dosing, the transparency — Ergogenic raised the bar for Indian supplements.", img: "https://i.pravatar.cc/120?img=44" },
-  { name: "Sahil D.", role: "Calisthenics Athlete", text: "Pure Creatine works exactly as it should. Strength is up across all my pulls.", img: "https://i.pravatar.cc/120?img=8" },
-  { name: "Meera J.", role: "Yoga Instructor", text: "Daily Multi keeps my immunity solid through hectic class schedules. Love it.", img: "https://i.pravatar.cc/120?img=49" },
-];
-
-const experts = [
-  { name: "Dr. Anand Kapoor", role: "Sports Nutrition Lead", desc: "PhD in Exercise Physiology with 15 years guiding elite athletes." },
-  { name: "Dr. Ritika Mehra", role: "Clinical R&D", desc: "Formulator for over 40 ergogenic blends across pro sports teams." },
-  { name: "Coach Daniel Roy", role: "Performance Coach", desc: "International strength coach focused on evidence-based protocols." },
-  { name: "Sneha Iyer", role: "Quality & Compliance", desc: "Leads our independent third-party lab verification program." },
-  { name: "Karan Bhalla", role: "Athlete Programs", desc: "Works directly with national-level athletes on supplementation." },
-  { name: "Dr. Maya Sharma", role: "Biochemist", desc: "Designs absorption-optimized matrices for our flagship products." },
-];
 
 const partners = ["IRON REALM", "FORGE GYMS", "ATHLETIC LAB", "PEAK FITNESS", "VOLT TRAINING", "PRO STRENGTH"];
 
