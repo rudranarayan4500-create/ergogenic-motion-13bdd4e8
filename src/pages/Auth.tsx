@@ -53,7 +53,9 @@ export default function AuthPage() {
   const nav = useNavigate();
   const { user } = useAuth();
 
-  useEffect(() => { if (user) nav("/"); }, [user, nav]);
+  useEffect(() => { 
+    if (user) nav("/"); 
+  }, [user, nav]);
 
   const checks = useMemo(() => pwChecks(password), [password]);
   const pwStrong = Object.values(checks).every(Boolean);
@@ -61,61 +63,95 @@ export default function AuthPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (parseInt(captchaInput, 10) !== captcha.a) {
       toast({ title: "Captcha incorrect", description: `Solve: ${captcha.q}`, variant: "destructive" });
-      setCaptcha(genCaptcha()); setCaptchaInput("");
+      setCaptcha(genCaptcha()); 
+      setCaptchaInput("");
       return;
     }
+    
     setBusy(true);
+    
     try {
       if (mode === "signup") {
         if (!pwStrong) {
           toast({ title: "Weak password", description: "Meet all strength rules.", variant: "destructive" });
+          setBusy(false);
           return;
         }
         if (password !== confirm) {
           toast({ title: "Passwords don't match", variant: "destructive" });
+          setBusy(false);
           return;
         }
-        const { error } = await supabase.auth.signUp({
-          email, password,
+
+        const { data, error } = await supabase.auth.signUp({
+          email, 
+          password,
           options: {
             emailRedirectTo: window.location.origin,
             data: {
-              full_name: name, phone: `${countryCode} ${phone}`, country_code: countryCode,
-              address, city, state: stateName, pincode, country,
+              full_name: name, 
+              phone: `${countryCode} ${phone}`, 
+              country_code: countryCode,
+              address, 
+              city, 
+              state: stateName, 
+              pincode, 
+              country,
             },
           },
         });
+
         if (error) throw error;
-        // Auto-confirm is enabled, so we can sign in immediately
-        const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
-        if (signInErr) {
-          toast({ title: "Account created", description: "Please sign in to continue." });
-          setMode("login");
-        } else {
+
+        // If auto-confirm is on, we'll get an immediate session
+        if (data?.session) {
           toast({ title: "Welcome to Ergogenic", description: "Account created successfully." });
           nav("/");
+          return;
         }
+
+        // If email confirmation is required, handle cleanly instead of letting sign-in crash the thread
+        try {
+          const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInErr) throw signInErr;
+          
+          toast({ title: "Welcome to Ergogenic", description: "Account created successfully." });
+          nav("/");
+        } catch {
+          toast({ 
+            title: "Account verification sent", 
+            description: "Please check your inbox to confirm your email before signing in." 
+          });
+          setMode("login");
+        }
+        
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
           if (/confirm/i.test(error.message)) {
-            throw new Error("Email not confirmed yet. Please sign up again or check your inbox.");
+            throw new Error("Email not confirmed yet. Please verify your email inbox.");
           }
           throw error;
         }
         nav("/");
       }
     } catch (err: any) {
-      toast({ title: "Auth failed", description: err.message, variant: "destructive" });
-      setCaptcha(genCaptcha()); setCaptchaInput("");
+      let errMsg = err.message || "An unexpected network error occurred.";
+      if (errMsg === "Failed to fetch") {
+        errMsg = "Could not connect to authentication servers. Please check your internet connection or disable ad-blockers.";
+      }
+      
+      toast({ title: "Auth failed", description: errMsg, variant: "destructive" });
+      setCaptcha(genCaptcha()); 
+      setCaptchaInput("");
     } finally {
       setBusy(false);
     }
   };
 
-  // FIXED: Changed lovable.auth.signInWithOAuth to use native supabase client
   const google = async () => {
     try {
       setBusy(true);
@@ -133,7 +169,7 @@ export default function AuthPage() {
     } catch (err: any) {
       toast({ 
         title: "Google sign-in failed", 
-        description: err.message || String(err), 
+        description: err.message || "Network request failed.", 
         variant: "destructive" 
       });
     } finally {
