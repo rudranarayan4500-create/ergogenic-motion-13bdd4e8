@@ -126,13 +126,14 @@ const ProductDetail = () => {
     if (!product) return [];
     if (product.id === "pure-creatine") {
       return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg", tag: "Product View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", tag: "Product Detail" }
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg", tag: "Product Banner" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg", tag: "Front View" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", tag: "Nutritional View" }
       ];
     }
     const g = (product as any).gallery as string[] | undefined;
     if (g && g.length > 1) {
-      return g.slice(0, 3).map((url, i) => ({ url, tag: ["Front View", "Detail View", "Side View"][i] || "Product View" }));
+      return g.slice(0, 3).map((url, i) => ({ url, tag: ["Product Banner", "Front View", "Nutritional View"][i] || "Product View" }));
     }
     return [{ url: product.image, tag: "Product View" }];
   }, [product]);
@@ -262,19 +263,44 @@ const ProductDetail = () => {
           {productBenefits.length > 0 && (
             <div data-scroll-section data-scroll-index="0" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
               
-              {/* Left Column: Image Previews */}
+              {/* Left Column: Stacked Design Layout Grid */}
               <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {productSnapshots.map((pic, pIdx) => (
-                    <div key={pIdx} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between">
-                      <div className="aspect-square w-full max-h-[140px] flex items-center justify-center p-2">
-                        <img src={pic.url} alt={pic.tag} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                <div className="flex flex-col gap-3">
+                  {/* First item: Top panoramic horizontal image */}
+                  {productSnapshots[0] && (
+                    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between w-full">
+                      <div className="w-full h-48 md:h-56 flex items-center justify-center p-2">
+                        <img 
+                          src={productSnapshots[0].url} 
+                          alt={productSnapshots[0].tag} 
+                          className="w-full h-full object-cover rounded-xl group-hover:scale-[1.02] transition-transform duration-500" 
+                        />
                       </div>
-                      <span className="text-[10px] font-mono tracking-wider text-slate-400 block text-center mt-2 border-t border-slate-100 pt-1.5 w-full">
-                        {pic.tag}
+                      <span className="text-[10px] font-mono tracking-wider text-slate-400 block text-center mt-3 border-t border-slate-100 pt-2 w-full">
+                        {productSnapshots[0].tag}
                       </span>
                     </div>
-                  ))}
+                  )}
+
+                  {/* Below Items: 1x1 Side-by-side squares for image 2 and 3 */}
+                  {productSnapshots.length > 1 && (
+                    <div className="grid grid-cols-2 gap-3">
+                      {productSnapshots.slice(1, 3).map((pic, pIdx) => (
+                        <div key={pIdx} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between aspect-square">
+                          <div className="w-full h-full flex items-center justify-center p-2 min-h-0">
+                            <img 
+                              src={pic.url} 
+                              alt={pic.tag} 
+                              className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" 
+                            />
+                          </div>
+                          <span className="text-[10px] font-mono tracking-wider text-slate-400 block text-center mt-2 border-t border-slate-100 pt-1.5 w-full shrink-0">
+                            {pic.tag}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 
                 {reviewVideos.length > 0 && (
