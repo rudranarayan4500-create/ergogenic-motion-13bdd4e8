@@ -20,11 +20,37 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [qty, setQty] = useState(1);
   const [extraMedia, setExtraMedia] = useState<MediaItem[]>([]);
+  const [dbProduct, setDbProduct] = useState<any | null>(null);
   const [, setScrollPositions] = useState<{ [key: number]: ScrollPosition }>({});
   const scrollHandlerRef = useRef<(() => void) | null>(null);
 
   const product = useMemo(() => {
     const found = products.find((p) => p.id === id || p.slug === id);
+    if (dbProduct) {
+      const base: any = found ?? {
+        id: dbProduct.slug, slug: dbProduct.slug,
+        category: dbProduct.category,
+        benefits: dbProduct.benefits ?? [],
+        howToUse: dbProduct.how_to_use ?? "",
+        ingredients: dbProduct.ingredients ?? [],
+        gallery: undefined,
+      };
+      return {
+        ...base,
+        name: dbProduct.name ?? base.name,
+        tagline: dbProduct.tagline ?? base.tagline ?? "",
+        description: dbProduct.description ?? base.description ?? "",
+        price: Number(dbProduct.price) || base.price,
+        mrp: Number(dbProduct.mrp) || base.mrp,
+        category: dbProduct.category || base.category,
+        image: dbProduct.image || base.image,
+        rating: Number(dbProduct.rating) || base.rating || 4.8,
+        reviews: Number(dbProduct.reviews) || base.reviews || 0,
+        benefits: (dbProduct.benefits?.length ? dbProduct.benefits : base.benefits) ?? [],
+        ingredients: (dbProduct.ingredients?.length ? dbProduct.ingredients : base.ingredients) ?? [],
+        howToUse: dbProduct.how_to_use || base.howToUse,
+      };
+    }
     if (!found && id === "pure-creatine") {
       return {
         id: "pure-creatine",
@@ -40,12 +66,13 @@ const ProductDetail = () => {
       };
     }
     return found;
-  }, [id]);
+  }, [id, dbProduct]);
 
   useEffect(() => {
     if (!id) return;
-    supabase.from("products").select("media").eq("slug", id).maybeSingle()
+    supabase.from("products").select("*").eq("slug", id).maybeSingle()
       .then(({ data }) => {
+        setDbProduct(data ?? null);
         const m = (data?.media as any[]) ?? [];
         setExtraMedia(m.filter((x) => x?.url).map((x) => ({ url: x.url, kind: x.kind })));
       });
