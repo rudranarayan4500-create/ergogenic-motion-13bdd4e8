@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
-import { ProductReviews } from "@/components/ProductReviews";
 import { ProductGallery, type MediaItem } from "@/components/ProductGallery";
 import { supabase } from "@/integrations/supabase/client";
 import { throttle } from "@/lib/utils";
@@ -105,7 +104,7 @@ const ProductDetail = () => {
   }, []);
 
   const gallery: MediaItem[] = useMemo(() => {
-    if (extraMedia.length) return extraMedia;
+    if (extraMedia.length) return extraMedia.slice(0, 6);
     
     if (product?.id === "pure-creatine") {
       return [
@@ -117,7 +116,7 @@ const ProductDetail = () => {
     
     if (!product) return [];
     const g = (product as any).gallery as string[] | undefined;
-    if (g && g.length) return g.map((url) => ({ url, kind: "image" as const }));
+    if (g && g.length) return g.slice(0, 6).map((url) => ({ url, kind: "image" as const }));
     return [{ url: product.image, kind: "image" }];
   }, [extraMedia, product]);
 
@@ -352,15 +351,6 @@ const ProductDetail = () => {
                 <p className="text-sm font-medium text-slate-600">Keep container tightly closed and store in a cool, dry place.</p>
               </div>
             </div>
-          </div>
-
-          {/* User Reviews */}
-          <div data-scroll-section data-scroll-index="3" className="pt-4">
-            <div className="flex items-center gap-3 mb-8">
-              <Star className="h-6 w-6 text-amber-500 fill-amber-500" />
-              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Product Reviews</h2>
-            </div>
-            <ProductReviews slug={product.id} />
           </div>
 
         </div>
