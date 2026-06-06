@@ -44,15 +44,14 @@ const ProductDetail = () => {
         mrp: Number(dbProduct.mrp) || base.mrp,
         category: dbProduct.category || base.category,
         image: dbProduct.image || base.image,
-        rating: Number(dbProduct.rating) || base.rating || 4.8,
-        reviews: Number(dbProduct.reviews) || base.reviews || 0,
+        rating: Number(dbProduct.rating) || base.rating || 4.9,
+        reviews: Number(dbProduct.reviews) || base.reviews || 3050,
         benefits: (dbProduct.benefits?.length ? dbProduct.benefits : base.benefits) ?? [],
         ingredients: (dbProduct.ingredients?.length ? dbProduct.ingredients : base.ingredients) ?? [],
         howToUse: dbProduct.how_to_use || base.howToUse,
       };
     }
     
-    // Explicit fallback and data structures mapping for the "chocolate-mocha-whey" product
     if (!found && (id === "chocolate-mocha-whey" || id === "fuelled-chocolate-mocha-whey")) {
       return {
         id: "chocolate-mocha-whey",
@@ -60,10 +59,11 @@ const ProductDetail = () => {
         name: "Fuelled Chocolate Mocha Whey",
         category: "Fitness",
         rating: 4.9,
-        reviews: 2450,
+        reviews: 3050,
         price: 2499,
         mrp: 3299,
         tagline: "Rich Notes of Chocolate & Coffee. Bold Cocoa. Fresh Coffee. Barista-Level Whey.",
+        description: "Chocolate Mocha Whey brings the best of both worlds. The rich taste of chocolate mocha, and the protein your training deserves. It's smooth, bold and a little indulgent - made for those who love their protein as much as their workouts.",
         image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%205.17.38%20PM.jpeg"
       };
     }
@@ -130,14 +130,15 @@ const ProductDetail = () => {
     if (!product) return [];
     if (product.id === "chocolate-mocha-whey") {
       return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%205.17.38%20PM.jpeg", tag: "Product Main View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%207.50.13%20PM.jpeg", tag: "Barista Taste" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%208.03.59%20PM.jpeg", tag: "Premium Blend" }
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%205.17.38%20PM.jpeg", tag: "Main Pack View" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%207.50.13%20PM.jpeg", tag: "Coffee Bean Spread" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%208.03.59%20PM.jpeg", tag: "Gourmet Formulation" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%208.09.24%20PM.jpeg", tag: "Barista Setup Directions" }
       ];
     }
     const g = (product as any).gallery as string[] | undefined;
     if (g && g.length > 1) {
-      return g.slice(0, 3).map((url, i) => ({ url, tag: ["Front View", "Detail View", "Side View"][i] || "Product View" }));
+      return g.slice(0, 4).map((url, i) => ({ url, tag: ["Front View", "Detail View", "Side View", "Texture View"][i] || "Product View" }));
     }
     return [{ url: product.image, tag: "Product View" }];
   }, [product]);
@@ -153,21 +154,20 @@ const ProductDetail = () => {
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
   };
 
-  // Content population derived directly from product graphics and web metadata structures
   const productIngredients = (product as any).mainIngredients || (product as any).ingredients || [
-    "100% Cold-Processed Whey Protein",
-    "Robusta Coffee Beans",
-    "Dutch Cocoa Powder",
-    "24g Protein per Serving",
-    "5G BCAAs",
-    "4G Carbs"
+    "100% Cold-Processed Whey Protein Blend",
+    "Premium Robusta Coffee Beans",
+    "Gourmet Dutch Cocoa Powder",
+    "24g Clean Protein",
+    "5.5g Branched-Chain Amino Acids (BCAAs)",
+    "4g Complex Carbohydrates"
   ];
   
   const productBenefits = (product as any).keyBenefits || (product as any).benefits || [
-    "Build Muscle",
-    "Lose Fat",
-    "Increase Daily Protein Intake",
-    "Barista-Level Gourmet Taste"
+    "Build Lean Muscle mass",
+    "Accelerate Fat Loss Programs",
+    "Increase Daily Protein Profiles",
+    "Tested, Certified, and Trusted Integrity"
   ];
   
   const productFlavours = (product as any).flavours || [
@@ -226,6 +226,7 @@ const ProductDetail = () => {
                   <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
                   <span className="ml-1.5 font-mono font-black text-slate-900">{product.rating}</span>
                 </div>
+                <span className="text-slate-400 font-bold uppercase tracking-wider text-xs">({product.reviews} Reviews)</span>
               </div>
 
               <p className="text-base md:text-lg leading-relaxed text-slate-600 font-medium max-w-2xl">
@@ -283,6 +284,30 @@ const ProductDetail = () => {
         </div>
       </section>
 
+      {/* Narrative & Co-Founder Panel Section */}
+      {product.description && (
+        <section className="py-16 bg-white border-b border-slate-100">
+          <div className="container max-w-6xl mx-auto px-4">
+            <div className="grid md:grid-cols-12 gap-8 items-center bg-slate-50 rounded-3xl p-8 border border-slate-200">
+              <div className="md:col-span-7 space-y-4">
+                <h3 className="text-xs tracking-[0.2em] uppercase font-black text-slate-400">Rich, Bold & Rewarding</h3>
+                <p className="text-lg font-medium text-slate-700 leading-relaxed italic">
+                  "{product.description}"
+                </p>
+                <p className="text-xs font-mono font-black text-slate-500">— Shrey Radhakrishnan, Co-Founder, Fuelled</p>
+              </div>
+              <div className="md:col-span-5 flex justify-center">
+                <img 
+                  src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%208.03.59%20PM.jpeg" 
+                  alt="Fuelled Co-Founder Concept" 
+                  className="rounded-2xl max-h-[280px] object-cover shadow-sm border border-slate-200"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Product Information Blocks */}
       <section className="py-20 bg-slate-50/50 relative">
         <div className="container max-w-6xl mx-auto px-4 space-y-24">
@@ -293,13 +318,13 @@ const ProductDetail = () => {
               
               {/* Left Column: Image Previews */}
               <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {productSnapshots.map((pic, pIdx) => (
-                    <div key={pIdx} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between">
-                      <div className="aspect-square w-full max-h-[140px] flex items-center justify-center p-2">
+                    <div key={pIdx} className="rounded-2xl border border-slate-200 bg-white p-2 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between">
+                      <div className="aspect-square w-full max-h-[120px] flex items-center justify-center p-1">
                         <img src={pic.url} alt={pic.tag} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" />
                       </div>
-                      <span className="text-[10px] font-mono tracking-wider text-slate-400 block text-center mt-2 border-t border-slate-100 pt-1.5 w-full">
+                      <span className="text-[9px] font-mono tracking-wider text-slate-400 block text-center mt-1.5 border-t border-slate-100 pt-1 w-full truncate">
                         {pic.tag}
                       </span>
                     </div>
@@ -341,7 +366,7 @@ const ProductDetail = () => {
           {productIngredients.length > 0 && (
             <div data-scroll-section data-scroll-index="1" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               <div className="lg:col-span-7 space-y-6 order-2 lg:order-1">
-                <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Ingredients</h2>
+                <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Macro Profiles & Ingredients</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {productIngredients.map((ingredient, idx) => (
                     <div key={ingredient} className="flex items-center justify-between p-4 rounded-xl border bg-white border-slate-200 shadow-sm transition-all duration-300 group/item">
@@ -356,7 +381,11 @@ const ProductDetail = () => {
                 </div>
               </div>
               <div className="lg:col-span-5 rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm order-1 lg:order-2">
-                <ProductGallery items={gallery.filter(m => m.kind === "image")} alt={product.name} />
+                <img 
+                  src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%207.50.13%20PM.jpeg" 
+                  alt="World's Finest Ingredients Breakdown" 
+                  className="rounded-2xl w-full h-auto object-cover border border-slate-200"
+                />
               </div>
             </div>
           )}
@@ -364,20 +393,24 @@ const ProductDetail = () => {
           {/* Usage Protocol */}
           <div data-scroll-section data-scroll-index="2" className="p-8 md:p-12 border rounded-2xl bg-white border-slate-200 shadow-sm relative overflow-hidden">
             <div className="mb-6">
-              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Usage Directions</h2>
+              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Barista-Level Taste (At Home)</h2>
             </div>
-            <div className="grid sm:grid-cols-3 gap-4">
-              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Suggested Timing</strong>
-                <p className="text-sm font-medium text-slate-600">Take before, during, or immediately after your training session.</p>
+            <div className="grid sm:grid-cols-4 gap-4">
+              <div className="p-5 rounded-xl border bg-slate-50 border-slate-200">
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Step 01</strong>
+                <p className="text-sm font-medium text-slate-600">Add 180-220ml water / chilled milk.</p>
               </div>
-              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Mixing</strong>
-                <p className="text-sm font-medium text-slate-600">Can be mixed with water, milk, or your preferred fitness shakes.</p>
+              <div className="p-5 rounded-xl border bg-slate-50 border-slate-200">
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Step 02</strong>
+                <p className="text-sm font-medium text-slate-600">Add 1 scoop of Chocolate Mocha Whey.</p>
               </div>
-              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Storage</strong>
-                <p className="text-sm font-medium text-slate-600">Keep container tightly closed and store in a cool, dry place.</p>
+              <div className="p-5 rounded-xl border bg-slate-50 border-slate-200">
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Step 03</strong>
+                <p className="text-sm font-medium text-slate-600">Shake it hard for 20 seconds.</p>
+              </div>
+              <div className="p-5 rounded-xl border bg-slate-50 border-slate-200">
+                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Step 04</strong>
+                <p className="text-sm font-medium text-slate-600">Pour into a glass and enjoy.</p>
               </div>
             </div>
           </div>
