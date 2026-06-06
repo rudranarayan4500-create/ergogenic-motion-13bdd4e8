@@ -381,8 +381,9 @@ const Products = () => {
                         <div className="w-full aspect-square relative bg-slate-50 rounded-2xl mb-3.5 flex items-center justify-center overflow-hidden border border-slate-200">
                           <Link to={`/products/${p.id}`} className="w-full h-full block cursor-pointer">
                             <img
-                              src={p.image} alt={p.name} loading="lazy"
-                              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none pointer-events-none"
+                              src={p.image || (p as any).gallery?.[0] || "/placeholder.svg"}
+                              alt={p.name} loading="lazy"
+                              className="w-full h-full object-contain p-4 transition-transform duration-700 ease-out group-hover:scale-105 select-none pointer-events-none"
                             />
                           </Link>
 
