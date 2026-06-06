@@ -27,8 +27,7 @@ const ProductDetail = () => {
     const found = products.find((p) => p.id === id || p.slug === id);
     if (dbProduct) {
       const base: any = found ?? {
-        id: dbProduct.slug,
-        slug: dbProduct.slug,
+        id: dbProduct.slug, slug: dbProduct.slug,
         category: dbProduct.category,
         benefits: dbProduct.benefits ?? [],
         howToUse: dbProduct.how_to_use ?? "",
@@ -51,20 +50,18 @@ const ProductDetail = () => {
         howToUse: dbProduct.how_to_use || base.howToUse,
       };
     }
-    
-    // Explicit fallback and data structures mapping for the "chocolate-mocha-whey" product
-    if (!found && (id === "chocolate-mocha-whey" || id === "fuelled-chocolate-mocha-whey")) {
+    if (!found && id === "pure-creatine") {
       return {
-        id: "chocolate-mocha-whey",
-        slug: "chocolate-mocha-whey",
-        name: "Fuelled Chocolate Mocha Whey",
+        id: "pure-creatine",
+        slug: "pure-creatine",
+        name: "Pure Creatine Micronized",
         category: "Fitness",
         rating: 4.9,
-        reviews: 2450,
-        price: 2499,
-        mrp: 3299,
-        tagline: "Rich Notes of Chocolate & Coffee. Bold Cocoa. Fresh Coffee. Barista-Level Whey.",
-        image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%205.17.38%20PM.jpeg"
+        reviews: 1750,
+        price: 1299,
+        mrp: 1599,
+        tagline: "Pure micronized creatine monohydrate designed to support muscle hydration and endurance.",
+        image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg"
       };
     }
     return found;
@@ -109,12 +106,11 @@ const ProductDetail = () => {
   const gallery: MediaItem[] = useMemo(() => {
     if (extraMedia.length) return extraMedia.slice(0, 6);
     
-    if (product?.id === "chocolate-mocha-whey") {
+    if (product?.id === "pure-creatine") {
       return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%205.17.38%20PM.jpeg", kind: "image" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%207.50.13%20PM.jpeg", kind: "image" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%208.03.59%20PM.jpeg", kind: "image" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%208.09.24%20PM.jpeg", kind: "image" }
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg", kind: "image" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png", kind: "image" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", kind: "image" }
       ];
     }
     
@@ -128,11 +124,10 @@ const ProductDetail = () => {
 
   const productSnapshots = useMemo(() => {
     if (!product) return [];
-    if (product.id === "chocolate-mocha-whey") {
+    if (product.id === "pure-creatine") {
       return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%205.17.38%20PM.jpeg", tag: "Product Main View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%207.50.13%20PM.jpeg", tag: "Barista Taste" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-06%20at%208.03.59%20PM.jpeg", tag: "Premium Blend" }
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg", tag: "Product View" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", tag: "Product Detail" }
       ];
     }
     const g = (product as any).gallery as string[] | undefined;
@@ -153,33 +148,9 @@ const ProductDetail = () => {
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
   };
 
-  // Content population derived directly from product graphics and web metadata structures
-  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || [
-    "100% Cold-Processed Whey Protein",
-    "Robusta Coffee Beans",
-    "Dutch Cocoa Powder",
-    "24g Protein per Serving",
-    "5G BCAAs",
-    "4G Carbs"
-  ];
-  
-  const productBenefits = (product as any).keyBenefits || (product as any).benefits || [
-    "Build Muscle",
-    "Lose Fat",
-    "Increase Daily Protein Intake",
-    "Barista-Level Gourmet Taste"
-  ];
-  
-  const productFlavours = (product as any).flavours || [
-    "Chocolate Mocha 🍫☕",
-    "Aamras 🥭",
-    "Chocolate Cookie Crunch",
-    "Classic Thandai",
-    "Iced Latte",
-    "Mango Ice Cream",
-    "Rose Milk",
-    "Spiced Malai Kulfi"
-  ];
+  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Pure Creatine Monohydrate"];
+  const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["Supports Power Output", "Promotes Muscle Hydration", "Assists Recovery"];
+  const productFlavours = (product as any).flavours || ["Unflavored"];
 
   return (
     <div className="bg-[#FFFFFF] text-slate-900 min-h-screen antialiased selection:bg-slate-900 selection:text-white">
@@ -373,7 +344,7 @@ const ProductDetail = () => {
               </div>
               <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
                 <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Mixing</strong>
-                <p className="text-sm font-medium text-slate-600">Can be mixed with water, milk, or your preferred fitness shakes.</p>
+                <p className="text-sm font-medium text-slate-600">Can be mixed with water, juice, or your preferred fitness shakes.</p>
               </div>
               <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
                 <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Storage</strong>
