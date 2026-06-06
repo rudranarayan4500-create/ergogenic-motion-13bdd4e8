@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { 
   ChevronRight, Star, SlidersHorizontal, RotateCcw, Search,
@@ -9,9 +9,20 @@ import { categories, products, type Category } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 const Products = () => {
   const [params, setParams] = useSearchParams();
+
+  // Admin-controlled products from DB (merged with the static catalog)
+  const [dbProducts, setDbProducts] = useState<any[]>([]);
+  useEffect(() => {
+    supabase
+      .from("products")
+      .select("*")
+      .eq("active", true)
+      .then(({ data }) => setDbProducts(data ?? []));
+  }, []);
   
   // Advanced Filter Matrix States
   const initialCat = (params.get("cat") as Category | null) ?? null;
@@ -54,7 +65,34 @@ const Products = () => {
 
   // Comprehensive Live Matrix Filtering Logic Engine
   const filteredProducts = useMemo(() => {
-    let result = products.map((p, index) => {
+    // Merge static catalog with admin-managed DB products.
+    // DB rows override the static entry that shares the same slug/id; extra DB rows are appended.
+    const bySlug = new Map<string, any>();
+    products.forEach((p) => bySlug.set((p as any).slug || p.id, p));
+    dbProducts.forEach((d) => {
+      bySlug.set(d.slug, {
+        id: d.slug,
+        slug: d.slug,
+        name: d.name,
+        tagline: d.tagline ?? "",
+        price: Number(d.price) || 0,
+        mrp: Number(d.mrp) || Number(d.price) || 0,
+        category: (d.category as Category) || "Essentials",
+        image: d.image || "/placeholder.svg",
+        description: d.description ?? "",
+        benefits: d.benefits ?? [],
+        howToUse: d.how_to_use ?? "",
+        ingredients: d.ingredients ?? [],
+        rating: Number(d.rating) || 4.8,
+        reviews: Number(d.reviews) || 0,
+        gallery: Array.isArray(d.media)
+          ? d.media.map((m: any) => m?.url).filter(Boolean)
+          : undefined,
+      });
+    });
+    const merged = Array.from(bySlug.values());
+
+    let result = merged.map((p, index) => {
       // Dynamic mapping for Lean Shot
       if (p.id === "lean- shot" || p.slug === "lean-shot") {
         return {
@@ -110,7 +148,7 @@ const Products = () => {
     if (sortBy === "rating") result.sort((a, b) => b.rating - a.rating);
     
     return result;
-  }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy]);
+  }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
