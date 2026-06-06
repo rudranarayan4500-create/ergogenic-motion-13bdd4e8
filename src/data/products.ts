@@ -78,7 +78,8 @@ export const products: Product[] = [
     mrp: 2499,
     category: "Recovery",
     image: B.aminoshot,
-    gallery: [B.aminoshot, U.aminoShotBack, B.aminoshotLifestyle],
+    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
+    gallery: [B.aminoshotLifestyle, B.aminoshot, U.aminoShotBack],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
@@ -100,7 +101,8 @@ export const products: Product[] = [
     mrp: 2099,
     category: "Recovery",
     image: B.glutashot,
-    gallery: [B.glutashot, U.glutaShotBack],
+    // [0] Placeholder/Alt/Wide fallback, [1] Front View, [2] Back Label View
+    gallery: [B.aminoshotLifestyle, B.glutashot, U.glutaShotBack],
     description:
       "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour.",
     benefits: ["Muscle repair", "Hydration & wellness", "Immunity support", "Easy mixing"],
@@ -117,7 +119,8 @@ export const products: Product[] = [
     mrp: 2799,
     category: "Performance",
     image: U.viper3,
-    gallery: [U.viper3, U.viper3, U.viper3Action],
+    // [0] Action/Wide View, [1] Front View, [2] Secondary/Back View
+    gallery: [U.viper3Action, U.viper3, U.viper3],
     description:
       "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
     benefits: [
@@ -138,10 +141,13 @@ export const products: Product[] = [
     price: 1499,
     mrp: 1899,
     category: "Performance",
-image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png",
-gallery: [
-  "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png"
-],
+    image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png",
+    // [0] Wide/Action fallback, [1] Front view, [2] Alternate view
+    gallery: [
+      U.viper3Action,
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png",
+      U.creatineAlt
+    ],
     description:
       "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
     benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
@@ -158,7 +164,8 @@ gallery: [
     mrp: 2399,
     category: "Performance",
     image: U.leanShotFront,
-    gallery: [U.leanShotFront, U.leanShotBack],
+    // [0] Action/Wide View, [1] Front View, [2] Back label View
+    gallery: [U.viper3Action, U.leanShotFront, U.leanShotBack],
     description:
       "Lean Shot supports fat metabolism, energy, focus and vitality. Tropical Mango flavour.",
     benefits: ["Fat loss support", "Energy & endurance", "Focus & clarity", "Overall vitality"],
@@ -175,7 +182,8 @@ gallery: [
     mrp: 5499,
     category: "Muscle",
     image: U.superWheyFront,
-    gallery: [U.superWheyFront, U.superWheyBack, B.superwheyLifestyle],
+    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
+    gallery: [B.superwheyLifestyle, U.superWheyFront, U.superWheyBack],
     description:
       "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
     benefits: [
@@ -198,7 +206,8 @@ gallery: [
     mrp: 4699,
     category: "Muscle",
     image: B.plasmamass,
-    gallery: [B.plasmamass, U.proFront, U.proBack],
+    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
+    gallery: [B.superwheyLifestyle, U.proFront, U.proBack],
     description:
       "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size.",
     benefits: [
@@ -220,7 +229,8 @@ gallery: [
     mrp: 1199,
     category: "Performance",
     image: U.caffeineNew,
-    gallery: [U.caffeineNew, B.caffeineLifestyle, U.capletsAllInOne],
+    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
+    gallery: [B.caffeineLifestyle, U.caffeineNew, U.capletsAllInOne],
     description:
       "60 caplets of pure Caffeine Anhydrous for instant energy and performance. Push your limits with every dose.",
     benefits: ["Instant energy", "Sharper focus", "Performance boost", "60 caplets per bottle"],
@@ -237,7 +247,8 @@ gallery: [
     mrp: 1299,
     category: "Performance",
     image: U.hyperNoNew,
-    gallery: [U.hyperNoNew, B.hypernoLifestyle, U.hyperNoCaplets],
+    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
+    gallery: [B.hypernoLifestyle, U.hyperNoNew, U.hyperNoCaplets],
     description:
       "60 caplets of L-Citrulline Malate and L-Arginine for nitric oxide pumps, strength and lean muscle building.",
     benefits: ["Bigger pumps", "Lean muscle support", "Strength gains", "60 caplets per bottle"],
@@ -254,7 +265,8 @@ gallery: [
     mrp: 1599,
     category: "Essentials",
     image: U.capletsAllInOne,
-    gallery: [U.capletsAllInOne],
+    // [0] Lifestyle Wide, [1] Front View, [2] Extra View
+    gallery: [B.caffeineLifestyle, U.capletsAllInOne, U.capletsAllInOne],
     description:
       "60 caplets of Korean Red Ginseng Extract to fuel your day with sustained energy and vitality.",
     benefits: ["Fuel your day", "Sustained energy", "Daily vitality", "60 caplets per bottle"],
