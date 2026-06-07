@@ -1,14 +1,16 @@
+```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* =========================================================
+   DESIGN SYSTEM
+========================================================= */
 
 @layer base {
   :root {
-    /* Light mode - Clean white, black & blue */
+    /* LIGHT MODE */
+
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
@@ -18,11 +20,11 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 217 91% 50%;            /* clean blue */
+    --primary: 217 91% 50%;
     --primary-foreground: 0 0% 100%;
     --primary-glow: 217 91% 62%;
 
-    --secondary: 222 47% 11%;           /* black */
+    --secondary: 222 47% 11%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 210 16% 95%;
@@ -41,169 +43,383 @@ All colors MUST be HSL.
     --ink: 222 47% 11%;
     --ink-foreground: 0 0% 100%;
 
-    --gradient-hero: radial-gradient(ellipse at 50% 30%, hsl(217 91% 50% / 0.12), transparent 60%), linear-gradient(180deg, hsl(0 0% 100%), hsl(217 70% 95%));
-    --gradient-red: linear-gradient(135deg, hsl(217 91% 50%), hsl(217 91% 62%));
-    --shadow-elevated: 0 20px 60px -20px hsl(217 91% 30% / 0.18);
-    --shadow-glow: 0 0 40px hsl(217 91% 50% / 0.20);
-    --grid-line: hsl(0 0% 0% / 0.03);
+    --gradient-hero:
+      radial-gradient(
+        ellipse at 50% 30%,
+        hsl(217 91% 50% / 0.12),
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        hsl(0 0% 100%),
+        hsl(217 70% 95%)
+      );
+
+    --gradient-red:
+      linear-gradient(
+        135deg,
+        hsl(217 91% 50%),
+        hsl(217 91% 62%)
+      );
+
+    --shadow-elevated:
+      0 20px 60px -20px hsl(217 91% 30% / 0.18);
+
+    --shadow-glow:
+      0 0 40px hsl(217 91% 50% / 0.20);
+
+    --grid-line:
+      hsl(0 0% 0% / 0.03);
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* SIDEBAR */
 
+    --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
 
     --sidebar-primary: 217 91% 50%;
-
     --sidebar-primary-foreground: 0 0% 100%;
 
     --sidebar-accent: 217 91% 50%;
-
     --sidebar-accent-foreground: 0 0% 100%;
 
     --sidebar-border: 217 20% 88%;
-
     --sidebar-ring: 217 91% 50%;
   }
 
   .dark {
     --background: 222 47% 6%;
     --foreground: 0 0% 98%;
+
     --card: 222 47% 9%;
     --card-foreground: 0 0% 98%;
+
     --popover: 222 47% 9%;
     --popover-foreground: 0 0% 98%;
+
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
+
     --secondary: 222 30% 16%;
     --secondary-foreground: 0 0% 98%;
+
     --muted: 222 30% 14%;
     --muted-foreground: 0 0% 65%;
+
     --accent: 217 91% 60%;
     --accent-foreground: 0 0% 98%;
+
     --destructive: 217 91% 50%;
     --destructive-foreground: 0 0% 100%;
+
     --border: 222 30% 18%;
     --input: 222 30% 16%;
     --ring: 217 91% 60%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
+
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
+
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
+
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
+    min-width: 0;
+  }
+
+  html,
+  body {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+
+    text-rendering: optimizeLegibility;
   }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+
     letter-spacing: -0.02em;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    display: block;
   }
 }
 
+/* =========================================================
+   UTILITIES
+========================================================= */
+
 @layer utilities {
+
+  /* GRID */
+
   .bg-grid-dark {
     background-image:
-      linear-gradient(to right, hsl(0 0% 100% / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(0 0% 100% / 0.04) 1px, transparent 1px);
+      linear-gradient(
+        to right,
+        hsl(0 0% 100% / 0.04) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        hsl(0 0% 100% / 0.04) 1px,
+        transparent 1px
+      );
+
     background-size: 48px 48px;
   }
-  .spin-360 {
-    animation: spin360 12s linear infinite;
-    transform-style: preserve-3d;
-  }
-  @keyframes spin360 {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(360deg); }
-  }
-  .shadow-glow { box-shadow: var(--shadow-glow); }
+
   .bg-grid-light {
     background-image:
-      linear-gradient(to right, hsl(0 0% 0% / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(0 0% 0% / 0.04) 1px, transparent 1px);
+      linear-gradient(
+        to right,
+        hsl(0 0% 0% / 0.04) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        hsl(0 0% 0% / 0.04) 1px,
+        transparent 1px
+      );
+
     background-size: 48px 48px;
   }
+
+  /* TEXT */
+
   .text-gradient-red {
     background: var(--gradient-red);
+
     -webkit-background-clip: text;
     background-clip: text;
+
     color: transparent;
   }
-  .shadow-glow { box-shadow: var(--shadow-glow); }
-  .hover-lift { @apply transition-all duration-300 will-change-transform hover:-translate-y-1 hover:shadow-2xl; }
+
+  /* SHADOW */
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* HOVER */
+
+  .hover-lift {
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease,
+      border-color 0.3s ease;
+
+    will-change: transform;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+
+  /* MARQUEE */
+
   .marquee {
     display: flex;
     width: max-content;
+    gap: 1rem;
+
     animation: marquee 40s linear infinite;
+
     will-change: transform;
-  }
-  .marquee-rev {
-    animation: marquee-rev 40s linear infinite;
-    will-change: transform;
-  }
-  @keyframes marquee {
-    from { transform: translate3d(0, 0, 0); }
-    to { transform: translate3d(-50%, 0, 0); }
-  }
-  @keyframes marquee-rev {
-    from { transform: translate3d(-50%, 0, 0); }
-    to { transform: translate3d(0, 0, 0); }
   }
 
-  /* Scroll animations with GPU acceleration */
+  .marquee:hover {
+    animation-play-state: paused;
+  }
+
+  .marquee-rev {
+    display: flex;
+    width: max-content;
+    gap: 1rem;
+
+    animation: marquee-rev 40s linear infinite;
+
+    will-change: transform;
+  }
+
+  .marquee-rev:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes marquee-rev {
+    from {
+      transform: translate3d(-50%, 0, 0);
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* SPIN */
+
+  .spin-360 {
+    animation: spin360 12s linear infinite;
+
+    transform-style: preserve-3d;
+
+    will-change: transform;
+  }
+
+  @keyframes spin360 {
+    from {
+      transform: rotateY(0deg);
+    }
+
+    to {
+      transform: rotateY(360deg);
+    }
+  }
+
+  /* SCROLL ANIMATIONS */
+
   .zoom-in {
     animation: zoomIn 0.8s ease-out forwards;
-    will-change: transform;
+    will-change: transform, opacity;
   }
+
   .zoom-out {
     animation: zoomOut 0.8s ease-out forwards;
-    will-change: transform;
+    will-change: transform, opacity;
   }
+
   .slide-up-text {
     animation: slideUpText 0.8s ease-out forwards;
-    will-change: transform;
-  }
-  .glow-card {
-    background: radial-gradient(ellipse at center, rgba(229, 9, 20, 0.08), transparent 70%);
-    border: 1px solid rgba(229, 9, 20, 0.2);
-    backdrop-filter: blur(10px);
-    will-change: auto;
-  }
-  .glow-card.light {
-    background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.06), transparent 70%);
-    border: 1px solid rgba(59, 130, 246, 0.15);
+    will-change: transform, opacity;
   }
 
   @keyframes zoomIn {
-    from { transform: scale3d(0.95, 0.95, 1); opacity: 0; }
-    to { transform: scale3d(1, 1, 1); opacity: 1; }
-  }
-  @keyframes zoomOut {
-    from { transform: scale3d(1.05, 1.05, 1); opacity: 1; }
-    to { transform: scale3d(1, 1, 1); opacity: 0.9; }
-  }
-  @keyframes slideUpText {
-    from { transform: translate3d(0, 40px, 0); opacity: 0; }
-    to { transform: translate3d(0, 0, 0); opacity: 1; }
+    from {
+      transform: scale3d(0.95, 0.95, 1);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale3d(1, 1, 1);
+      opacity: 1;
+    }
   }
 
+  @keyframes zoomOut {
+    from {
+      transform: scale3d(1.05, 1.05, 1);
+      opacity: 1;
+    }
+
+    to {
+      transform: scale3d(1, 1, 1);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes slideUpText {
+    from {
+      transform: translate3d(0, 40px, 0);
+      opacity: 0;
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  /* GLOW CARD */
+
+  .glow-card {
+    background:
+      radial-gradient(
+        ellipse at center,
+        rgba(59, 130, 246, 0.06),
+        transparent 70%
+      );
+
+    border:
+      1px solid rgba(59, 130, 246, 0.15);
+
+    backdrop-filter: blur(10px);
+  }
+
+  /* SLIDER FIXES */
+
+  .slider-safe {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .slider-controls {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+
+    transform: translateX(-50%);
+
+    z-index: 20;
+  }
+
+  /* PERFORMANCE */
+
+  .gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* REDUCED MOTION */
+
   @media (prefers-reduced-motion: reduce) {
-    .zoom-in, .zoom-out, .slide-up-text,
-    .transition-all, .transition,
-    [class*="animate-"] {
+    *,
+    *::before,
+    *::after {
       animation: none !important;
       transition: none !important;
+      scroll-behavior: auto !important;
     }
   }
 }
+```
