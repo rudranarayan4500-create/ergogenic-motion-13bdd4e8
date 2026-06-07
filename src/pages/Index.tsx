@@ -76,13 +76,13 @@ const Index = () => {
         </div>
       </section>
 
-      {/* PRODUCT SHOWCASE SLIDER — Isolated with padding bottom to contain the dots cleanly */}
-      <section className="w-full overflow-hidden pb-12 relative z-20 bg-background">
+      {/* PRODUCT SHOWCASE SLIDER — Increased padding-bottom to completely clear out the absolute slider indicators */}
+      <section className="w-full overflow-hidden pb-20 relative z-10 bg-background">
         <ProductShowcaseSlider />
       </section>
 
-      {/* CATEGORIES / PRODUCTS MARQUEE — Pushed down with relative isolation */}
-      <section className="py-16 md:py-24 relative w-full z-10 bg-background">
+      {/* CATEGORIES / PRODUCTS MARQUEE — Shifted down safely using mt-8 to prevent overlaps */}
+      <section className="py-16 md:py-24 mt-8 relative w-full z-20 bg-background">
         <div className="absolute inset-0 bg-grid-light opacity-40" />
         <div className="container relative px-4">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
