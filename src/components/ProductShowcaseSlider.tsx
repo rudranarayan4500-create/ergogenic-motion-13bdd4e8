@@ -38,7 +38,7 @@ const slides: Slide[] = [
     cta: "Shop Viper-3",
     bg: "bg-gradient-to-br from-[#0b1220] via-[#0d1a33] to-[#0a0f1f]",
     text: "text-white",
-    accent: "bg-white hover:bg-white/90 text-[#0b1220]",
+    accent: "!bg-[#1d4ed8] hover:!bg-[#1e40af] !text-white",
   },
   {
     productId: "ergo-lean-shot",
