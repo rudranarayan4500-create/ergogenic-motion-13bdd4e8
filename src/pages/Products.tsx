@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { 
   ChevronRight, Star, SlidersHorizontal, RotateCcw, Search,
-  Activity, ShieldCheck, ArrowDown, Zap, Dumbbell, Sparkles, HeartPulse, 
+  Activity, ShieldCheck, ArrowDown, Zap, Dumbbell, 
   ChevronDown, ChevronUp 
 } from "lucide-react";
 import { categories, products, type Category } from "@/data/products";
@@ -56,7 +57,7 @@ const Products = () => {
 
   const resetFilters = () => {
     setActiveCategory(null);
-    setSearchQuery("");
+    searchQuery("");
     setMaxPrice(7000);
     setShowOutOfStock(true);
     setSortBy("featured");
@@ -66,7 +67,6 @@ const Products = () => {
   // Comprehensive Live Matrix Filtering Logic Engine
   const filteredProducts = useMemo(() => {
     // Merge static catalog with admin-managed DB products.
-    // DB rows override the static entry that shares the same slug/id; extra DB rows are appended.
     const bySlug = new Map<string, any>();
     products.forEach((p) => bySlug.set((p as any).slug || p.id, p));
     dbProducts.forEach((d) => {
@@ -94,7 +94,7 @@ const Products = () => {
 
     let result = merged.map((p, index) => {
       // Dynamic mapping for Lean Shot
-      if (p.id === "lean- shot" || p.slug === "lean-shot") {
+      if (p.id === "lean-shot" || p.slug === "lean-shot") {
         return {
           ...p,
           image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 7.38.06 PM.jpeg"
@@ -511,96 +511,7 @@ const Products = () => {
         </div>
       </section>
 
-      {/* ==================== SECTION 4: PREMIUM WHITE/BLUE SUBSCRIPTIONS ==================== */}
-      <section className="py-24 bg-background border-t border-slate-200 relative">
-        <div className="container max-w-6xl mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-50 border border-blue-100 rounded-full text-[10px] font-mono tracking-widest text-blue-700 uppercase font-bold">
-              <Zap className="h-3 w-3" /> Auto-Delivery Matrix
-            </div>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-slate-900">CHOOSE YOUR SUBSCRIPTION PLAN</h2>
-            <p className="text-slate-500 text-xs md:text-sm">Unlock automated recurring product deliveries dispatched straight to your doorstep on schedule.</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
-            
-            {/* ELITE PLAN CARD — High-Visibility White & Blue Architecture */}
-            <div className="bg-white border-2 border-blue-600 p-8 rounded-3xl flex flex-col justify-between relative overflow-hidden group shadow-md">
-              <div className="absolute top-0 right-0 bg-blue-600 text-white font-black font-mono px-4 py-1 rounded-bl-xl text-[9px] uppercase tracking-widest">
-                Recommended
-              </div>
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
-                    <Sparkles className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-black uppercase tracking-tight text-slate-900 leading-none">CULT-ELITE ACCELERATOR</h3>
-                    <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block mt-1">Full Compound Bundle System</span>
-                  </div>
-                </div>
-
-                <p className="text-slate-600 text-xs font-medium leading-relaxed">
-                  Grants ongoing automated recurring drop-cycles containing core micro-filtered isolates and performance stack configurations safely.
-                </p>
-
-                <ul className="space-y-2 text-xs font-bold text-slate-700">
-                  <li className="flex items-center gap-2.5"><Dumbbell className="h-4 w-4 text-blue-600 shrink-0" /> Access rights across Partner Center Gym Networks</li>
-                  <li className="flex items-center gap-2.5"><Zap className="h-4 w-4 text-blue-600 shrink-0" /> Custom 1-on-1 AI Digital Macro Tracker Profiles</li>
-                  <li className="flex items-center gap-2.5"><ShieldCheck className="h-4 w-4 text-blue-600 shrink-0" /> Guaranteed High-Priority Supply Allocation Locking</li>
-                </ul>
-              </div>
-
-              <div className="pt-8 border-t border-slate-200 mt-8 flex items-end justify-between">
-                <div>
-                  <span className="block text-[10px] uppercase font-mono text-slate-400 font-bold">Subscription Cost</span>
-                  <span className="text-3xl font-black text-slate-900 tracking-tight font-mono">₹4,499<span className="text-xs font-light text-slate-500">/mo</span></span>
-                </div>
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase text-xs tracking-wider px-6 rounded-xl h-12 shadow-sm">
-                  Activate Plan
-                </Button>
-              </div>
-            </div>
-
-            {/* BASE PRO PLAN CARD */}
-            <div className="bg-slate-50 border border-slate-200 p-8 rounded-3xl flex flex-col justify-between group shadow-sm">
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 bg-white rounded-xl border border-slate-200">
-                    <HeartPulse className="h-6 w-6 text-slate-700" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-black uppercase tracking-tight text-slate-800 leading-none">CULT-PRO BASELINE</h3>
-                    <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block mt-1">Core Micronutrient Foundations</span>
-                  </div>
-                </div>
-
-                <p className="text-slate-600 text-xs font-medium leading-relaxed">
-                  Tailored to automate baseline replenishment supplies across fundamental mineral packs, multivitamin traces, and daily multi-stacks.
-                </p>
-
-                <ul className="space-y-2 text-xs font-bold text-slate-600">
-                  <li className="flex items-center gap-2.5"><Dumbbell className="h-4 w-4 text-slate-400 shrink-0" /> Standard Logistics Fulfillment Timelines</li>
-                  <li className="flex items-center gap-2.5"><Zap className="h-4 w-4 text-slate-400 shrink-0" /> Auto-Replenish Courier Tracking Records</li>
-                  <li className="flex items-center gap-2.5"><ShieldCheck className="h-4 w-4 text-slate-400 shrink-0" /> Complete Batch Verification Certification Logs</li>
-                </ul>
-              </div>
-
-              <div className="pt-8 border-t border-slate-200 mt-8 flex items-end justify-between">
-                <div>
-                  <span className="block text-[10px] uppercase font-mono text-slate-400 font-bold">Subscription Cost</span>
-                  <span className="text-3xl font-black text-slate-900 tracking-tight font-mono">₹2,199<span className="text-xs font-light text-slate-500">/mo</span></span>
-                </div>
-                <Button variant="outline" className="border-slate-300 text-slate-700 bg-white hover:bg-slate-100 font-black uppercase text-xs tracking-wider px-6 rounded-xl h-12">
-                  Deploy Plan
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== SECTION 5: TRANSPARENCY LEDGER ==================== */}
+      {/* ==================== SECTION 4: TRANSPARENCY LEDGER ==================== */}
       <section className="py-24 bg-slate-50/50 border-t border-slate-200">
         <div className="container max-w-5xl mx-auto px-4">
           <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 grid md:grid-cols-[1fr_2px_1fr] gap-8 items-center shadow-sm">
