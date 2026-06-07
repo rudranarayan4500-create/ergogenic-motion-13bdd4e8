@@ -315,7 +315,7 @@ export const SiteHeader = () => {
       {/* MOBILE MENU */}
       <div
         className={cn(
-          "fixed inset-0 z-40 lg:hidden transition-all duration-500",
+          "fixed inset-0 z-[60] lg:hidden transition-all duration-500",
           open
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -330,7 +330,7 @@ export const SiteHeader = () => {
         {/* PANEL */}
         <div
           className={cn(
-            "absolute top-0 right-0 h-full w-[85%] max-w-[360px] bg-[#050505] border-l border-border p-6 transition-transform duration-500",
+            "absolute top-0 right-0 h-full w-[85%] max-w-[360px] bg-background border-l border-border p-6 transition-transform duration-500 shadow-2xl",
             open
               ? "translate-x-0"
               : "translate-x-full"
