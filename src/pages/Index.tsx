@@ -33,7 +33,7 @@ const ingredients = [
 const Index = () => {
   return (
     <div className="bg-background text-foreground overflow-x-hidden w-full">
-      {/* HERO SECTION — Fully Responsive Typography & Fixed Spacing */}
+      {/* HERO SECTION */}
       <section className="relative min-h-[85vh] md:min-h-[92vh] flex items-center overflow-hidden w-full">
         <video
           className="absolute inset-0 h-full w-full object-cover opacity-20 pointer-events-none"
@@ -63,12 +63,10 @@ const Index = () => {
               Transparently dosed, made for evolution.
             </span>
           </p>
-          {/* Mobile UI Fix: Stacked buttons on small viewports with flex-shrink prevention */}
           <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center px-4 sm:px-0 max-w-sm sm:max-w-none mx-auto">
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-sm sm:text-base h-12 px-6 sm:px-8 shadow-glow flex items-center justify-center gap-2 shrink-0">
-              <Link to="/products">
-                <span>Shop Now</span>
-                <ChevronRight className="h-4 w-4 shrink-0" />
+              <Link to="/products" className="flex items-center gap-1">
+                Shop Now <ChevronRight className="h-4 w-4 shrink-0" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="h-12 px-6 sm:px-8 border-border text-foreground hover:bg-muted bg-transparent text-sm sm:text-base flex items-center justify-center shrink-0">
@@ -78,13 +76,13 @@ const Index = () => {
         </div>
       </section>
 
-      {/* PRODUCT SHOWCASE SLIDER */}
-      <div className="w-full overflow-hidden">
+      {/* PRODUCT SHOWCASE SLIDER — Isolated with padding bottom to contain the dots cleanly */}
+      <section className="w-full overflow-hidden pb-12 relative z-20 bg-background">
         <ProductShowcaseSlider />
-      </div>
+      </section>
 
-      {/* CATEGORIES / PRODUCTS MARQUEE */}
-      <section className="py-16 md:py-24 relative w-full">
+      {/* CATEGORIES / PRODUCTS MARQUEE — Pushed down with relative isolation */}
+      <section className="py-16 md:py-24 relative w-full z-10 bg-background">
         <div className="absolute inset-0 bg-grid-light opacity-40" />
         <div className="container relative px-4">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
@@ -157,7 +155,7 @@ const Index = () => {
                   Formulated to help support recovery, lean muscle development, and nutrient absorption.
                 </p>
                 <Button asChild size="lg" className="w-full sm:w-auto shadow-glow bg-primary hover:bg-primary/90 text-white gap-2 justify-center">
-                  <Link to="/products">Buy Now <ChevronRight className="h-4 w-4 shrink-0" /></Link>
+                  <Link to="/products" className="flex items-center gap-1">Buy Now <ChevronRight className="h-4 w-4 shrink-0" /></Link>
                 </Button>
               </ScrollReveal>
             </div>
@@ -175,7 +173,7 @@ const Index = () => {
                   Formulated to support endurance, hydration balance, and performance during training cycles.
                 </p>
                 <Button asChild size="lg" className="w-full sm:w-auto shadow-glow bg-primary hover:bg-primary/90 text-white gap-2 justify-center">
-                  <Link to="/products">Explore Stack <ChevronRight className="h-4 w-4 shrink-0" /></Link>
+                  <Link to="/products" className="flex items-center gap-1">Explore Stack <ChevronRight className="h-4 w-4 shrink-0" /></Link>
                 </Button>
               </ScrollReveal>
               <ScrollReveal direction="right" className="md:col-span-6 order-1 md:order-2 w-full">
@@ -211,7 +209,7 @@ const Index = () => {
                   Crafted to support overall daily recovery, hydration, and exercise output targets.
                 </p>
                 <Button asChild size="lg" className="w-full sm:w-auto shadow-glow bg-primary hover:bg-primary/90 text-white gap-2 justify-center">
-                  <Link to="/products">View Formula <ChevronRight className="h-4 w-4 shrink-0" /></Link>
+                  <Link to="/products" className="flex items-center gap-1">View Formula <ChevronRight className="h-4 w-4 shrink-0" /></Link>
                 </Button>
               </ScrollReveal>
             </div>
@@ -229,7 +227,7 @@ const Index = () => {
                   Designed for individuals demanding quality ingredients, clean recovery, and straightforward performance support.
                 </p>
                 <Button asChild size="lg" className="w-full sm:w-auto shadow-glow bg-primary hover:bg-primary/90 text-white gap-2 justify-center">
-                  <Link to="/products">Shop Collection <ChevronRight className="h-4 w-4 shrink-0" /></Link>
+                  <Link to="/products" className="flex items-center gap-1">Shop Collection <ChevronRight className="h-4 w-4 shrink-0" /></Link>
                 </Button>
               </ScrollReveal>
               <ScrollReveal direction="right" className="md:col-span-6 order-1 md:order-2 w-full">
@@ -247,7 +245,7 @@ const Index = () => {
       </section>
 
       {/* INGREDIENTS ARSENAL */}
-      <section className="py-16 md:py-24 relative overflow-hidden w-full">
+      <section className="py-16 md:py-24 relative overflow-hidden w-full bg-background">
         <div className="container relative z-10 px-4 w-full">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
             <p className="text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] text-primary mb-2 md:mb-3">TECH ARSENAL</p>
@@ -307,7 +305,7 @@ const Index = () => {
             Join thousands who trust Ergogenic for clean, quality nutrition.
           </p>
           <Button asChild size="lg" className="mt-8 md:mt-10 w-full sm:w-auto bg-primary hover:bg-primary/90 h-12 px-8 md:px-10 shadow-glow gap-2 justify-center">
-            <Link to="/products">Explore Products <ChevronRight className="h-4 w-4 shrink-0" /></Link>
+            <Link to="/products" className="flex items-center gap-1">Explore Products <ChevronRight className="h-4 w-4 shrink-0" /></Link>
           </Button>
         </ScrollReveal>
       </section>
