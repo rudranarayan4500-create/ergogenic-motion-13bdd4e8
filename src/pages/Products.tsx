@@ -92,32 +92,7 @@ const Products = () => {
     });
     const merged = Array.from(bySlug.values());
 
-    let result = merged.map((p, index) => {
-      // Dynamic mapping for Lean Shot
-      if (p.id === "lean-shot" || p.slug === "lean-shot") {
-        return {
-          ...p,
-          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM.jpeg"
-        };
-      }
-      // Precise mapping override to turn the target row asset into your customized Pure Creatine configuration
-      if (p.id === "super-whey" || p.slug === "super-whey" || p.id === "pure-creatine" || p.slug === "pure-creatine" || index === 0) {
-        return {
-          ...p,
-          id: "pure-creatine",
-          slug: "pure-creatine",
-          name: "Pure Creatine Micronized",
-          rating: 4.9,
-          reviews: 1750,
-          price: 1299,
-          mrp: 1599,
-          category: "Performance" as Category,
-          tagline: "200-mesh pure micronized creatine monohydrate built to maximize muscle hydration.",
-          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//596a34ab-1f16-48d9-ba17-e78d005ec14c.png"
-        };
-      }
-      return p;
-    });
+    let result = merged;
 
     // 1. Text Query Search Filter Validation
     if (searchQuery.trim() !== "") {
@@ -365,7 +340,7 @@ const Products = () => {
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
                 <AnimatePresence mode="popLayout">
                   {filteredProducts.map((p, index) => {
-                    const isNewArrival = p.id === "pure-creatine" || index === 4;
+                    const isNewArrival = index === 0;
                     const isPriceDrop = index === 2;
 
                     return (
