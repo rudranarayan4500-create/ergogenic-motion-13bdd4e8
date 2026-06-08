@@ -50,6 +50,8 @@ const ProductDetail = () => {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg";
       } else if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg";
+      } else if (normalName.includes("aminoshot") || normalName.includes("amino shot")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg";
       }
 
       return {
@@ -154,6 +156,13 @@ const ProductDetail = () => {
       if (normalName.includes("plasma")) {
         return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg", kind: "image" }];
       }
+      if (normalName.includes("aminoshot") || normalName.includes("amino shot")) {
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 9.04.52 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.53.29 PM.jpeg", kind: "image" }
+        ];
+      }
       if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg", kind: "image" },
@@ -207,6 +216,13 @@ const ProductDetail = () => {
         { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg", tag: "Back View" }
       ];
     }
+    if (normalName.includes("aminoshot") || normalName.includes("amino shot")) {
+      return [
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg", tag: "Front View" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 9.04.52 PM.jpeg", tag: "Back View A" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.53.29 PM.jpeg", tag: "Back View B" }
+      ];
+    }
 
     const g = (product as any).gallery as string[] | undefined;
     if (g && g.length > 1) {
@@ -217,7 +233,6 @@ const ProductDetail = () => {
 
   if (!product) return <Navigate to="/products" replace />;
 
-  // FIXED: Expanded removal rules to drop Lean Shot, Pure Creatine, Super Whey, and Plasma Mass from recommendations row
   const related = useMemo(() => {
     const hiddenCatalogItems = [
       "super whey", 
