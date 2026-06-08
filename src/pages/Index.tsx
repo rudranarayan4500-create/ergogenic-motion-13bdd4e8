@@ -150,55 +150,99 @@ const Index = () => {
         </div>
 
         {/* Outer scrolling container */}
-        <div className="relative flex w-full overflow-x-hidden select-none">
-          {/* Track wrapper */}
-          <div className="flex flex-nowrap w-max gap-4 md:gap-6 animate-marquee">
+        <div className="relative flex w-full overflow-x-hidden select-none group/marquee">
+          {/* Track wrapper - Splitting into two sibling tracking columns ensures continuous CSS performance without clipping boundaries */}
+          <div className="flex flex-nowrap gap-4 md:gap-6 animate-marquee whitespace-nowrap py-2 group-hover/marquee:[animation-play-state:paused]">
             
-            {[...products, ...products].map((p, i) => (
-              <Link
-                key={`${p.id}-${i}`}
-                to={`/products/${p.id}`}
-                className="group block w-[220px] shrink-0 overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 md:w-[260px]"
-              >
-                <div className="aspect-[4/5] overflow-hidden bg-muted">
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    loading="lazy"
-                    decoding="async"
-                    draggable="false"
-                    className={imageClass}
-                  />
-                </div>
-
-                <div className="p-4">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
-                    {p.category}
-                  </p>
-                  <h3 className="mt-2 line-clamp-1 text-base font-bold text-foreground">
-                    {p.name}
-                  </h3>
-                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                    {p.tagline}
-                  </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-base font-bold text-foreground">
-                      ₹{p.price.toLocaleString()}
-                    </span>
-                    <span className="inline-flex items-center text-xs font-medium text-primary">
-                      Shop
-                      <ChevronRight className="ml-1 h-3 w-3" />
-                    </span>
+            {/* Array Track Item Set A */}
+            {products.map((p, i) => {
+              const routeParam = p.slug || p.id;
+              return (
+                <Link
+                  key={`marquee-a-${routeParam}-${i}`}
+                  to={`/products/${routeParam}`}
+                  className="group block w-[220px] shrink-0 overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 md:w-[260px]"
+                >
+                  <div className="aspect-[4/5] overflow-hidden bg-muted">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      className={imageClass}
+                    />
                   </div>
-                </div>
-              </Link>
-            ))}
+
+                  <div className="p-4 text-left whitespace-normal">
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
+                      {p.category}
+                    </p>
+                    <h3 className="mt-2 line-clamp-1 text-base font-bold text-foreground">
+                      {p.name}
+                    </h3>
+                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                      {p.tagline}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-base font-bold text-foreground font-mono">
+                        ₹{p.price.toLocaleString()}
+                      </span>
+                      <span className="inline-flex items-center text-xs font-medium text-primary">
+                        Shop
+                        <ChevronRight className="ml-1 h-3 w-3" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+
+            {/* Array Track Item Set B (Perfect Duplicate Loop Segment) */}
+            {products.map((p, i) => {
+              const routeParam = p.slug || p.id;
+              return (
+                <Link
+                  key={`marquee-b-${routeParam}-${i}`}
+                  to={`/products/${routeParam}`}
+                  className="group block w-[220px] shrink-0 overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 md:w-[260px]"
+                >
+                  <div className="aspect-[4/5] overflow-hidden bg-muted">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      className={imageClass}
+                    />
+                  </div>
+
+                  <div className="p-4 text-left whitespace-normal">
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
+                      {p.category}
+                    </p>
+                    <h3 className="mt-2 line-clamp-1 text-base font-bold text-foreground">
+                      {p.name}
+                    </h3>
+                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                      {p.tagline}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-base font-bold text-foreground font-mono">
+                        ₹{p.price.toLocaleString()}
+                      </span>
+                      <span className="inline-flex items-center text-xs font-medium text-primary">
+                        Shop
+                        <ChevronRight className="ml-1 h-3 w-3" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
             
           </div>
 
-          {/* Luxury Side Vignette Overlays */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent md:w-24" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent md:w-24" />
+          {/* Vignette Overlays */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10 md:w-24" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10 md:w-24" />
         </div>
       </section>
 
