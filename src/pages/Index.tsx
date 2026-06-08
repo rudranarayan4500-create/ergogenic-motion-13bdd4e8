@@ -10,10 +10,12 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+
 import { Logo } from "@/components/Logo";
 import { TypewriterText } from "@/components/TypewriterText";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ProductShowcaseSlider } from "@/components/ProductShowcaseSlider";
+
 import { products } from "@/data/products";
 
 const ingredients = [
@@ -50,102 +52,89 @@ const ingredients = [
 ];
 
 const buttonClass =
-  "w-full sm:w-auto min-h-[48px] px-6 md:px-8 whitespace-nowrap flex items-center justify-center gap-2 transition-all duration-300";
+  "w-full sm:w-auto min-h-[48px] px-6 md:px-8 whitespace-nowrap shadow-glow flex items-center justify-center gap-2";
 
 const imageClass =
-  "w-full h-full object-contain p-4 transition-transform duration-500 will-change-transform group-hover:scale-105 select-none pointer-events-none";
+  "w-full h-auto object-cover transition-transform duration-500 will-change-transform group-hover:scale-105";
 
 const Index = () => {
   return (
-    <div className="relative w-full overflow-x-hidden bg-white text-slate-900 antialiased selection:bg-slate-950 selection:text-white">
+    <div className="relative w-full overflow-x-hidden bg-background text-foreground">
 
-      {/* ==================== SECTION 1: HERO CANVAS ==================== */}
-      <section className="relative min-h-[85vh] lg:min-h-[calc(100vh-80px)] flex items-center overflow-hidden border-b border-slate-100 bg-white py-12 lg:py-0">
-        <div className="absolute inset-0 bg-grid-light opacity-30 pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(219,234,254,0.3),transparent_50%)] pointer-events-none" />
-        
-        <div className="container max-w-7xl mx-auto px-4 md:px-8 relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            
-            {/* Left Content Column */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start order-2 lg:order-1">
-              <div className="flex justify-center lg:justify-start">
-                <Logo className="h-7 w-auto object-contain sm:h-9 md:h-10" />
-              </div>
+      {/* HERO */}
+      <section className="relative flex min-h-[85vh] md:min-h-[92vh] items-center overflow-hidden">
+        <video
+          className="absolute inset-0 h-full w-full object-cover opacity-20 pointer-events-none"
+          src="/videos/hero.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="absolute inset-0 bg-grid-light opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,hsl(var(--primary)/0.18),transparent_60%)]" />
 
-              <h1 className="text-4xl sm:text-6xl md:text-7xl xl:text-8xl font-black tracking-tighter leading-[0.95] text-slate-900 uppercase">
-                FUEL{" "}
-                <span className="text-gradient-red inline-block">
-                  <TypewriterText text="EVOLVED" speed={120} delay={400} />
-                </span>
-              </h1>
+        <div className="container relative z-10 px-4 py-20 md:py-32 text-center">
+          <div className="mb-6 flex justify-center md:mb-8">
+            <Logo className="h-8 w-auto object-contain sm:h-10 md:h-12" />
+          </div>
 
-              <p className="text-sm sm:text-base md:text-lg max-w-2xl font-medium leading-relaxed text-slate-500">
-                Performance-focused nutrition engineered for your fitness goals. 
-                Transparently dosed, clear metrics, made for evolution.
-              </p>
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] break-words">
+            FUEL{" "}
+            <span className="text-gradient-red inline-block">
+              <TypewriterText
+                text="EVOLVED"
+                speed={120}
+                delay={400}
+              />
+            </span>
+          </h1>
 
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto pt-2">
-                <Button
-                  asChild
-                  size="lg"
-                  className={`${buttonClass} bg-slate-900 text-white hover:bg-slate-800 font-black uppercase text-xs tracking-wider rounded-xl shadow-md h-12`}
-                >
-                  <Link to="/products">
-                    Shop Now
-                    <ChevronRight className="h-4 w-4 shrink-0 stroke-[3]" />
-                  </Link>
-                </Button>
+          <p className="mx-auto mt-5 max-w-2xl px-2 text-sm text-foreground/90 sm:text-base md:text-xl">
+            Performance-focused nutrition engineered for your fitness goals.
+            Transparently dosed, made for evolution.
+          </p>
 
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className={`${buttonClass} border-slate-900 text-slate-900 bg-transparent hover:bg-slate-50 font-black uppercase text-xs tracking-wider rounded-xl h-12`}
-                >
-                  <Link to="/ingredients">
-                    Explore Science
-                  </Link>
-                </Button>
-              </div>
-            </div>
+          <div className="mx-auto mt-8 flex max-w-sm flex-col gap-3 px-4 sm:max-w-none sm:flex-row sm:justify-center sm:px-0">
+            <Button
+              asChild
+              size="lg"
+              className={`${buttonClass} bg-primary hover:bg-primary/90`}
+            >
+              <Link to="/products">
+                Shop Now
+                <ChevronRight className="h-4 w-4 shrink-0" />
+              </Link>
+            </Button>
 
-            {/* Right Media Column */}
-            <div className="lg:col-span-5 order-1 lg:order-2 w-full flex justify-center">
-              <div className="relative w-full max-w-[440px] aspect-[4/3] lg:aspect-square rounded-3xl border border-slate-200 overflow-hidden bg-slate-50 shadow-inner p-2 group">
-                <video
-                  className="w-full h-full object-cover rounded-2xl opacity-90 transition-transform duration-700 group-hover:scale-102"
-                  src="/videos/hero.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-slate-950/20 to-transparent pointer-events-none" />
-              </div>
-            </div>
-
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className={`${buttonClass} border-border bg-transparent hover:bg-muted`}
+            >
+              <Link to="/ingredients">
+                Explore Science
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* ==================== SECTION 2: BATCH DISPENSING PROGRESS (FIRST GIF) ==================== */}
-      <section className="w-full bg-slate-50 border-b border-slate-200 overflow-hidden py-16 md:py-24">
-        <div className="container max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
-          
-          <div className="lg:col-span-5 space-y-4">
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-3 py-1 rounded border border-blue-200/50 inline-block">
-              LAB ORIENTED FORMULAS
-            </span>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">
+      {/* NEW GIF SECTION */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container px-4 grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-4">
+            <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tighter uppercase leading-none">
               PRECISE BATCH DISPENSING
             </h2>
-            <p className="text-sm md:text-base font-medium text-slate-500 leading-relaxed">
+            <p className="text-sm md:text-base font-medium text-muted-foreground leading-relaxed">
               Every scoop goes through strict packaging verification intervals. Witness the high-speed deployment track built around clinical purity parameters and micro-filtered consistency benchmarks.
             </p>
           </div>
           
-          <div className="lg:col-span-7 rounded-3xl border border-slate-200 overflow-hidden shadow-sm bg-white p-2.5">
+          <div className="rounded-3xl border border-border overflow-hidden shadow-xl bg-card p-2">
             <img 
               src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ezgif-131eb69db341388e (1).gif" 
               alt="Batch Processing workflow animation" 
@@ -153,173 +142,111 @@ const Index = () => {
               loading="lazy"
             />
           </div>
-          
         </div>
       </section>
 
-      {/* ==================== SECTION 3: PRODUCT SHOWCASE SLIDER ==================== */}
-      <section className="relative overflow-hidden bg-white py-12 md:py-20">
-        <div className="container max-w-7xl relative px-4 md:px-8 mx-auto">
-          <div className="relative min-h-[440px] lg:min-h-[500px]">
+      {/* PRODUCT SHOWCASE */}
+      <section className="relative overflow-hidden bg-background py-10 md:py-16">
+        <div className="container relative px-4">
+          <div className="relative min-h-[420px] md:min-h-[520px]">
             <ProductShowcaseSlider />
           </div>
         </div>
       </section>
 
-      {/* ==================== SECTION 4: LAB SYNTHESIS LINES (SECOND GIF PLACEHOLDER) ==================== */}
-      <section className="w-full bg-slate-50 border-y border-slate-200 overflow-hidden py-16 md:py-24">
-        <div className="container max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
-          
-          <div className="lg:col-span-7 rounded-3xl border border-slate-200 overflow-hidden shadow-sm bg-white p-2.5">
-            <img 
-              src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&auto=format&fit=crop&q=60" 
-              alt="Advanced synthesis line custom animation placeholder" 
-              className="w-full h-auto max-h-[400px] object-cover rounded-2xl filter grayscale opacity-90"
-              loading="lazy"
-            />
-          </div>
-
-          <div className="lg:col-span-5 space-y-4">
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-3 py-1 rounded border border-blue-200/50 inline-block">
-              INTELLIGENT MANUFACTURE
-            </span>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">
-              TRANSPARENT SYNTHESIS LINES
-            </h2>
-            <p className="text-sm md:text-base font-medium text-slate-500 leading-relaxed">
-              Our automated system keeps your macro fractions protected from outside ambient vectors. This structural processing loop retains consistency and formula bioavailability benchmarks smoothly.
-            </p>
-          </div>
-          
-        </div>
-      </section>
-
-      {/* ==================== SECTION 5: HORIZONTAL MARQUEE STACK ==================== */}
-      <section className="relative overflow-hidden bg-white py-20 md:py-28">
-        <div className="container relative px-4 md:px-8 mx-auto max-w-7xl">
-          <ScrollReveal className="mx-auto mb-16 max-w-2xl text-center">
-            <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black sm:text-xs">
+      {/* PRODUCTS MARQUEE */}
+      <section className="relative overflow-hidden bg-background py-20 md:py-28">
+        <div className="absolute inset-0 bg-grid-light opacity-40" />
+        <div className="container relative px-4">
+          <ScrollReveal className="mx-auto mb-12 max-w-2xl text-center">
+            <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-primary sm:text-xs">
               BUILD YOUR STACK
             </p>
-            <h2 className="text-3xl font-black text-slate-900 md:text-5xl uppercase tracking-tight">
+            <h2 className="text-3xl font-bold text-foreground md:text-5xl">
               Engineered for every goal
             </h2>
-            <p className="mt-4 text-sm text-slate-500 font-medium">
-              Every product is formulated for real results. Explore our collection.
+            <p className="mt-4 text-sm text-muted-foreground md:text-base">
+              Every product is formulated for real results.
+              Explore our collection.
             </p>
           </ScrollReveal>
         </div>
 
-        {/* Outer scrolling container marquee track grid */}
-        <div className="relative flex w-full overflow-x-hidden select-none group/marquee border-y border-slate-100 py-4 bg-slate-50/30">
-          <div className="flex flex-nowrap gap-6 animate-marquee whitespace-nowrap py-2 group-hover/marquee:[animation-play-state:paused]">
-            
-            {/* Array Track Item Set A */}
-            {products.map((p, i) => {
-              const routeParam = p.slug || p.id;
-              return (
-                <Link
-                  key={`marquee-a-${routeParam}-${i}`}
-                  to={`/products/${routeParam}`}
-                  className="group block w-[240px] md:w-[280px] shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-md"
-                >
-                  <div className="aspect-[4/5] overflow-hidden bg-slate-50 relative flex items-center justify-center border-b border-slate-100">
-                    <img src={p.image} alt={p.name} loading="lazy" className={imageClass} />
+        <div className="relative overflow-hidden">
+          <div className="flex w-max animate-marquee gap-4 md:gap-6">
+            {[...products, ...products].map((p, i) => (
+              <Link
+                key={`${p.id}-${i}`}
+                to={`/products/${p.id}`}
+                className="group block w-[220px] shrink-0 overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 md:w-[260px]"
+              >
+                <div className="aspect-[4/5] overflow-hidden bg-muted">
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    loading="lazy"
+                    decoding="async"
+                    draggable="false"
+                    className={imageClass}
+                  />
+                </div>
+                <div className="p-4">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
+                    {p.category}
+                  </p>
+                  <h3 className="mt-2 line-clamp-1 text-base font-bold text-foreground">
+                    {p.name}
+                  </h3>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                    {p.tagline}
+                  </p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="text-base font-bold text-foreground">
+                      ₹{p.price.toLocaleString()}
+                    </span>
+                    <span className="inline-flex items-center text-xs font-medium text-primary">
+                      Shop
+                      <ChevronRight className="ml-1 h-3 w-3" />
+                    </span>
                   </div>
-
-                  <div className="p-5 text-left whitespace-normal space-y-1.5">
-                    <p className="text-[9px] font-black uppercase tracking-[0.25em] text-blue-600">
-                      {p.category}
-                    </p>
-                    <h3 className="line-clamp-1 text-base font-black tracking-tight text-slate-800 group-hover:text-slate-900">
-                      {p.name}
-                    </h3>
-                    <p className="line-clamp-2 text-xs text-slate-400 font-medium leading-relaxed h-8">
-                      {p.tagline}
-                    </p>
-                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-base font-black text-slate-900 font-mono">
-                        ₹{p.price.toLocaleString()}
-                      </span>
-                      <span className="inline-flex items-center text-xs font-black uppercase tracking-wider text-slate-800">
-                        Shop <ChevronRight className="ml-0.5 h-3 w-3 stroke-[3]" />
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-
-            {/* Array Track Item Set B */}
-            {products.map((p, i) => {
-              const routeParam = p.slug || p.id;
-              return (
-                <Link
-                  key={`marquee-b-${routeParam}-${i}`}
-                  to={`/products/${routeParam}`}
-                  className="group block w-[240px] md:w-[280px] shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-md"
-                >
-                  <div className="aspect-[4/5] overflow-hidden bg-slate-50 relative flex items-center justify-center border-b border-slate-100">
-                    <img src={p.image} alt={p.name} loading="lazy" className={imageClass} />
-                  </div>
-
-                  <div className="p-5 text-left whitespace-normal space-y-1.5">
-                    <p className="text-[9px] font-black uppercase tracking-[0.25em] text-blue-600">
-                      {p.category}
-                    </p>
-                    <h3 className="line-clamp-1 text-base font-black tracking-tight text-slate-800 group-hover:text-slate-900">
-                      {p.name}
-                    </h3>
-                    <p className="line-clamp-2 text-xs text-slate-400 font-medium leading-relaxed h-8">
-                      {p.tagline}
-                    </p>
-                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-base font-black text-slate-900 font-mono">
-                        ₹{p.price.toLocaleString()}
-                      </span>
-                      <span className="inline-flex items-center text-xs font-black uppercase tracking-wider text-slate-800">
-                        Shop <ChevronRight className="ml-0.5 h-3 w-3 stroke-[3]" />
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-            
+                </div>
+              </Link>
+            ))}
           </div>
-
-          {/* Vignette Blur Overlays */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white via-white/80 to-transparent z-10 md:w-32" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white via-white/80 to-transparent z-10 md:w-32" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10 md:w-24" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10 md:w-24" />
         </div>
       </section>
 
-      {/* ==================== SECTION 6: INGREDIENTS ARSENAL INDEX ==================== */}
-      <section className="relative overflow-hidden bg-white py-20 md:py-28 border-t border-slate-100">
-        <div className="container relative z-10 px-4 md:px-8 mx-auto max-w-7xl">
-          <ScrollReveal className="mx-auto mb-16 max-w-2xl text-center">
-            <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black sm:text-xs">
+      {/* INGREDIENTS */}
+      <section className="relative overflow-hidden bg-background py-16 md:py-24">
+        <div className="container relative z-10 px-4">
+          <ScrollReveal className="mx-auto mb-12 max-w-2xl text-center">
+            <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-primary sm:text-xs">
               TECH ARSENAL
             </p>
-            <h2 className="text-3xl font-black text-slate-900 md:text-5xl uppercase tracking-tight">
+            <h2 className="text-3xl font-bold text-foreground md:text-5xl">
               The science behind every scoop
             </h2>
-            <p className="mt-4 text-sm text-slate-500 font-medium">
+            <p className="mt-4 text-sm text-muted-foreground md:text-base">
               A closer look at the key ingredients powering our formulations.
             </p>
           </ScrollReveal>
 
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {ingredients.map((ing, i) => (
-              <ScrollReveal key={ing.name} delay={i * 60}>
-                <div className="flex h-full flex-col items-start rounded-2xl border border-slate-200 bg-slate-50/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-slate-400 shadow-sm text-left hover:bg-white hover:shadow-md">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-slate-900 text-white shadow-sm">
-                    <ing.icon className="h-5 w-5 stroke-[2.5]" />
+              <ScrollReveal
+                key={ing.name}
+                delay={i * 60}
+              >
+                <div className="flex h-full flex-col items-start rounded-xl border border-border bg-card/80 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30">
+                  <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/15 text-primary">
+                    <ing.icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-5 text-lg font-black tracking-tight text-slate-900 uppercase">
+                  <h3 className="mt-5 text-lg font-semibold text-foreground">
                     {ing.name}
                   </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-slate-500 font-medium">
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {ing.desc}
                   </p>
                 </div>
