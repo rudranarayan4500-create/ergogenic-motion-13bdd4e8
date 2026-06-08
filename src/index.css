@@ -57,7 +57,7 @@
     --gradient-red:
       linear-gradient(
         135deg,
-        choose(217 91% 50%),
+        hsl(217 91% 50%),
         hsl(217 91% 62%)
       );
 
@@ -245,14 +245,14 @@
     transform: translateY(-4px);
   }
 
-  /* MARQUEE RUNNERS (FIXED: Supports both '.marquee' and '.animate-marquee' components seamlessly) */
+  /* MARQUEE RUNNERS (UPDATED: High-Performance Medium Speed Timing Set) */
 
   .marquee,
   .animate-marquee {
     display: flex;
     width: max-content;
     gap: 1.5rem;
-    animation: marquee 35s linear infinite;
+    animation: marquee 22s linear infinite; /* Accelerated from 40s/35s down to 22s */
     will-change: transform;
   }
 
@@ -265,7 +265,7 @@
     display: flex;
     width: max-content;
     gap: 1.5rem;
-    animation: marquee-rev 35s linear infinite;
+    animation: marquee-rev 22s linear infinite; /* Accelerated from 40s/35s down to 22s */
     will-change: transform;
   }
 
