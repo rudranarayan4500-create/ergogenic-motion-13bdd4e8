@@ -1,52 +1,20 @@
-import leanShot from "@/assets/product-leanshot.png";
-import plasmaMass from "@/assets/product-plasmamass.png";
-import superWhey from "@/assets/product-superwhey.png";
-import myogenetix from "@/assets/product-myogenetix.png";
-import aminoshotHero from "@/assets/aminoshot-hero.png.asset.json";
-import aminoshotLifestyle from "@/assets/aminoshot-lifestyle.png.asset.json";
-import caffeineLifestyle from "@/assets/caffeine-lifestyle.png.asset.json";
-import hypernoLifestyle from "@/assets/hyperno-lifestyle.png.asset.json";
-import superwheyLifestyle from "@/assets/superwhey-lifestyle.png.asset.json";
-import ergo11 from "@/assets/brand/ergo-11.png.asset.json";
-import ergo12 from "@/assets/brand/ergo-12.png.asset.json";
-import ergo13 from "@/assets/brand/ergo-13.png.asset.json";
-import ergo14 from "@/assets/brand/ergo-14.png.asset.json";
-import ergo15 from "@/assets/brand/ergo-15.png.asset.json";
-import ergo16 from "@/assets/brand/ergo-16.png.asset.json";
-import ergo17 from "@/assets/brand/ergo-17.png.asset.json";
-
-const B = {
-  aminoshot: aminoshotHero.url,
-  aminoshotLifestyle: aminoshotLifestyle.url,
-  aminoshotAlt: ergo13.url,
-  glutashot: ergo12.url,
-  vitalshock: ergo14.url,
-  leanshot: ergo15.url,
-  superwhey: ergo16.url,
-  plasmamass: ergo17.url,
-  caffeineLifestyle: caffeineLifestyle.url,
-  hypernoLifestyle: hypernoLifestyle.url,
-  superwheyLifestyle: superwheyLifestyle.url,
-};
 
 // User-supplied product imagery (Supabase storage public URLs)
 const U = {
-  proFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 8.26.16 PM.jpeg",
-  proBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d4210519-9c5a-4101-a064-84b90287c3c6-removebg-preview.png",
-  capletsAllInOne: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-03 010450.png",
-  creatine: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//596a34ab-1f16-48d9-ba17-e78d005ec14c.png",
-  creatineAlt: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//57e762da-d2b6-4a92-80e3-90a506d1c65a.png",
-  viper3: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//9a8b5609-5707-4131-90a1-6a161292fc56.png",
-  hyperNoCaplets: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 7.38.06 PM-2.jpeg",
-  hyperNoNew: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 005721-2.png",
-  superWheyFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 010121-2.png",
-  superWheyBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 1.32.05 AM.jpeg",
-  caffeineNew: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 004448.png",
-  leanShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 162442.png",
-  leanShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//16e12056-a386-4d09-adc4-ee8a0277c454.png",
-  aminoShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 162740.png",
-  glutaShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-04 163441-2.png",
-  viper3Action: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//9a8b5609-5707-4131-90a1-6a161292fc56.png",
+  // Micro-Power Creatine
+  creatineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg",
+  // Lean Shot
+  leanShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg",
+  // Super Whey
+  superWheyFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg",
+  superWheyBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 7.37.43 PM.jpeg",
+  superWheyBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.27.30 PM.jpeg",
+  // Hyper-NO Shot
+  hyperNoFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg",
+  hyperNoBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg",
+  hyperNoBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg",
+  // Caffeine Shot
+  caffeineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg",
 };
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
@@ -77,11 +45,10 @@ export const products: Product[] = [
     price: 1999,
     mrp: 2499,
     category: "Recovery",
-    image: B.aminoshot,
-    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
-    gallery: [B.aminoshotLifestyle, B.aminoshot, U.aminoShotBack],
+    image: "/placeholder.svg",
+    gallery: [],
     description:
-      "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
+      "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour. Coming soon!",
     benefits: [
       "Muscle recovery",
       "Pump support",
@@ -100,11 +67,10 @@ export const products: Product[] = [
     price: 1699,
     mrp: 2099,
     category: "Recovery",
-    image: B.glutashot,
-    // [0] Placeholder/Alt/Wide fallback, [1] Front View, [2] Back Label View
-    gallery: [B.aminoshotLifestyle, B.glutashot, U.glutaShotBack],
+    image: "/placeholder.svg",
+    gallery: [],
     description:
-      "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour.",
+      "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour. Coming soon!",
     benefits: ["Muscle repair", "Hydration & wellness", "Immunity support", "Easy mixing"],
     howToUse: "Mix 1 scoop with 200ml water, post-workout or before bed.",
     ingredients: ["L-Glutamine", "Acidity Regulator (INS 296)", "Sweetener (INS 955)", "Tropical Bliss Flavour"],
@@ -118,11 +84,10 @@ export const products: Product[] = [
     price: 2299,
     mrp: 2799,
     category: "Performance",
-    image: U.viper3,
-    // [0] Action/Wide View, [1] Front View, [2] Secondary/Back View
-    gallery: [U.viper3Action, U.viper3, U.viper3],
+    image: "/placeholder.svg",
+    gallery: [],
     description:
-      "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
+      "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour. Coming soon!",
     benefits: [
       "Energy & focus",
       "Muscle pump support",
@@ -141,13 +106,8 @@ export const products: Product[] = [
     price: 1499,
     mrp: 1899,
     category: "Performance",
-    image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png",
-    // [0] Wide/Action fallback, [1] Front view, [2] Alternate view
-    gallery: [
-      U.viper3Action,
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//faaafcb8-7a3e-4a1a-9820-64965d172bcb.png",
-      U.creatineAlt
-    ],
+    image: U.creatineFront,
+    gallery: [U.creatineFront, U.creatineFront, U.creatineFront],
     description:
       "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
     benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
@@ -164,8 +124,7 @@ export const products: Product[] = [
     mrp: 2399,
     category: "Performance",
     image: U.leanShotFront,
-    // [0] Action/Wide View, [1] Front View, [2] Back label View
-    gallery: [U.viper3Action, U.leanShotFront, U.leanShotBack],
+    gallery: [U.leanShotFront, U.leanShotFront, U.leanShotFront],
     description:
       "Lean Shot supports fat metabolism, energy, focus and vitality. Tropical Mango flavour.",
     benefits: ["Fat loss support", "Energy & endurance", "Focus & clarity", "Overall vitality"],
@@ -182,8 +141,7 @@ export const products: Product[] = [
     mrp: 5499,
     category: "Muscle",
     image: U.superWheyFront,
-    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
-    gallery: [B.superwheyLifestyle, U.superWheyFront, U.superWheyBack],
+    gallery: [U.superWheyFront, U.superWheyBack1, U.superWheyBack2],
     description:
       "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
     benefits: [
@@ -205,11 +163,10 @@ export const products: Product[] = [
     price: 3899,
     mrp: 4699,
     category: "Muscle",
-    image: B.plasmamass,
-    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
-    gallery: [B.superwheyLifestyle, U.proFront, U.proBack],
+    image: "/placeholder.svg",
+    gallery: [],
     description:
-      "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size.",
+      "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size. Coming soon!",
     benefits: [
       "30g protein + 60g complex carbs",
       "Added MCTs and digestive enzymes",
@@ -228,9 +185,8 @@ export const products: Product[] = [
     price: 899,
     mrp: 1199,
     category: "Performance",
-    image: U.caffeineNew,
-    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
-    gallery: [B.caffeineLifestyle, U.caffeineNew, U.capletsAllInOne],
+    image: U.caffeineFront,
+    gallery: [U.caffeineFront, U.caffeineFront, U.caffeineFront],
     description:
       "60 caplets of pure Caffeine Anhydrous for instant energy and performance. Push your limits with every dose.",
     benefits: ["Instant energy", "Sharper focus", "Performance boost", "60 caplets per bottle"],
@@ -246,9 +202,8 @@ export const products: Product[] = [
     price: 999,
     mrp: 1299,
     category: "Performance",
-    image: U.hyperNoNew,
-    // [0] Lifestyle Wide, [1] Front View, [2] Back Label View
-    gallery: [B.hypernoLifestyle, U.hyperNoNew, U.hyperNoCaplets],
+    image: U.hyperNoFront,
+    gallery: [U.hyperNoFront, U.hyperNoBack1, U.hyperNoBack2],
     description:
       "60 caplets of L-Citrulline Malate and L-Arginine for nitric oxide pumps, strength and lean muscle building.",
     benefits: ["Bigger pumps", "Lean muscle support", "Strength gains", "60 caplets per bottle"],
@@ -264,11 +219,10 @@ export const products: Product[] = [
     price: 1299,
     mrp: 1599,
     category: "Essentials",
-    image: U.capletsAllInOne,
-    // [0] Lifestyle Wide, [1] Front View, [2] Extra View
-    gallery: [B.caffeineLifestyle, U.capletsAllInOne, U.capletsAllInOne],
+    image: "/placeholder.svg",
+    gallery: [],
     description:
-      "60 caplets of Korean Red Ginseng Extract to fuel your day with sustained energy and vitality.",
+      "60 caplets of Korean Red Ginseng Extract to fuel your day with sustained energy and vitality. Coming soon!",
     benefits: ["Fuel your day", "Sustained energy", "Daily vitality", "60 caplets per bottle"],
     howToUse: "1 caplet daily with food.",
     ingredients: ["Korean Red Ginseng Extract"],
