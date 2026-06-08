@@ -77,26 +77,26 @@ const Products = () => {
     // 2. Overwrite / Append with live admin DB lines cleanly matching unique slugs
     dbProducts.forEach((d) => {
       const liveKey = d.slug || d.id;
+      const normalName = d.name?.toLowerCase().trim() || "";
       
-      // Asset Routing & Mapping Layer for newly added product media links
-      let productFeaturedImage = d.image || "/placeholder.svg";
+      // Setup base variables
+      let productFeaturedImage = d.image;
       let structuredGallery: string[] = Array.isArray(d.media)
         ? d.media.map((m: any) => m?.url).filter(Boolean)
         : [];
 
-      const normalName = d.name?.toLowerCase().trim() || "";
-
-      if (normalName.includes("hyper no short")) {
+      // STRICT OVERRIDE: Prioritize your review photos directly based on string matching
+      if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
         structuredGallery = [
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg"
         ];
-      } else if (normalName.includes("micro power creatin")) {
+      } else if (normalName.includes("micro power") || normalName.includes("creatin")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
         structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"];
-      } else if (normalName.includes("caffeine short")) {
+      } else if (normalName.includes("caffeine")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg";
         structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg"];
       } else if (normalName.includes("super whey")) {
@@ -106,8 +106,21 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 7.37.43 PM.jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.27.30 PM.jpeg"
         ];
-      } else if (normalName.includes("viper 3")) {
+      } else if (normalName.includes("viper 3") || normalName.includes("viper-3")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg";
         structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg"];
+      } else if (normalName.includes("aminoshot")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg";
+      } else if (normalName.includes("glutashot")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg";
+      } else if (normalName.includes("plasma")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg";
+      }
+
+      // Final fallback checker if the db string contains an empty placeholder string
+      if (!productFeaturedImage || productFeaturedImage === "/placeholder.svg") {
+        const fallbackObj = uniqueProductMatrix.get(liveKey);
+        productFeaturedImage = fallbackObj?.image || "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
       }
 
       uniqueProductMatrix.set(liveKey, {
@@ -211,7 +224,6 @@ const Products = () => {
     }
   };
 
-  // Pre-split the banner string safely outside the direct JSX evaluation block to prevent SWC index errors
   const bannerHeadingCharacters = "THE COMPLETE PRODUCTS".split("");
 
   return (
@@ -412,9 +424,13 @@ const Products = () => {
                         <div className="w-full aspect-square relative bg-slate-50 rounded-2xl mb-3.5 flex items-center justify-center overflow-hidden border border-slate-200">
                           <Link to={`/products/${dynamicSlugRoute}`} className="w-full h-full block cursor-pointer">
                             <img
-                              src={p.image || (p as any).gallery?.[0] || "/placeholder.svg"}
-                              alt={p.name} loading="lazy"
+                              src={p.image}
+                              alt={p.name} 
+                              loading="lazy"
                               className="w-full h-full object-contain p-4 transition-transform duration-700 ease-out group-hover:scale-105 select-none pointer-events-none"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
+                              }}
                             />
                           </Link>
 
@@ -532,7 +548,9 @@ const Products = () => {
                 <motion.div variants={imageScrollZoomVariants} className="w-full lg:w-1/2 flex items-center justify-center relative">
                   <Link to={`/products/${dynamicSlugRoute}`} className="relative w-full max-w-[300px] md:max-w-[350px] aspect-square block cursor-pointer">
                     <img
-                      src={p.image} alt={p.name} loading="lazy"
+                      src={p.image} 
+                      alt={p.name} 
+                      loading="lazy"
                       className="w-full h-full object-contain transition-all duration-700 ease-out"
                     />
                   </Link>
