@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import {
   ChevronRight,
@@ -11,13 +10,6 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 import { Logo } from "@/components/Logo";
 import { TypewriterText } from "@/components/TypewriterText";
@@ -71,7 +63,6 @@ const Index = () => {
 
       {/* HERO */}
       <section className="relative flex min-h-[85vh] md:min-h-[92vh] items-center overflow-hidden">
-
         <video
           className="absolute inset-0 h-full w-full object-cover opacity-20 pointer-events-none"
           src="/videos/hero.mp4"
@@ -80,15 +71,11 @@ const Index = () => {
           loop
           playsInline
         />
-
         <div className="absolute inset-0 bg-grid-light opacity-60" />
-
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
-
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,hsl(var(--primary)/0.18),transparent_60%)]" />
 
         <div className="container relative z-10 px-4 py-20 md:py-32 text-center">
-
           <div className="mb-6 flex justify-center md:mb-8">
             <Logo className="h-8 w-auto object-contain sm:h-10 md:h-12" />
           </div>
@@ -100,6 +87,7 @@ const Index = () => {
                 text="EVOLVED"
                 speed={120}
                 delay={400}
+                }
               />
             </span>
           </h1>
@@ -110,7 +98,6 @@ const Index = () => {
           </p>
 
           <div className="mx-auto mt-8 flex max-w-sm flex-col gap-3 px-4 sm:max-w-none sm:flex-row sm:justify-center sm:px-0">
-
             <Button
               asChild
               size="lg"
@@ -132,63 +119,50 @@ const Index = () => {
                 Explore Science
               </Link>
             </Button>
-
           </div>
         </div>
       </section>
 
       {/* PRODUCT SHOWCASE */}
       <section className="relative overflow-hidden bg-background py-10 md:py-16">
-
         <div className="container relative px-4">
-
           <div className="relative min-h-[420px] md:min-h-[520px]">
-
             <ProductShowcaseSlider />
-
           </div>
         </div>
       </section>
 
-      {/* PRODUCTS MARQUEE */}
+      {/* PRODUCTS MARQUEE (AUTO-SCROLLING RIGHT TO LEFT / SEAMLESS LOOP) */}
       <section className="relative overflow-hidden bg-background py-20 md:py-28">
-
         <div className="absolute inset-0 bg-grid-light opacity-40" />
 
         <div className="container relative px-4">
-
           <ScrollReveal className="mx-auto mb-12 max-w-2xl text-center">
-
             <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-primary sm:text-xs">
               BUILD YOUR STACK
             </p>
-
             <h2 className="text-3xl font-bold text-foreground md:text-5xl">
               Engineered for every goal
             </h2>
-
             <p className="mt-4 text-sm text-muted-foreground md:text-base">
-              Every product is formulated for real results.
-              Explore our collection.
+              Every product is formulated for real results. Explore our collection.
             </p>
-
           </ScrollReveal>
         </div>
 
-        <div className="relative overflow-hidden">
-
-          <div className="flex w-max animate-marquee gap-4 md:gap-6">
-
+        {/* Outer scrolling container */}
+        <div className="relative flex w-full overflow-x-hidden select-none">
+          {/* Track wrapper - flex-nowrap prevents vertical stacking, animate-marquee provides movement */}
+          <div className="flex flex-nowrap w-max gap-4 md:gap-6 animate-marquee">
+            
+            {/* Array duplicated to make the continuous loop possible */}
             {[...products, ...products].map((p, i) => (
-
               <Link
                 key={`${p.id}-${i}`}
                 to={`/products/${p.id}`}
                 className="group block w-[220px] shrink-0 overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 md:w-[260px]"
               >
-
                 <div className="aspect-[4/5] overflow-hidden bg-muted">
-
                   <img
                     src={p.image}
                     alt={p.name}
@@ -197,93 +171,68 @@ const Index = () => {
                     draggable="false"
                     className={imageClass}
                   />
-
                 </div>
 
                 <div className="p-4">
-
                   <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
                     {p.category}
                   </p>
-
                   <h3 className="mt-2 line-clamp-1 text-base font-bold text-foreground">
                     {p.name}
                   </h3>
-
                   <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
                     {p.tagline}
                   </p>
-
                   <div className="mt-4 flex items-center justify-between">
-
                     <span className="text-base font-bold text-foreground">
                       ₹{p.price.toLocaleString()}
                     </span>
-
                     <span className="inline-flex items-center text-xs font-medium text-primary">
                       Shop
                       <ChevronRight className="ml-1 h-3 w-3" />
                     </span>
-
                   </div>
                 </div>
               </Link>
             ))}
+            
           </div>
 
+          {/* Left & Right Edge Vignette Gradients for Luxury Fade Look */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent md:w-24" />
-
           <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent md:w-24" />
-
         </div>
       </section>
 
       {/* INGREDIENTS */}
       <section className="relative overflow-hidden bg-background py-16 md:py-24">
-
         <div className="container relative z-10 px-4">
-
           <ScrollReveal className="mx-auto mb-12 max-w-2xl text-center">
-
             <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-primary sm:text-xs">
               TECH ARSENAL
             </p>
-
             <h2 className="text-3xl font-bold text-foreground md:text-5xl">
               The science behind every scoop
             </h2>
-
             <p className="mt-4 text-sm text-muted-foreground md:text-base">
               A closer look at the key ingredients powering our formulations.
             </p>
-
           </ScrollReveal>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-
             {ingredients.map((ing, i) => (
-
-              <ScrollReveal
-                key={ing.name}
-                delay={i * 60}
-              >
-
+              <ScrollReveal key={ing.name} delay={i * 60}>
                 <div className="flex h-full flex-col items-start rounded-xl border border-border bg-card/80 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30">
-
                   <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/15 text-primary">
                     <ing.icon className="h-6 w-6" />
                   </div>
-
                   <h3 className="mt-5 text-lg font-semibold text-foreground">
                     {ing.name}
                   </h3>
-
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {ing.desc}
                   </p>
-
                 </div>
-
               </ScrollReveal>
             ))}
           </div>
