@@ -35,13 +35,12 @@ const ProductDetail = () => {
         gallery: undefined,
       };
 
-      // Inline Asset Router logic matching names to custom image buckets
       const normalName = (dbProduct.name || "").toLowerCase().trim();
       let targetedImage = dbProduct.image || base.image;
 
       if (normalName.includes("hyper no short")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
-      } else if (normalName.includes("micro power creatin")) {
+      } else if (normalName.includes("micro power") || normalName.includes("creatin")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
       } else if (normalName.includes("caffeine short")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg";
@@ -134,7 +133,7 @@ const ProductDetail = () => {
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", kind: "image" }
         ];
       }
-      if (normalName.includes("micro power creatin") || product.id === "micro-power-creatine") {
+      if (normalName.includes("micro power") || product.id === "micro-power-creatine") {
         return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", kind: "image" }];
       }
       if (normalName.includes("caffeine short") || product.id === "caffeine-short") {
@@ -175,7 +174,7 @@ const ProductDetail = () => {
         { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", tag: "Back View B" }
       ];
     }
-    if (normalName.includes("micro power creatin")) {
+    if (normalName.includes("micro power")) {
       return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", tag: "Product View" }];
     }
     if (normalName.includes("caffeine short")) {
@@ -204,7 +203,16 @@ const ProductDetail = () => {
 
   if (!product) return <Navigate to="/products" replace />;
 
-  const related = products.filter((p) => p.id !== product.id).slice(0, 4);
+  // FIXED: Sync exclusion list rules with your global filter architecture settings to clear recommended tray duplicates
+  const related = useMemo(() => {
+    const hiddenCatalogItems = ["super whey", "plasma mass", "amino shot caplets", "pure creatin", "bcaa recover", "glutamine x", "lean shot thermogenic", "v-shot multivitamin", "daily multi", "myogenetix concentrate", "ginseng extract"];
+    return products.filter((p) => {
+      const isSelf = p.id === product.id;
+      const cleanName = p.name ? String(p.name).toLowerCase().trim() : "";
+      return !isSelf && !hiddenCatalogItems.includes(cleanName);
+    }).slice(0, 4);
+  }, [product.id]);
+
   const add = () => {
     addToCart(
       { slug: (product as any).slug || product.id, name: product.name, price: product.price, image: product.image },
