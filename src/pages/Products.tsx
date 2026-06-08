@@ -87,7 +87,7 @@ const Products = () => {
         ? d.media.map((m: any) => m?.url).filter(Boolean)
         : [];
 
-      // STRICT OVERRIDE: Prioritize your review photos directly based on string matching
+      // STRICT OVERRIDE: Prioritize review photos based on string matching
       if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
         structuredGallery = [
@@ -132,7 +132,7 @@ const Products = () => {
         tagline: d.tagline ?? "",
         price: Number(d.price) || 0,
         mrp: Number(d.mrp) || Number(d.price) || 0,
-        category: d.category || "Essentials",
+        category: d.category || "Muscle",
         image: productFeaturedImage,
         description: d.description ?? "",
         benefits: d.benefits ?? [],
@@ -146,20 +146,23 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. EXCLUSION FILTER: Cleans specified elements completely from shop views
+    // 3. SECURE EXCLUSION FILTER: Blocks database row lines + static copies simultaneously
     const excludedProductNames = [
       "pure creatin", 
-      "pure creatine",       // Removed
+      "pure creatine",
       "bcaa recover", 
       "glutamine x", 
-      "lean shot",           // Removed
+      "lean shot",
       "lean shot thermogenic", 
       "v-shot multivitamin", 
       "daily multi", 
       "myogenetix concentrate", 
       "ginseng extract",
-      "super whey",          // Removed
-      "plasma mass"          // Removed
+      "super whey",          // Hard block global matching name
+      "super whey 2kg",      // Hard block variation name string
+      "plasma mass",         // Hard block global matching name
+      "plasma mass 3kg",     // Hard block variation name string
+      "amino shot caplets"   // Hard block variation name string
     ];
     
     result = result.filter(p => {
@@ -198,13 +201,9 @@ const Products = () => {
     return result;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
 
-  // Filters out specific visibility tray display records safely
+  // Clean layout fallback wrapper logic
   const visibleDisplayProducts = useMemo(() => {
-    const layoutDisplayExclusions = ["amino shot caplets"];
-    return filteredProducts.filter(p => {
-      const nameStr = p?.name ? String(p.name).toLowerCase().trim() : "";
-      return !layoutDisplayExclusions.includes(nameStr);
-    });
+    return filteredProducts;
   }, [filteredProducts]);
 
   const activeFilterCount = useMemo(() => {
