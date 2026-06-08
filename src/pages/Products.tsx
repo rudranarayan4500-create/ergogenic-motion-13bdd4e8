@@ -97,7 +97,7 @@ const Products = () => {
       if (p.id === "lean-shot" || p.slug === "lean-shot") {
         return {
           ...p,
-          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-05-31 at 7.38.06 PM.jpeg"
+          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM.jpeg"
         };
       }
       // Precise mapping override to turn the target row asset into your customized Pure Creatine configuration
