@@ -34,6 +34,21 @@ const ProductDetail = () => {
         ingredients: dbProduct.ingredients ?? [],
         gallery: undefined,
       };
+
+      // Inline Asset Router logic matching names to custom image buckets
+      const normalName = (dbProduct.name || "").toLowerCase().trim();
+      let targetedImage = dbProduct.image || base.image;
+
+      if (normalName.includes("hyper no short")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
+      } else if (normalName.includes("micro power creatin")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
+      } else if (normalName.includes("caffeine short")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg";
+      } else if (normalName.includes("super whey")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg";
+      }
+
       return {
         ...base,
         name: dbProduct.name ?? base.name,
@@ -42,7 +57,7 @@ const ProductDetail = () => {
         price: Number(dbProduct.price) || base.price,
         mrp: Number(dbProduct.mrp) || base.mrp,
         category: dbProduct.category || base.category,
-        image: dbProduct.image || base.image,
+        image: targetedImage,
         rating: Number(dbProduct.rating) || base.rating || 4.8,
         reviews: Number(dbProduct.reviews) || base.reviews || 0,
         benefits: (dbProduct.benefits?.length ? dbProduct.benefits : base.benefits) ?? [],
@@ -50,18 +65,19 @@ const ProductDetail = () => {
         howToUse: dbProduct.how_to_use || base.howToUse,
       };
     }
-    if (!found && id === "pure-creatine") {
+    
+    if (!found && id === "micro-power-creatine") {
       return {
-        id: "pure-creatine",
-        slug: "pure-creatine",
-        name: "Pure Creatine Micronized",
+        id: "micro-power-creatine",
+        slug: "micro-power-creatine",
+        name: "Micro Power Creatin",
         category: "Fitness",
         rating: 4.9,
         reviews: 1750,
         price: 1299,
         mrp: 1599,
-        tagline: "Pure micronized creatine monohydrate designed to support muscle hydration and endurance.",
-        image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg"
+        tagline: "Pure micronized formulation designed to support explosive power and muscle hydration.",
+        image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"
       };
     }
     return found;
@@ -106,12 +122,32 @@ const ProductDetail = () => {
   const gallery: MediaItem[] = useMemo(() => {
     if (extraMedia.length) return extraMedia.slice(0, 6);
     
-    if (product?.id === "pure-creatine") {
-      return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg", kind: "image" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg", kind: "image" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", kind: "image" }
-      ];
+    if (product) {
+      const normalName = (product.name || "").toLowerCase().trim();
+      
+      if (normalName.includes("hyper no short") || product.id === "hyper-no-short") {
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", kind: "image" }
+        ];
+      }
+      if (normalName.includes("micro power creatin") || product.id === "micro-power-creatine") {
+        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", kind: "image" }];
+      }
+      if (normalName.includes("caffeine short") || product.id === "caffeine-short") {
+        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg", kind: "image" }];
+      }
+      if (normalName.includes("super whey") || product.id === "super-whey") {
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 7.37.43 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.27.30 PM.jpeg", kind: "image" }
+        ];
+      }
+      if (normalName.includes("viper 3") || product.id === "viper-3") {
+        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg", kind: "image" }];
+      }
     }
     
     if (!product) return [];
@@ -124,13 +160,33 @@ const ProductDetail = () => {
 
   const productSnapshots = useMemo(() => {
     if (!product) return [];
-    if (product.id === "pure-creatine") {
+    
+    const normalName = (product.name || "").toLowerCase().trim();
+    
+    if (normalName.includes("hyper no short")) {
       return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-05-31%20at%207.38.06%20PM.jpeg", tag: "Product Banner" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg", tag: "Front View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//d0fed463-4148-42f5-8d2a-594e5b48f021.png", tag: "Nutritional View" }
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg", tag: "Front View" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg", tag: "Back View A" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", tag: "Back View B" }
       ];
     }
+    if (normalName.includes("micro power creatin")) {
+      return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", tag: "Product View" }];
+    }
+    if (normalName.includes("caffeine short")) {
+      return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg", tag: "Product View" }];
+    }
+    if (normalName.includes("super whey")) {
+      return [
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg", tag: "Front View" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 7.37.43 PM.jpeg", tag: "Back View A" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.27.30 PM.jpeg", tag: "Back View B" }
+      ];
+    }
+    if (normalName.includes("viper 3")) {
+      return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg", tag: "Back View" }];
+    }
+
     const g = (product as any).gallery as string[] | undefined;
     if (g && g.length > 1) {
       return g.slice(0, 3).map((url, i) => ({ url, tag: ["Product Banner", "Front View", "Nutritional View"][i] || "Product View" }));
@@ -149,8 +205,8 @@ const ProductDetail = () => {
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
   };
 
-  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Pure Creatine Monohydrate"];
-  const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["Supports Power Output", "Promotes Muscle Hydration", "Assists Recovery"];
+  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Formula Specific Compounds"];
+  const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["Supports Performance Output", "Promotes Cellular Hydration", "Assists Structured Recovery"];
   const productFlavours = (product as any).flavours || ["Unflavored"];
 
   return (
@@ -225,7 +281,7 @@ const ProductDetail = () => {
                   ₹{product.mrp.toLocaleString()}
                 </span>
                 <span className="text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider border text-emerald-700 bg-emerald-50 border-emerald-200">
-                  Save {Math.round((1 - product.price / product.mrp) * 100)}%
+                  Save {product.mrp > product.price ? Math.round((1 - product.price / product.mrp) * 100) : 0}%
                 </span>
               </div>
 
@@ -273,7 +329,7 @@ const ProductDetail = () => {
                         <img 
                           src={productSnapshots[0].url} 
                           alt={productSnapshots[0].tag} 
-                          className="w-full h-full object-cover rounded-xl group-hover:scale-[1.02] transition-transform duration-500" 
+                          className="w-full h-full object-contain rounded-xl group-hover:scale-[1.02] transition-transform duration-500" 
                         />
                       </div>
                       <span className="text-[10px] font-mono tracking-wider text-slate-400 block text-center mt-3 border-t border-slate-100 pt-2 w-full">
