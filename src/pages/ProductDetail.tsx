@@ -38,16 +38,18 @@ const ProductDetail = () => {
       const normalName = (dbProduct.name || "").toLowerCase().trim();
       let targetedImage = dbProduct.image || base.image;
 
-      if (normalName.includes("hyper no short")) {
+      if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
       } else if (normalName.includes("micro power") || normalName.includes("creatin")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
-      } else if (normalName.includes("caffeine short")) {
+      } else if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg";
       } else if (normalName.includes("super whey")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg";
       } else if (normalName.includes("plasma")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg";
+      } else if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg";
       }
 
       return {
@@ -126,7 +128,7 @@ const ProductDetail = () => {
     if (product) {
       const normalName = (product.name || "").toLowerCase().trim();
       
-      if (normalName.includes("hyper no short") || product.id === "hyper-no-short") {
+      if (normalName.includes("hyper no short") || product.id === "hyper-no-short" || normalName.includes("hyper-no")) {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg", kind: "image" },
@@ -136,7 +138,7 @@ const ProductDetail = () => {
       if (normalName.includes("micro power") || product.id === "micro-power-creatine") {
         return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", kind: "image" }];
       }
-      if (normalName.includes("caffeine short") || product.id === "caffeine-short") {
+      if (normalName.includes("caffeine short") || product.id === "caffeine-short" || normalName.includes("caffeine")) {
         return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg", kind: "image" }];
       }
       if (normalName.includes("super whey") || product.id === "super-whey") {
@@ -151,6 +153,12 @@ const ProductDetail = () => {
       }
       if (normalName.includes("plasma")) {
         return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg", kind: "image" }];
+      }
+      if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg", kind: "image" }
+        ];
       }
     }
     
@@ -167,7 +175,7 @@ const ProductDetail = () => {
     
     const normalName = (product.name || "").toLowerCase().trim();
     
-    if (normalName.includes("hyper no short")) {
+    if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
       return [
         { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg", tag: "Front View" },
         { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg", tag: "Back View A" },
@@ -177,7 +185,7 @@ const ProductDetail = () => {
     if (normalName.includes("micro power")) {
       return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", tag: "Product View" }];
     }
-    if (normalName.includes("caffeine short")) {
+    if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
       return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg", tag: "Product View" }];
     }
     if (normalName.includes("super whey")) {
@@ -187,11 +195,17 @@ const ProductDetail = () => {
         { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.27.30 PM.jpeg", tag: "Back View B" }
       ];
     }
-    if (normalName.includes("viper 3")) {
+    if (normalName.includes("viper 3") || normalName.includes("viper-3")) {
       return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg", tag: "Back View" }];
     }
     if (normalName.includes("plasma")) {
       return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg", tag: "Product View" }];
+    }
+    if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
+      return [
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg", tag: "Front View" },
+        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg", tag: "Back View" }
+      ];
     }
 
     const g = (product as any).gallery as string[] | undefined;
@@ -203,9 +217,25 @@ const ProductDetail = () => {
 
   if (!product) return <Navigate to="/products" replace />;
 
-  // FIXED: Sync exclusion list rules with your global filter architecture settings to clear recommended tray duplicates
+  // FIXED: Expanded removal rules to drop Lean Shot, Pure Creatine, Super Whey, and Plasma Mass from recommendations row
   const related = useMemo(() => {
-    const hiddenCatalogItems = ["super whey", "plasma mass", "amino shot caplets", "pure creatin", "bcaa recover", "glutamine x", "lean shot thermogenic", "v-shot multivitamin", "daily multi", "myogenetix concentrate", "ginseng extract"];
+    const hiddenCatalogItems = [
+      "super whey", 
+      "super whey 2kg",
+      "plasma mass", 
+      "plasma mass 3kg",
+      "amino shot caplets", 
+      "pure creatin", 
+      "pure creatine",
+      "lean shot",
+      "lean shot thermogenic",
+      "bcaa recover", 
+      "glutamine x", 
+      "v-shot multivitamin", 
+      "daily multi", 
+      "myogenetix concentrate", 
+      "ginseng extract"
+    ];
     return products.filter((p) => {
       const isSelf = p.id === product.id;
       const cleanName = p.name ? String(p.name).toLowerCase().trim() : "";
