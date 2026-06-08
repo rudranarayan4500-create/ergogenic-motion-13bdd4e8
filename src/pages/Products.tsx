@@ -114,7 +114,8 @@ const Products = () => {
       } else if (normalName.includes("glutashot")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg";
       } else if (normalName.includes("plasma")) {
-        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg";
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg";
+        structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg"];
       }
 
       // Final fallback checker if the db string contains an empty placeholder string
@@ -144,7 +145,7 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. EXCLUSION FILTER: Keep unwanted items clean out of UI pipelines
+    // 3. EXCLUSION FILTER: Clean out unneeded product records securely
     const excludedProductNames = [
       "pure creatin", 
       "bcaa recover", 
@@ -153,7 +154,8 @@ const Products = () => {
       "v-shot multivitamin", 
       "daily multi", 
       "myogenetix concentrate", 
-      "ginseng extract"
+      "ginseng extract",
+      "super whey" // Dropped per specific layout requirements
     ];
     
     result = result.filter(p => !excludedProductNames.includes(p.name?.toLowerCase().trim()));
