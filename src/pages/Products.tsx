@@ -3,8 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { 
   ChevronRight, Star, SlidersHorizontal, RotateCcw, Search,
-  Activity, ShieldCheck, ArrowDown, Zap, Dumbbell, 
-  ChevronDown, ChevronUp 
+  Activity, ShieldCheck, ArrowDown, ChevronDown, ChevronUp 
 } from "lucide-react";
 import { categories, products, type Category } from "@/data/products";
 import { cn } from "@/lib/utils";
@@ -17,6 +16,7 @@ const Products = () => {
 
   // Admin-controlled products from DB (merged with the static catalog)
   const [dbProducts, setDbProducts] = useState<any[]>([]);
+  
   useEffect(() => {
     supabase
       .from("products")
@@ -57,7 +57,7 @@ const Products = () => {
 
   const resetFilters = () => {
     setActiveCategory(null);
-    searchQuery("");
+    setSearchQuery("");
     setMaxPrice(7000);
     setShowOutOfStock(true);
     setSortBy("featured");
@@ -66,12 +66,19 @@ const Products = () => {
 
   // Comprehensive Live Matrix Filtering Logic Engine
   const filteredProducts = useMemo(() => {
-    // Merge static catalog with admin-managed DB products.
-    const bySlug = new Map<string, any>();
-    products.forEach((p) => bySlug.set((p as any).slug || p.id, p));
+    const uniqueProductMatrix = new Map<string, any>();
+
+    // 1. Seed static hardcoded catalogue elements 
+    products.forEach((p: any) => {
+      const primaryKey = p.slug || p.id;
+      uniqueProductMatrix.set(primaryKey, { ...p });
+    });
+
+    // 2. Overwrite / Append with live admin DB lines cleanly matching unique slugs
     dbProducts.forEach((d) => {
-      bySlug.set(d.slug, {
-        id: d.slug,
+      const liveKey = d.slug || d.id;
+      uniqueProductMatrix.set(liveKey, {
+        id: d.id || d.slug, 
         slug: d.slug,
         name: d.name,
         tagline: d.tagline ?? "",
@@ -90,11 +97,24 @@ const Products = () => {
           : undefined,
       });
     });
-    const merged = Array.from(bySlug.values());
 
-    let result = merged;
+    let result = Array.from(uniqueProductMatrix.values());
 
-    // 1. Text Query Search Filter Validation
+    // 3. EXCLUSION FILTER: Remove unneeded items safely by exact text string name properties
+    const excludedProductNames = [
+      "pure creatin", 
+      "bcaa recover", 
+      "glutamine x", 
+      "lean shot thermogenic", 
+      "v-shot multivitamin", 
+      "daily multi", 
+      "myogenetix concentrate", 
+      "ginseng extract"
+    ];
+    
+    result = result.filter(p => !excludedProductNames.includes(p.name?.toLowerCase().trim()));
+
+    // 4. Text Query Search Filter Validation
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -104,20 +124,20 @@ const Products = () => {
       );
     }
 
-    // 2. Active Category Routing Match Filter
+    // 5. Active Category Routing Match Filter
     if (activeCategory) {
       result = result.filter((p) => p.category === activeCategory);
     }
 
-    // 3. Quantitative Price Cap Bounds Filter
+    // 6. Quantitative Price Cap Bounds Filter
     result = result.filter((p) => p.price <= maxPrice);
 
-    // 4. Availability Simulation Threshold Filter
+    // 7. Availability Simulation Threshold Filter
     if (!showOutOfStock) {
       result = result.filter((p) => p.reviews > 5); 
     }
 
-    // 5. Multi-Mode Sorting Execution Layer
+    // 8. Multi-Mode Sorting Execution Layer
     if (sortBy === "price-low") result.sort((a, b) => a.price - b.price);
     if (sortBy === "price-high") result.sort((a, b) => b.price - a.price);
     if (sortBy === "rating") result.sort((a, b) => b.rating - a.rating);
@@ -340,12 +360,14 @@ const Products = () => {
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
                 <AnimatePresence mode="popLayout">
                   {filteredProducts.map((p, index) => {
+                    const pId = p.id || p.slug;
                     const isNewArrival = index === 0;
                     const isPriceDrop = index === 2;
 
                     return (
                       <motion.div
-                        key={p.id} layout
+                        key={`product-card-${pId}`} 
+                        layout
                         initial={{ opacity: 0, y: 20, scale: 0.96 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         viewport={{ once: true, margin: "-40px" }}
@@ -354,7 +376,7 @@ const Products = () => {
                         className="group flex flex-col text-left relative"
                       >
                         <div className="w-full aspect-square relative bg-slate-50 rounded-2xl mb-3.5 flex items-center justify-center overflow-hidden border border-slate-200">
-                          <Link to={`/products/${p.id}`} className="w-full h-full block cursor-pointer">
+                          <Link to={`/products/${pId}`} className="w-full h-full block cursor-pointer">
                             <img
                               src={p.image || (p as any).gallery?.[0] || "/placeholder.svg"}
                               alt={p.name} loading="lazy"
@@ -376,7 +398,7 @@ const Products = () => {
 
                         <div className="space-y-1 px-1">
                           <h3 className="text-sm font-black tracking-tight text-slate-800 group-hover:text-slate-900 transition-colors line-clamp-1">
-                            <Link to={`/products/${p.id}`}>{p.name}</Link>
+                            <Link to={`/products/${pId}`}>{p.name}</Link>
                           </h3>
                           
                           <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
@@ -392,7 +414,7 @@ const Products = () => {
                             <span className="font-black text-slate-900 text-sm font-mono">₹{p.price.toLocaleString()}</span>
                             <span className="text-slate-400 line-through font-medium font-mono">₹{p.mrp.toLocaleString()}</span>
                             <span className="text-emerald-600 font-black text-[11px]">
-                              {Math.round((1 - p.price / p.mrp) * 100)}% OFF
+                              {p.mrp > p.price ? Math.round((1 - p.price / p.mrp) * 100) : 0}% OFF
                             </span>
                           </div>
                         </div>
@@ -426,9 +448,10 @@ const Products = () => {
 
           {filteredProducts.slice(0, 3).map((p, idx) => {
             const isEven = idx % 2 === 0;
+            const pId = p.id || p.slug;
             return (
               <motion.div 
-                key={`feature-row-${p.id}`}
+                key={`feature-row-${pId}`}
                 variants={sectionContainerVariants}
                 initial="hidden"
                 whileInView="whileInView"
@@ -464,7 +487,7 @@ const Products = () => {
                   </div>
 
                   <div className="pt-4">
-                    <Link to={`/products/${p.id}`}>
+                    <Link to={`/products/${pId}`}>
                       <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-widest rounded-xl px-6 h-12 transition-all">
                         Inspect Product <ChevronRight className="h-3 w-3 ml-1" />
                       </Button>
@@ -473,7 +496,7 @@ const Products = () => {
                 </motion.div>
 
                 <motion.div variants={imageScrollZoomVariants} className="w-full lg:w-1/2 flex items-center justify-center relative">
-                  <Link to={`/products/${p.id}`} className="relative w-full max-w-[300px] md:max-w-[350px] aspect-square block cursor-pointer">
+                  <Link to={`/products/${pId}`} className="relative w-full max-w-[300px] md:max-w-[350px] aspect-square block cursor-pointer">
                     <img
                       src={p.image} alt={p.name} loading="lazy"
                       className="w-full h-full object-contain transition-all duration-700 ease-out"
