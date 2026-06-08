@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#f8fafc"/>
+  <circle cx="200" cy="200" r="60" fill="#e2e8f0"/>
+  <path d="M180 220 L200 190 L220 220 Z" fill="#cbd5e1"/>
+  <path d="M205 220 L220 205 L235 220 Z" fill="#94a3b8"/>
+  <circle cx="220" cy="175" r="8" fill="#94a3b8"/>
+  <text x="200" y="290" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#94a3b8" text-anchor="middle" letter-spacing="1">IMAGE COMING SOON</text>
+</svg>
