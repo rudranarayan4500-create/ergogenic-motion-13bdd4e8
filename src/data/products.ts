@@ -11,7 +11,13 @@ const U = {
   // Viper 3 Backside
   viperBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg",
   // Plasma Mass Real Image
-  plasmaMassFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg"
+  plasmaMassFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg",
+  
+  // NEW ASSET ROUTING MATRIX DEFINITIONS
+  aminoShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg",
+  aminoShotBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 9.04.52 PM.jpeg",
+  aminoShotBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.53.29 PM.jpeg",
+  glutaShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg"
 };
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
@@ -42,8 +48,8 @@ export const products: Product[] = [
     price: 1999,
     mrp: 2499,
     category: "Recovery",
-    image: U.hyperNoBack1, 
-    gallery: [U.hyperNoBack1, U.hyperNoBack2],
+    image: U.aminoShotFront, 
+    gallery: [U.aminoShotFront, U.aminoShotBack1, U.aminoShotBack2],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
@@ -64,8 +70,8 @@ export const products: Product[] = [
     price: 1699,
     mrp: 2099,
     category: "Recovery",
-    image: U.hyperNoBack2, 
-    gallery: [U.hyperNoBack2],
+    image: U.aminoShotFront, 
+    gallery: [U.aminoShotFront, U.glutaShotBack],
     description:
       "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour.",
     benefits: ["Muscle repair", "Hydration & wellness", "Immunity support", "Easy mixing"],
