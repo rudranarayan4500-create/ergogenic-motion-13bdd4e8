@@ -146,17 +146,20 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. EXCLUSION FILTER: Run safely with direct typecasting strings
+    // 3. EXCLUSION FILTER: Cleans specified elements completely from shop views
     const excludedProductNames = [
       "pure creatin", 
+      "pure creatine",       // Removed
       "bcaa recover", 
       "glutamine x", 
+      "lean shot",           // Removed
       "lean shot thermogenic", 
       "v-shot multivitamin", 
       "daily multi", 
       "myogenetix concentrate", 
       "ginseng extract",
-      "super whey"
+      "super whey",          // Removed
+      "plasma mass"          // Removed
     ];
     
     result = result.filter(p => {
@@ -195,7 +198,7 @@ const Products = () => {
     return result;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
 
-  // Display specific visibility grids — FIXED: Removed plasma mass from exclusion array so it clickable routes cleanly
+  // Filters out specific visibility tray display records safely
   const visibleDisplayProducts = useMemo(() => {
     const layoutDisplayExclusions = ["amino shot caplets"];
     return filteredProducts.filter(p => {
