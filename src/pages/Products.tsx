@@ -155,7 +155,9 @@ const Products = () => {
       "daily multi", 
       "myogenetix concentrate", 
       "ginseng extract",
-      "super whey" // Dropped per specific layout requirements
+      "super whey",         // Removed
+      "plasma mass",        // Removed
+      "amino shot caplets"  // Removed
     ];
     
     result = result.filter(p => !excludedProductNames.includes(p.name?.toLowerCase().trim()));
