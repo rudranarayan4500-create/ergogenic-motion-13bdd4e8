@@ -5,42 +5,54 @@ import type { Product } from "@/data/products";
 import { addToCart } from "@/lib/cart";
 import { toast } from "@/hooks/use-toast";
 
-export const ProductCard = ({ p }: { p: Product }) => (
-  <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-border hover-lift">
-    <Link to={`/products/${p.id}`} className="block aspect-[4/5] overflow-hidden bg-muted">
-      <img
-        src={p.image}
-        alt={p.name}
-        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        loading="lazy"
-      />
-    </Link>
-    <div className="p-5">
-      <div className="flex items-center gap-1 text-xs text-primary mb-1">
-        <Star className="h-3 w-3 fill-primary" />
-        <span>{p.rating} ({p.reviews})</span>
-      </div>
-      <h3 className="font-semibold text-lg leading-tight">
-        <Link to={`/products/${p.id}`} className="hover:text-primary transition-colors">{p.name}</Link>
-      </h3>
-      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{p.tagline}</p>
-      <div className="mt-4 flex items-center justify-between">
-        <div>
-          <span className="text-lg font-bold">₹{p.price.toLocaleString()}</span>
-          <span className="ml-2 text-xs text-muted-foreground line-through">₹{p.mrp.toLocaleString()}</span>
+export const ProductCard = ({ p }: { p: Product }) => {
+  const dynamicSlugRoute = p.slug || p.id;
+
+  return (
+    <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-border hover-lift flex flex-col justify-between">
+      <div>
+        <Link to={`/products/${dynamicSlugRoute}`} className="block aspect-[4/5] overflow-hidden bg-slate-50 border-b border-slate-100 relative flex items-center justify-center">
+          <img
+            src={p.image}
+            alt={p.name}
+            className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105 select-none pointer-events-none"
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
+            }}
+          />
+        </Link>
+        <div className="p-5 text-left space-y-1">
+          <div className="flex items-center gap-1 text-xs font-bold text-amber-500 mb-1">
+            <Star className="h-3 w-3 fill-amber-500 stroke-none" />
+            <span className="text-slate-700 font-sans">{p.rating || 4.8} <span className="text-slate-400 font-mono">({p.reviews || 0})</span></span>
+          </div>
+          <h3 className="font-black text-base tracking-tight text-slate-800 line-clamp-1">
+            <Link to={`/products/${dynamicSlugRoute}`} className="hover:text-primary transition-colors">{p.name}</Link>
+          </h3>
+          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed h-8">{p.tagline}</p>
         </div>
-        <Button
-          size="sm"
-          className="bg-primary hover:bg-primary/90"
-          onClick={(e) => {
-            e.preventDefault();
-            addToCart({ slug: p.slug || p.id, name: p.name, price: p.price, image: p.image });
-            toast({ title: "Added to cart", description: p.name });
-          }}
-        >
-          Add
-        </Button>
+      </div>
+
+      <div className="p-5 pt-0">
+        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+          <div className="text-left">
+            <span className="text-base font-black text-slate-900 font-mono">₹{p.price.toLocaleString()}</span>
+            <span className="ml-2 text-xs font-medium text-slate-400 line-through font-mono">₹{p.mrp.toLocaleString()}</span>
+          </div>
+          <Button
+            size="sm"
+            className="bg-slate-900 text-white hover:bg-slate-800 font-black uppercase tracking-wider text-[11px] rounded-lg px-4 h-9 shadow-sm"
+            onClick={(e) => {
+              e.preventDefault();
+              addToCart({ slug: dynamicSlugRoute, name: p.name, price: p.price, image: p.image });
+              toast({ title: "Added to cart", description: p.name });
+            }}
+          >
+            Add
+          </Button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
