@@ -155,7 +155,8 @@ const Products = () => {
       "v-shot multivitamin", 
       "daily multi", 
       "myogenetix concentrate", 
-      "ginseng extract"
+      "ginseng extract",
+      "super whey" // FIXED: Excluded at the core list mapping state layer
     ];
     
     result = result.filter(p => {
@@ -196,7 +197,7 @@ const Products = () => {
 
   // Display specific visibility grids while preserving general deep navigation parameter maps
   const visibleDisplayProducts = useMemo(() => {
-    const layoutDisplayExclusions = ["super whey", "plasma mass", "amino shot caplets"];
+    const layoutDisplayExclusions = ["plasma mass", "amino shot caplets"];
     return filteredProducts.filter(p => {
       const nameStr = p?.name ? String(p.name).toLowerCase().trim() : "";
       return !layoutDisplayExclusions.includes(nameStr);
