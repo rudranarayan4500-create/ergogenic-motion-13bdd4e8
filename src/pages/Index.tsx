@@ -61,7 +61,6 @@ const Index = () => {
 
       {/* ==================== SECTION 1: HERO CANVAS ==================== */}
       <section className="relative min-h-[85vh] lg:min-h-[calc(100vh-80px)] flex items-center overflow-hidden border-b border-slate-100 bg-white py-12 lg:py-0">
-        {/* Background Canvas Layer Specs */}
         <div className="absolute inset-0 bg-grid-light opacity-30 pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(219,234,254,0.3),transparent_50%)] pointer-events-none" />
         
@@ -111,7 +110,7 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Right Media Column - Optimized for high-resolution laptops */}
+            {/* Right Media Column */}
             <div className="lg:col-span-5 order-1 lg:order-2 w-full flex justify-center">
               <div className="relative w-full max-w-[440px] aspect-[4/3] lg:aspect-square rounded-3xl border border-slate-200 overflow-hidden bg-slate-50 shadow-inner p-2 group">
                 <video
@@ -130,17 +129,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ==================== SECTION 2: PRODUCT SLIDER ==================== */}
-      <section className="relative overflow-hidden bg-white py-12 md:py-20">
-        <div className="container max-w-7xl relative px-4 md:px-8 mx-auto">
-          <div className="relative min-h-[440px] lg:min-h-[500px]">
-            <ProductShowcaseSlider />
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== SECTION 3: LAB WORKFLOW GIF ==================== */}
-      <section className="w-full bg-slate-50 border-y border-slate-200 overflow-hidden py-16 md:py-24">
+      {/* ==================== SECTION 2: FIRST LAB GIF PROCESS BANNER ==================== */}
+      <section className="w-full bg-slate-50 border-b border-slate-200 overflow-hidden py-16 md:py-24">
         <div className="container max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
           
           <div className="lg:col-span-5 space-y-4">
@@ -167,7 +157,45 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ==================== SECTION 4: HORIZONTAL MARQUEE ==================== */}
+      {/* ==================== SECTION 3: PRODUCT SLIDER ==================== */}
+      <section className="relative overflow-hidden bg-white py-12 md:py-20">
+        <div className="container max-w-7xl relative px-4 md:px-8 mx-auto">
+          <div className="relative min-h-[440px] lg:min-h-[500px]">
+            <ProductShowcaseSlider />
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== SECTION 4: SECOND LAB GIF PROCESS BANNER (CUSTOM PLACEHOLDER) ==================== */}
+      <section className="w-full bg-slate-50 border-y border-slate-200 overflow-hidden py-16 md:py-24">
+        <div className="container max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
+          
+          <div className="lg:col-span-7 rounded-3xl border border-slate-200 overflow-hidden shadow-sm bg-white p-2.5">
+            {/* REPLACE THIS PLACEHOLDER IMAGE URL ONCE YOUR SECOND COMPLEMENTARY LAB GIF IS READY */}
+            <img 
+              src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&auto=format&fit=crop&q=60" 
+              alt="Advanced custom synthesis line placeholder" 
+              className="w-full h-auto max-h-[400px] object-cover rounded-2xl filter grayscale opacity-90"
+              loading="lazy"
+            />
+          </div>
+
+          <div className="lg:col-span-5 space-y-4">
+            <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-3 py-1 rounded border border-blue-200/50 inline-block">
+              INTELLIGENT MANUFACTURE
+            </span>
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">
+              TRANSPARENT SYNTHESIS LINES
+            </h2>
+            <p className="text-sm md:text-base font-medium text-slate-500 leading-relaxed">
+              Our automated system keeps your macro fractions protected from outside ambient vectors. This structural processing loop retains consistency and formula bioavailability benchmarks smoothly.
+            </p>
+          </div>
+          
+        </div>
+      </section>
+
+      {/* ==================== SECTION 5: HORIZONTAL MARQUEE ==================== */}
       <section className="relative overflow-hidden bg-white py-20 md:py-28">
         <div className="container relative px-4 md:px-8 mx-auto max-w-7xl">
           <ScrollReveal className="mx-auto mb-16 max-w-2xl text-center">
@@ -267,7 +295,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ==================== SECTION 5: INGREDIENTS INDEX ==================== */}
+      {/* ==================== SECTION 6: INGREDIENTS INDEX ==================== */}
       <section className="relative overflow-hidden bg-white py-20 md:py-28 border-t border-slate-100">
         <div className="container relative z-10 px-4 md:px-8 mx-auto max-w-7xl">
           <ScrollReveal className="mx-auto mb-16 max-w-2xl text-center">
