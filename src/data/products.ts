@@ -1,10 +1,7 @@
-
 // User-supplied product imagery (Supabase storage public URLs)
 const U = {
   // Micro-Power Creatine
   creatineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg",
-  // Lean Shot
-  leanShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg",
   // Super Whey
   superWheyFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg",
   superWheyBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 7.37.43 PM.jpeg",
@@ -107,7 +104,7 @@ export const products: Product[] = [
     mrp: 1899,
     category: "Performance",
     image: U.creatineFront,
-    gallery: [U.creatineFront, U.creatineFront, U.creatineFront],
+    gallery: [U.creatineFront],
     description:
       "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
     benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
@@ -115,23 +112,6 @@ export const products: Product[] = [
     ingredients: ["Creatine Monohydrate (Micronized)"],
     rating: 4.9,
     reviews: 980,
-  },
-  {
-    id: "ergo-lean-shot",
-    name: "Lean Shot Thermogenic",
-    tagline: "Ultra potent fat burning formula",
-    price: 1899,
-    mrp: 2399,
-    category: "Performance",
-    image: U.leanShotFront,
-    gallery: [U.leanShotFront, U.leanShotFront, U.leanShotFront],
-    description:
-      "Lean Shot supports fat metabolism, energy, focus and vitality. Tropical Mango flavour.",
-    benefits: ["Fat loss support", "Energy & endurance", "Focus & clarity", "Overall vitality"],
-    howToUse: "1 scoop with 200ml water 20 minutes before training or fasted cardio.",
-    ingredients: ["L-Carnitine L-Tartrate", "CLA", "Green Coffee Bean Extract", "Caffeine Anhydrous"],
-    rating: 4.7,
-    reviews: 870,
   },
   {
     id: "super-whey",
@@ -186,7 +166,7 @@ export const products: Product[] = [
     mrp: 1199,
     category: "Performance",
     image: U.caffeineFront,
-    gallery: [U.caffeineFront, U.caffeineFront, U.caffeineFront],
+    gallery: [U.caffeineFront],
     description:
       "60 caplets of pure Caffeine Anhydrous for instant energy and performance. Push your limits with every dose.",
     benefits: ["Instant energy", "Sharper focus", "Performance boost", "60 caplets per bottle"],
@@ -211,23 +191,6 @@ export const products: Product[] = [
     ingredients: ["L-Citrulline Malate", "L-Arginine"],
     rating: 4.8,
     reviews: 410,
-  },
-  {
-    id: "ergo-ginseng",
-    name: "Ginseng Energy Caplets",
-    tagline: "Korean Red Ginseng for daily fuel",
-    price: 1299,
-    mrp: 1599,
-    category: "Essentials",
-    image: "/placeholder.svg",
-    gallery: [],
-    description:
-      "60 caplets of Korean Red Ginseng Extract to fuel your day with sustained energy and vitality. Coming soon!",
-    benefits: ["Fuel your day", "Sustained energy", "Daily vitality", "60 caplets per bottle"],
-    howToUse: "1 caplet daily with food.",
-    ingredients: ["Korean Red Ginseng Extract"],
-    rating: 4.8,
-    reviews: 240,
   },
 ];
 
