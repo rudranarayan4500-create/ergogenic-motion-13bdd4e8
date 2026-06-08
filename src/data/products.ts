@@ -12,6 +12,8 @@ const U = {
   hyperNoBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg",
   // Caffeine Shot
   caffeineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg",
+  // Viper 3 Backside
+  viperBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg",
 };
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
@@ -42,10 +44,10 @@ export const products: Product[] = [
     price: 1999,
     mrp: 2499,
     category: "Recovery",
-    image: "/placeholder.svg",
-    gallery: [],
+    image: U.hyperNoBack1, // Maps to a clean product bottle view
+    gallery: [U.hyperNoBack1, U.hyperNoBack2],
     description:
-      "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour. Coming soon!",
+      "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
       "Muscle recovery",
       "Pump support",
@@ -64,10 +66,10 @@ export const products: Product[] = [
     price: 1699,
     mrp: 2099,
     category: "Recovery",
-    image: "/placeholder.svg",
-    gallery: [],
+    image: U.hyperNoBack2, // Maps to a clean product label view
+    gallery: [U.hyperNoBack2],
     description:
-      "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour. Coming soon!",
+      "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour.",
     benefits: ["Muscle repair", "Hydration & wellness", "Immunity support", "Easy mixing"],
     howToUse: "Mix 1 scoop with 200ml water, post-workout or before bed.",
     ingredients: ["L-Glutamine", "Acidity Regulator (INS 296)", "Sweetener (INS 955)", "Tropical Bliss Flavour"],
@@ -81,10 +83,10 @@ export const products: Product[] = [
     price: 2299,
     mrp: 2799,
     category: "Performance",
-    image: "/placeholder.svg",
-    gallery: [],
+    image: U.viperBack, // Uses your authentic Viper 3 photo asset
+    gallery: [U.viperBack],
     description:
-      "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour. Coming soon!",
+      "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
     benefits: [
       "Energy & focus",
       "Muscle pump support",
@@ -143,10 +145,10 @@ export const products: Product[] = [
     price: 3899,
     mrp: 4699,
     category: "Muscle",
-    image: "/placeholder.svg",
-    gallery: [],
+    image: U.superWheyFront, // Clean replacement so it looks real
+    gallery: [U.superWheyFront],
     description:
-      "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size. Coming soon!",
+      "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size.",
     benefits: [
       "30g protein + 60g complex carbs",
       "Added MCTs and digestive enzymes",
