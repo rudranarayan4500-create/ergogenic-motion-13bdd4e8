@@ -145,7 +145,7 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. EXCLUSION FILTER: Drop structural clones while maintaining deep system accessibility maps
+    // 3. EXCLUSION FILTER: Clean out unneeded product records securely
     const excludedProductNames = [
       "pure creatin", 
       "bcaa recover", 
@@ -154,7 +154,10 @@ const Products = () => {
       "v-shot multivitamin", 
       "daily multi", 
       "myogenetix concentrate", 
-      "ginseng extract"
+      "ginseng extract",
+      "super whey",         // Removed
+      "plasma mass",        // Removed
+      "amino shot caplets"  // Removed
     ];
     
     result = result.filter(p => !excludedProductNames.includes(p.name?.toLowerCase().trim()));
@@ -189,12 +192,6 @@ const Products = () => {
     
     return result;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
-
-  // Display specific visibility grids while preserving general navigation maps
-  const visibleDisplayProducts = useMemo(() => {
-    const layoutDisplayExclusions = ["super whey", "plasma mass", "amino shot caplets"];
-    return filteredProducts.filter(p => !layoutDisplayExclusions.includes(p.name?.toLowerCase().trim()));
-  }, [filteredProducts]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -392,7 +389,7 @@ const Products = () => {
             <div className="xl:col-span-9 space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-slate-200 text-xs text-slate-500">
                 <span className="font-mono font-bold tracking-wider uppercase">
-                  Products Found: <span className="text-slate-900 font-sans font-black">{visibleDisplayProducts.length}</span>
+                  Products Found: <span className="text-slate-900 font-sans font-black">{filteredProducts.length}</span>
                 </span>
                 
                 <div className="flex items-center gap-2">
@@ -412,7 +409,7 @@ const Products = () => {
               {/* Master Products Cards Grid Map Layout */}
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
                 <AnimatePresence mode="popLayout">
-                  {visibleDisplayProducts.map((p, index) => {
+                  {filteredProducts.map((p, index) => {
                     const dynamicSlugRoute = p.slug || p.id;
                     const isNewArrival = index === 0;
                     const isPriceDrop = index === 2;
@@ -481,7 +478,7 @@ const Products = () => {
                 </AnimatePresence>
               </motion.div>
 
-              {visibleDisplayProducts.length === 0 && (
+              {filteredProducts.length === 0 && (
                 <div className="text-center py-24 border border-dashed border-slate-200 rounded-2xl bg-slate-50">
                   <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">No matching product lines found inside active filter parameters.</p>
                   <button onClick={resetFilters} className="text-slate-900 text-[10px] uppercase font-bold tracking-widest mt-4 hover:underline">Reset Selection</button>
@@ -503,7 +500,7 @@ const Products = () => {
             <p className="text-slate-500 text-xs md:text-sm max-w-lg mx-auto font-light">Explore structured compound profiles designed to support workout progression clean and efficiently.</p>
           </div>
 
-          {visibleDisplayProducts.slice(0, 3).map((p, idx) => {
+          {filteredProducts.slice(0, 3).map((p, idx) => {
             const isEven = idx % 2 === 0;
             const dynamicSlugRoute = p.slug || p.id;
             return (
@@ -518,3 +515,91 @@ const Products = () => {
                   isEven ? "lg:flex-row" : "lg:flex-row-reverse"
                 )}
               >
+                <motion.div variants={textGlideUpVariants} className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 border border-slate-200 rounded-md">
+                    <Activity className="h-3.5 w-3.5 text-slate-700" />
+                    <span className="text-[9px] uppercase tracking-widest font-mono text-slate-600 font-bold">Featured Line 0{idx + 1}</span>
+                  </div>
+                  
+                  <h3 className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-slate-900 transition-colors duration-300">
+                    {p.name}
+                  </h3>
+                  
+                  <p className="text-slate-600 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
+                    {p.tagline} Carefully crafted using quality parameters to ensure consistent nutritional value, fitting seamlessly into your structured fitness targets.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3 pt-2 text-left max-w-xs mx-auto lg:mx-0">
+                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                      <span className="block text-[8px] font-mono text-slate-400 uppercase">Rating Index</span>
+                      <span className="text-base font-black text-slate-800 flex items-center gap-1 mt-0.5 font-mono">{p.rating} <Star className="h-3 w-3 fill-amber-500 text-amber-500" /></span>
+                    </div>
+                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                      <span className="block text-[8px] font-mono text-slate-400 uppercase">Product Status</span>
+                      <span className="text-xs font-black text-emerald-600 block mt-1.5 uppercase tracking-wide">Purity Checked</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-4">
+                    <Link to={`/products/${dynamicSlugRoute}`}>
+                      <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-widest rounded-xl px-6 h-12 transition-all">
+                        Inspect Product <ChevronRight className="h-3 w-3 ml-1" />
+                      </Button>
+                    </Link>
+                  </div>
+                </motion.div>
+
+                <motion.div variants={imageScrollZoomVariants} className="w-full lg:w-1/2 flex items-center justify-center relative">
+                  <Link to={`/products/${dynamicSlugRoute}`} className="relative w-full max-w-[300px] md:max-w-[350px] aspect-square block cursor-pointer">
+                    <img
+                      src={p.image} 
+                      alt={p.name} 
+                      loading="lazy"
+                      className="w-full h-full object-contain transition-all duration-700 ease-out"
+                    />
+                  </Link>
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ==================== SECTION 4: TRANSPARENCY LEDGER ==================== */}
+      <section className="py-24 bg-slate-50/50 border-t border-slate-200">
+        <div className="container max-w-5xl mx-auto px-4">
+          <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 grid md:grid-cols-[1fr_2px_1fr] gap-8 items-center shadow-sm">
+            <div className="space-y-4 text-left">
+              <div className="h-8 w-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center">
+                <ShieldCheck className="h-4 w-4 text-slate-800" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-900">THE TRANSPARENCY ASSURANCES</h3>
+              <p className="text-slate-600 text-xs md:text-sm font-light leading-relaxed">
+                We focus on straightforward manufacturing clarity. Verification testing metrics, raw item breakdowns, and clear macro details across all product layers remain completely accessible to ensure your peace of mind.
+              </p>
+            </div>
+
+            <div className="h-full w-full bg-slate-100 hidden md:block" />
+
+            <div className="space-y-4 text-left">
+              <h4 className="text-xs uppercase font-mono font-black tracking-widest text-muted-foreground">Quality Controls</h4>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2 text-xs">
+                  <span className="text-slate-900 font-bold font-mono">01/</span>
+                  <p className="text-slate-600 font-light"><strong className="text-slate-800 font-bold">Thoroughly Audited Process:</strong> Formulated using highly strict guidelines matching standard composition targets accurately.</p>
+                </div>
+                <div className="flex items-start gap-2 text-xs">
+                  <span className="text-slate-900 font-bold font-mono">02/</span>
+                  <p className="text-slate-600 font-light"><strong className="text-slate-800 font-bold">Precise Label Matching:</strong> Content weights and compound listings align directly with the printed specs present on our product pack labels.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+};
+
+export default Products;
