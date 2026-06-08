@@ -286,7 +286,6 @@ const ProductDetail = () => {
                   ₹{product.price.toLocaleString()}
                 </span>
                 <span className="text-lg line-through font-bold text-slate-400 font-mono">
-                  text-slate-400
                   ₹{product.mrp.toLocaleString()}
                 </span>
                 <span className="text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider border text-emerald-700 bg-emerald-50 border-emerald-200">
