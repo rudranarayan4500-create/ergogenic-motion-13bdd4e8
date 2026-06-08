@@ -113,8 +113,12 @@ const Products = () => {
         structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg"];
       } else if (normalName.includes("aminoshot")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg";
-      } else if (normalName.includes("glutashot")) {
-        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg";
+      } else if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg";
+        structuredGallery = [
+          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg",
+          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg"
+        ];
       } else if (normalName.includes("plasma")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg";
         structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg"];
@@ -158,11 +162,11 @@ const Products = () => {
       "daily multi", 
       "myogenetix concentrate", 
       "ginseng extract",
-      "super whey",          // Hard block global matching name
-      "super whey 2kg",      // Hard block variation name string
-      "plasma mass",         // Hard block global matching name
-      "plasma mass 3kg",     // Hard block variation name string
-      "amino shot caplets"   // Hard block variation name string
+      "super whey",          
+      "super whey 2kg",      
+      "plasma mass",         
+      "plasma mass 3kg",     
+      "amino shot caplets"   
     ];
     
     result = result.filter(p => {
