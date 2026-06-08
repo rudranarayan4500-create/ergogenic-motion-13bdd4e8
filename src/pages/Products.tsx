@@ -156,7 +156,7 @@ const Products = () => {
       "daily multi", 
       "myogenetix concentrate", 
       "ginseng extract",
-      "super whey" // FIXED: Excluded at the core list mapping state layer
+      "super whey"
     ];
     
     result = result.filter(p => {
@@ -195,9 +195,9 @@ const Products = () => {
     return result;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
 
-  // Display specific visibility grids while preserving general deep navigation parameter maps
+  // Display specific visibility grids — FIXED: Removed plasma mass from exclusion array so it clickable routes cleanly
   const visibleDisplayProducts = useMemo(() => {
-    const layoutDisplayExclusions = ["plasma mass", "amino shot caplets"];
+    const layoutDisplayExclusions = ["amino shot caplets"];
     return filteredProducts.filter(p => {
       const nameStr = p?.name ? String(p.name).toLowerCase().trim() : "";
       return !layoutDisplayExclusions.includes(nameStr);
