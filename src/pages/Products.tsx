@@ -76,11 +76,13 @@ const Products = () => {
 
     // 2. Overwrite / Append with live admin DB lines cleanly matching unique slugs
     dbProducts.forEach((d) => {
+      if (!d) return;
       const liveKey = d.slug || d.id;
-      const normalName = d.name?.toLowerCase().trim() || "";
+      const rawName = d.name || "";
+      const normalName = String(rawName).toLowerCase().trim();
       
-      // Setup base variables
-      let productFeaturedImage = d.image;
+      // Setup base variables safely
+      let productFeaturedImage = d.image || "";
       let structuredGallery: string[] = Array.isArray(d.media)
         ? d.media.map((m: any) => m?.url).filter(Boolean)
         : [];
@@ -118,7 +120,6 @@ const Products = () => {
         structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg"];
       }
 
-      // Final fallback checker if the db string contains an empty placeholder string
       if (!productFeaturedImage || productFeaturedImage === "/placeholder.svg") {
         const fallbackObj = uniqueProductMatrix.get(liveKey);
         productFeaturedImage = fallbackObj?.image || "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
@@ -131,7 +132,7 @@ const Products = () => {
         tagline: d.tagline ?? "",
         price: Number(d.price) || 0,
         mrp: Number(d.mrp) || Number(d.price) || 0,
-        category: (d.category as Category) || "Essentials",
+        category: d.category || "Essentials",
         image: productFeaturedImage,
         description: d.description ?? "",
         benefits: d.benefits ?? [],
@@ -145,7 +146,7 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. EXCLUSION FILTER: Clean out unneeded product records securely
+    // 3. EXCLUSION FILTER: Run safely with direct typecasting strings
     const excludedProductNames = [
       "pure creatin", 
       "bcaa recover", 
@@ -154,22 +155,22 @@ const Products = () => {
       "v-shot multivitamin", 
       "daily multi", 
       "myogenetix concentrate", 
-      "ginseng extract",
-      "super whey",         // Removed
-      "plasma mass",        // Removed
-      "amino shot caplets"  // Removed
+      "ginseng extract"
     ];
     
-    result = result.filter(p => !excludedProductNames.includes(p.name?.toLowerCase().trim()));
+    result = result.filter(p => {
+      const pName = p?.name ? String(p.name).toLowerCase().trim() : "";
+      return !excludedProductNames.includes(pName);
+    });
 
     // 4. Text Query Search Filter Validation
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
-      result = result.filter(
-        (p) => 
-          p.name.toLowerCase().includes(query) || 
-          p.tagline?.toLowerCase().includes(query)
-      );
+      result = result.filter(p => {
+        const nameStr = p?.name ? String(p.name).toLowerCase() : "";
+        const tagStr = p?.tagline ? String(p.tagline).toLowerCase() : "";
+        return nameStr.includes(query) || tagStr.includes(query);
+      });
     }
 
     // 5. Active Category Routing Match Filter
@@ -192,6 +193,15 @@ const Products = () => {
     
     return result;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
+
+  // Display specific visibility grids while preserving general deep navigation parameter maps
+  const visibleDisplayProducts = useMemo(() => {
+    const layoutDisplayExclusions = ["super whey", "plasma mass", "amino shot caplets"];
+    return filteredProducts.filter(p => {
+      const nameStr = p?.name ? String(p.name).toLowerCase().trim() : "";
+      return !layoutDisplayExclusions.includes(nameStr);
+    });
+  }, [filteredProducts]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -389,7 +399,7 @@ const Products = () => {
             <div className="xl:col-span-9 space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-slate-200 text-xs text-slate-500">
                 <span className="font-mono font-bold tracking-wider uppercase">
-                  Products Found: <span className="text-slate-900 font-sans font-black">{filteredProducts.length}</span>
+                  Products Found: <span className="text-slate-900 font-sans font-black">{visibleDisplayProducts.length}</span>
                 </span>
                 
                 <div className="flex items-center gap-2">
@@ -409,7 +419,7 @@ const Products = () => {
               {/* Master Products Cards Grid Map Layout */}
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
                 <AnimatePresence mode="popLayout">
-                  {filteredProducts.map((p, index) => {
+                  {visibleDisplayProducts.map((p, index) => {
                     const dynamicSlugRoute = p.slug || p.id;
                     const isNewArrival = index === 0;
                     const isPriceDrop = index === 2;
@@ -478,7 +488,7 @@ const Products = () => {
                 </AnimatePresence>
               </motion.div>
 
-              {filteredProducts.length === 0 && (
+              {visibleDisplayProducts.length === 0 && (
                 <div className="text-center py-24 border border-dashed border-slate-200 rounded-2xl bg-slate-50">
                   <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">No matching product lines found inside active filter parameters.</p>
                   <button onClick={resetFilters} className="text-slate-900 text-[10px] uppercase font-bold tracking-widest mt-4 hover:underline">Reset Selection</button>
@@ -500,7 +510,7 @@ const Products = () => {
             <p className="text-slate-500 text-xs md:text-sm max-w-lg mx-auto font-light">Explore structured compound profiles designed to support workout progression clean and efficiently.</p>
           </div>
 
-          {filteredProducts.slice(0, 3).map((p, idx) => {
+          {visibleDisplayProducts.slice(0, 3).map((p, idx) => {
             const isEven = idx % 2 === 0;
             const dynamicSlugRoute = p.slug || p.id;
             return (
