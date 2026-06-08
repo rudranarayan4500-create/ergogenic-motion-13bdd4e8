@@ -2,10 +2,6 @@
 const U = {
   // Micro-Power Creatine
   creatineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg",
-  // Super Whey
-  superWheyFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 2.05.49 PM.jpeg",
-  superWheyBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 7.37.43 PM.jpeg",
-  superWheyBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.27.30 PM.jpeg",
   // Hyper-NO Shot
   hyperNoFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg",
   hyperNoBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg",
@@ -14,6 +10,8 @@ const U = {
   caffeineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg",
   // Viper 3 Backside
   viperBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg",
+  // Plasma Mass Real Image
+  plasmaMassFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg"
 };
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
@@ -44,7 +42,7 @@ export const products: Product[] = [
     price: 1999,
     mrp: 2499,
     category: "Recovery",
-    image: U.hyperNoBack1, // Maps to a clean product bottle view
+    image: U.hyperNoBack1, 
     gallery: [U.hyperNoBack1, U.hyperNoBack2],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
@@ -66,7 +64,7 @@ export const products: Product[] = [
     price: 1699,
     mrp: 2099,
     category: "Recovery",
-    image: U.hyperNoBack2, // Maps to a clean product label view
+    image: U.hyperNoBack2, 
     gallery: [U.hyperNoBack2],
     description:
       "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour.",
@@ -83,7 +81,7 @@ export const products: Product[] = [
     price: 2299,
     mrp: 2799,
     category: "Performance",
-    image: U.viperBack, // Uses your authentic Viper 3 photo asset
+    image: U.viperBack, 
     gallery: [U.viperBack],
     description:
       "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
@@ -114,51 +112,6 @@ export const products: Product[] = [
     ingredients: ["Creatine Monohydrate (Micronized)"],
     rating: 4.9,
     reviews: 980,
-  },
-  {
-    id: "super-whey",
-    name: "Super Whey",
-    tagline: "27g premium whey protein blend",
-    price: 4499,
-    mrp: 5499,
-    category: "Muscle",
-    image: U.superWheyFront,
-    gallery: [U.superWheyFront, U.superWheyBack1, U.superWheyBack2],
-    description:
-      "Super Whey delivers a clinically dosed 27g of fast-absorbing whey protein per scoop, engineered for serious lean-muscle development, post-training recovery and daily protein intake. Cold-processed, instantized, and lab-verified for purity.",
-    benefits: [
-      "27g protein per serving",
-      "6.2g BCAAs, 5g Glutamic acid",
-      "Cold-processed, instantized blend",
-      "Zero amino spiking guarantee",
-    ],
-    howToUse:
-      "Mix 1 scoop (33g) with 200ml chilled water or milk. Consume post-workout or anytime to meet daily protein needs.",
-    ingredients: ["Whey Protein Isolate", "Whey Concentrate", "Digestive Enzymes", "Cocoa", "Natural Flavour"],
-    rating: 4.9,
-    reviews: 2841,
-  },
-  {
-    id: "plasma-mass",
-    name: "Plasma Mass",
-    tagline: "High-calorie advanced gainer formula",
-    price: 3899,
-    mrp: 4699,
-    category: "Muscle",
-    image: U.superWheyFront, // Clean replacement so it looks real
-    gallery: [U.superWheyFront],
-    description:
-      "Plasma Mass is engineered for hard gainers who need clean calories. Each serving packs 60g of complex carbs and 30g of protein with zero junk fillers. Built for strength, recovery and serious size.",
-    benefits: [
-      "30g protein + 60g complex carbs",
-      "Added MCTs and digestive enzymes",
-      "No added sugar fillers",
-      "Lab-verified purity",
-    ],
-    howToUse: "Mix 2 scoops with 300ml milk. Consume post-workout or between meals for surplus calories.",
-    ingredients: ["Maltodextrin", "Whey Concentrate", "Oat Flour", "MCT Oil", "Creatine Monohydrate"],
-    rating: 4.8,
-    reviews: 1620,
   },
   {
     id: "ergo-caffeine-shot",
