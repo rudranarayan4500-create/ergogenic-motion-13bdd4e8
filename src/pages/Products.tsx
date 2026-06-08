@@ -57,7 +57,7 @@ const Products = () => {
 
   const resetFilters = () => {
     setActiveCategory(null);
-    setSearchQuery(""); // FIXED: Corrected from function-like invocation expression
+    setSearchQuery("");
     setMaxPrice(7000);
     setShowOutOfStock(true);
     setSortBy("featured");
@@ -391,13 +391,14 @@ const Products = () => {
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
                 <AnimatePresence mode="popLayout">
                   {filteredProducts.map((p, index) => {
-                    const pId = p.id || p.slug;
+                    // FIXED: Ensure targeting logic strictly uses route parameter keys safely matching backend routing maps
+                    const dynamicSlugRoute = p.slug || p.id;
                     const isNewArrival = index === 0;
                     const isPriceDrop = index === 2;
 
                     return (
                       <motion.div
-                        key={`product-card-${pId}`} 
+                        key={`product-card-${dynamicSlugRoute}`} 
                         layout
                         initial={{ opacity: 0, y: 20, scale: 0.96 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -407,7 +408,7 @@ const Products = () => {
                         className="group flex flex-col text-left relative"
                       >
                         <div className="w-full aspect-square relative bg-slate-50 rounded-2xl mb-3.5 flex items-center justify-center overflow-hidden border border-slate-200">
-                          <Link to={`/products/${pId}`} className="w-full h-full block cursor-pointer">
+                          <Link to={`/products/${dynamicSlugRoute}`} className="w-full h-full block cursor-pointer">
                             <img
                               src={p.image || (p as any).gallery?.[0] || "/placeholder.svg"}
                               alt={p.name} loading="lazy"
@@ -429,7 +430,7 @@ const Products = () => {
 
                         <div className="space-y-1 px-1">
                           <h3 className="text-sm font-black tracking-tight text-slate-800 group-hover:text-slate-900 transition-colors line-clamp-1">
-                            <Link to={`/products/${pId}`}>{p.name}</Link>
+                            <Link to={`/products/${dynamicSlugRoute}`}>{p.name}</Link>
                           </h3>
                           
                           <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
@@ -479,10 +480,11 @@ const Products = () => {
 
           {filteredProducts.slice(0, 3).map((p, idx) => {
             const isEven = idx % 2 === 0;
-            const pId = p.id || p.slug;
+            // FIXED: Standardize highlighting panels route metrics
+            const dynamicSlugRoute = p.slug || p.id;
             return (
               <motion.div 
-                key={`feature-row-${pId}`}
+                key={`feature-row-${dynamicSlugRoute}`}
                 variants={sectionContainerVariants}
                 initial="hidden"
                 whileInView="whileInView"
@@ -518,7 +520,7 @@ const Products = () => {
                   </div>
 
                   <div className="pt-4">
-                    <Link to={`/products/${pId}`}>
+                    <Link to={`/products/${dynamicSlugRoute}`}>
                       <Button className="bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-widest rounded-xl px-6 h-12 transition-all">
                         Inspect Product <ChevronRight className="h-3 w-3 ml-1" />
                       </Button>
@@ -526,55 +528,4 @@ const Products = () => {
                   </div>
                 </motion.div>
 
-                <motion.div variants={imageScrollZoomVariants} className="w-full lg:w-1/2 flex items-center justify-center relative">
-                  <Link to={`/products/${pId}`} className="relative w-full max-w-[300px] md:max-w-[350px] aspect-square block cursor-pointer">
-                    <img
-                      src={p.image} alt={p.name} loading="lazy"
-                      className="w-full h-full object-contain transition-all duration-700 ease-out"
-                    />
-                  </Link>
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ==================== SECTION 4: TRANSPARENCY LEDGER ==================== */}
-      <section className="py-24 bg-slate-50/50 border-t border-slate-200">
-        <div className="container max-w-5xl mx-auto px-4">
-          <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 grid md:grid-cols-[1fr_2px_1fr] gap-8 items-center shadow-sm">
-            <div className="space-y-4 text-left">
-              <div className="h-8 w-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center">
-                <ShieldCheck className="h-4 w-4 text-slate-800" />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-900">THE TRANSPARENCY ASSURANCES</h3>
-              <p className="text-slate-600 text-xs md:text-sm font-light leading-relaxed">
-                We focus on straightforward manufacturing clarity. Verification testing metrics, raw item breakdowns, and clear macro details across all product layers remain completely accessible to ensure your peace of mind.
-              </p>
-            </div>
-
-            <div className="h-full w-full bg-slate-100 hidden md:block" />
-
-            <div className="space-y-4 text-left">
-              <h4 className="text-xs uppercase font-mono font-black tracking-widest text-muted-foreground">Quality Controls</h4>
-              <div className="space-y-3">
-                <div className="flex items-start gap-2 text-xs">
-                  <span className="text-slate-900 font-bold font-mono">01/</span>
-                  <p className="text-slate-600 font-light"><strong className="text-slate-800 font-bold">Thoroughly Audited Process:</strong> Formulated using highly strict guidelines matching standard composition targets accurately.</p>
-                </div>
-                <div className="flex items-start gap-2 text-xs">
-                  <span className="text-slate-900 font-bold font-mono">02/</span>
-                  <p className="text-slate-600 font-light"><strong className="text-slate-800 font-bold">Precise Label Matching:</strong> Content weights and compound listings align directly with the printed specs present on our product pack labels.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  );
-};
-
-export default Products;
+                <motion.
