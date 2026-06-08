@@ -17,6 +17,9 @@ const U = {
   aminoShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg",
   aminoShotBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 9.04.52 PM.jpeg",
   aminoShotBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.53.29 PM.jpeg",
+  
+  // FIXED: Separate discrete front asset target definition explicitly configured for GlutaShot
+  glutaShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg",
   glutaShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg"
 };
 
@@ -70,8 +73,8 @@ export const products: Product[] = [
     price: 1699,
     mrp: 2099,
     category: "Recovery",
-    image: U.aminoShotFront, 
-    gallery: [U.aminoShotFront, U.glutaShotBack],
+    image: U.glutaShotFront, // FIXED: Now targets its dedicated review asset cleanly
+    gallery: [U.glutaShotFront, U.glutaShotBack], // FIXED: Isolated independent multi-view tracking canvas
     description:
       "GlutaShot provides clinically dosed L-Glutamine for muscle repair, hydration and overall wellness. Tropical Bliss flavour.",
     benefits: ["Muscle repair", "Hydration & wellness", "Immunity support", "Easy mixing"],
