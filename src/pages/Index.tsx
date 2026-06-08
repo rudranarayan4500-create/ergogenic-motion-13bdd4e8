@@ -87,7 +87,6 @@ const Index = () => {
                 text="EVOLVED"
                 speed={120}
                 delay={400}
-                }
               />
             </span>
           </h1>
@@ -132,7 +131,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* PRODUCTS MARQUEE (AUTO-SCROLLING RIGHT TO LEFT / SEAMLESS LOOP) */}
+      {/* PRODUCTS MARQUEE */}
       <section className="relative overflow-hidden bg-background py-20 md:py-28">
         <div className="absolute inset-0 bg-grid-light opacity-40" />
 
@@ -152,10 +151,9 @@ const Index = () => {
 
         {/* Outer scrolling container */}
         <div className="relative flex w-full overflow-x-hidden select-none">
-          {/* Track wrapper - flex-nowrap prevents vertical stacking, animate-marquee provides movement */}
+          {/* Track wrapper */}
           <div className="flex flex-nowrap w-max gap-4 md:gap-6 animate-marquee">
             
-            {/* Array duplicated to make the continuous loop possible */}
             {[...products, ...products].map((p, i) => (
               <Link
                 key={`${p.id}-${i}`}
@@ -198,7 +196,7 @@ const Index = () => {
             
           </div>
 
-          {/* Left & Right Edge Vignette Gradients for Luxury Fade Look */}
+          {/* Luxury Side Vignette Overlays */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent md:w-24" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent md:w-24" />
         </div>
