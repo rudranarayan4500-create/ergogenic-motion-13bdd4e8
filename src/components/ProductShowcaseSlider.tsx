@@ -17,25 +17,25 @@ type Slide = {
 
 const slides: Slide[] = [
   {
-    productId: "super-whey",
+    productId: "AminoShot",
     image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f579410b-7a2a-4db6-a058-59078cc70e1f.png",
-    eyebrow: "PREMIUM WHEY",
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//8877245a-5baa-4706-8c30-20ae7ab24985%20(1).png",
+    eyebrow: "300g Intra-Workout Amino",
     title: "Built For Lean Muscle",
-    subtitle: "27g of clinically dosed, cold-processed whey per scoop. Zero amino spiking.",
-    cta: "Shop Super Whey",
+    subtitle: "Juicy Fruit Bubblegum • 300g intra-workout amino.",
+    cta: "Shop AminoShot",
     bg: "bg-gradient-to-br from-[#eaf1ff] via-[#f6f9ff] to-white",
     text: "text-[#0a1b3d]",
     accent: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",
   },
   {
-    productId: "ergo-viper-3",
+    productId: "Super Whey",
     image:
       "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-05 at 3.24.31 PM.jpeg",
     eyebrow: "HIGH VOLTAGE",
     title: "Train At Full Throttle",
-    subtitle: "Viper-3 unleashes explosive energy, razor focus and skin-splitting pumps.",
-    cta: "Shop Viper-3",
+    subtitle: "Our premium cold-processed whey protein is designed for rapid absorption and clean muscle synthesis.",
+    cta: "Shop Super Whey",
     bg: "bg-gradient-to-br from-[#0b1220] via-[#0d1a33] to-[#0a0f1f]",
     text: "text-white",
     accent: "!bg-[#1d4ed8] hover:!bg-[#1e40af] !text-white",
@@ -43,7 +43,7 @@ const slides: Slide[] = [
   {
     productId: "ergo-lean-shot",
     image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-05 160514-2.png",
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//fa87092f-ed7a-4f2a-a943-2d5acf883b09.png",
     eyebrow: "THERMOGENIC EDGE",
     title: "Burn Cleaner. Move Sharper.",
     subtitle: "Lean Shot fuels fat metabolism with sustained energy and crystal focus.",
