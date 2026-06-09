@@ -1,20 +1,32 @@
 // User-supplied product imagery (Supabase storage public URLs)
 const U = {
-// Hyper-NO Shot
+  // Hyper-NO Shot
   hyperNoFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg",
   hyperNoBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg",
   hyperNoBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg",
   // Caffeine Shot
   caffeineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg",
-  // Viper 3 Backside
+  // Viper 3
+  viperFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//98737dbc-d1ae-49e4-86bb-ddc9fc9f4565.png",
+  viperFront2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot%202026-06-09%20142302.png",
   viperBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg",
-  // Plasma Mass Real Image
-  plasmaMassFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM.jpeg",
-  
-  // NEW ASSET ROUTING MATRIX DEFINITIONS
+  // Plasma Mass
+  plasmaMassFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg",
+  plasmaMassBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png",
+  // Super Whey
+  superWheyFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg",
+  superWheyBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg",
+  superWheyBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 5.17.38 PM.jpeg",
+  // Lean Shot
+  leanShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg",
+  leanShotFront2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 144649.png",
+  leanShotFront3: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//61f8ac7f-e71f-4b22-a5e5-3c1451a49775.png",
+  // AminoShot
   aminoShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg",
   aminoShotBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 9.04.52 PM.jpeg",
   aminoShotBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.53.29 PM.jpeg",
+  aminoShotDetail: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153307.png",
+  // GlutaShot
   glutaShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg"
 };
 
@@ -36,6 +48,7 @@ export interface Product {
   rating: number;
   reviews: number;
   gallery?: string[];
+  flavours?: string[];
 }
 
 export const products: Product[] = [
@@ -46,8 +59,8 @@ export const products: Product[] = [
     price: 1999,
     mrp: 2499,
     category: "Recovery",
-    image: U.aminoShotFront, 
-    gallery: [U.aminoShotFront, U.aminoShotBack1, U.aminoShotBack2],
+    image: U.aminoShotFront,
+    gallery: [U.aminoShotFront, U.aminoShotBack1, U.aminoShotBack2, U.aminoShotDetail],
     description:
       "AminoShot delivers BCAAs, L-Arginine, L-Glutamine and beetroot powder for muscle recovery, pump support and endurance hydration. Juicy Fruit Bubblegum flavour.",
     benefits: [
@@ -60,6 +73,7 @@ export const products: Product[] = [
     ingredients: ["BCAA", "L-Arginine", "L-Glutamine", "Beetroot Powder", "Sweetener (INS 955)"],
     rating: 4.8,
     reviews: 612,
+    flavours: ["Juicy Fruit Bubblegum"],
   },
   {
     id: "ergo-glutashot",
@@ -85,8 +99,8 @@ export const products: Product[] = [
     price: 2299,
     mrp: 2799,
     category: "Performance",
-    image: U.viperBack, 
-    gallery: [U.viperBack],
+    image: U.viperFront,
+    gallery: [U.viperFront, U.viperFront2, U.viperBack],
     description:
       "Viper-3 is a high voltage pre-workout for explosive energy, focus, pumps and endurance. Blue Raspberry Ice flavour.",
     benefits: [
@@ -99,6 +113,7 @@ export const products: Product[] = [
     ingredients: ["L-Citrulline", "Beta Alanine", "Caffeine Anhydrous", "Taurine", "L-Tyrosine", "L-Theanine"],
     rating: 4.9,
     reviews: 1342,
+    flavours: ["Blue Raspberry Ice"],
   },
 {
     id: "ergo-caffeine-shot",
@@ -133,6 +148,57 @@ export const products: Product[] = [
     ingredients: ["L-Citrulline Malate", "L-Arginine"],
     rating: 4.8,
     reviews: 410,
+  },
+  {
+    id: "ergo-lean-shot",
+    name: "Lean Shot",
+    tagline: "Thermogenic fat burner for clean energy & focus",
+    price: 1799,
+    mrp: 2199,
+    category: "Performance",
+    image: U.leanShotFront,
+    gallery: [U.leanShotFront, U.leanShotFront2, U.leanShotFront3],
+    description:
+      "Lean Shot is a powerful thermogenic formula designed to accelerate fat metabolism, boost energy and sharpen mental focus. Engineered for athletes who train with intensity.",
+    benefits: ["Fat metabolism support", "Sustained clean energy", "Mental focus & clarity", "Thermogenic activation"],
+    howToUse: "1 capsule 30 minutes before training. Do not exceed 2 per day.",
+    ingredients: ["Caffeine Anhydrous", "Green Tea Extract", "L-Carnitine", "Cayenne Pepper Extract", "Black Pepper Extract"],
+    rating: 4.7,
+    reviews: 520,
+  },
+  {
+    id: "ergo-plasma-mass",
+    name: "Plasma Mass",
+    tagline: "High-calorie mass builder for serious size",
+    price: 3499,
+    mrp: 3999,
+    category: "Muscle",
+    image: U.plasmaMassFront,
+    gallery: [U.plasmaMassFront, U.plasmaMassBack],
+    description:
+      "Plasma Mass is a calorie-dense mass gainer formulated for athletes who need serious size and strength. Packed with protein, complex carbs and essential fats for maximum growth.",
+    benefits: ["Rapid mass gains", "High protein & carbs", "Recovery support", "Dense caloric formula"],
+    howToUse: "Mix 2 scoops (100g) with 400ml milk or water, post-workout or between meals.",
+    ingredients: ["Whey Protein Concentrate", "Maltodextrin", "Creatine Monohydrate", "MCT Oil", "Vitamin & Mineral Blend"],
+    rating: 4.8,
+    reviews: 680,
+  },
+  {
+    id: "ergo-super-whey",
+    name: "Super Whey",
+    tagline: "Premium cold-processed whey for lean muscle",
+    price: 4499,
+    mrp: 4999,
+    category: "Muscle",
+    image: U.superWheyFront,
+    gallery: [U.superWheyFront, U.superWheyBack1, U.superWheyBack2],
+    description:
+      "Super Whey delivers 27g of cold-processed, micro-filtered whey protein isolate and concentrate per scoop. Zero amino spiking, lab-tested purity for serious athletes.",
+    benefits: ["27g protein per scoop", "Cold-processed & micro-filtered", "Zero amino spiking", "Fast absorption"],
+    howToUse: "Mix 1 scoop (33g) with 250ml water or milk, post-workout or anytime.",
+    ingredients: ["Whey Protein Isolate", "Whey Protein Concentrate", "Cocoa Powder", "Natural Flavour", "Sweetener (Sucralose)"],
+    rating: 4.9,
+    reviews: 1240,
   },
 ];
 
