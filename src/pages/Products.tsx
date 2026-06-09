@@ -95,9 +95,6 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg"
         ];
-      } else if (normalName.includes("micro power") || normalName.includes("creatin")) {
-        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
-        structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"];
       } else if (normalName.includes("caffeine")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg";
         structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg"];
@@ -157,21 +154,22 @@ const Products = () => {
 
     // 3. SECURE EXCLUSION FILTER: Blocks database row lines + static copies simultaneously
     const excludedProductNames = [
-      "pure creatin", 
+      "pure creatin",
       "pure creatine",
-      "bcaa recover", 
-      "glutamine x", 
+      "micro-power creatine",
+      "bcaa recover",
+      "glutamine x",
       "lean shot",
-      "lean shot thermogenic", 
-      "v-shot multivitamin", 
-      "daily multi", 
-      "myogenetix concentrate", 
+      "lean shot thermogenic",
+      "v-shot multivitamin",
+      "daily multi",
+      "myogenetix concentrate",
       "ginseng extract",
-      "super whey",          
-      "super whey 2kg",      
-      "plasma mass",         
-      "plasma mass 3kg",     
-      "amino shot caplets"   
+      "super whey",
+      "super whey 2kg",
+      "plasma mass",
+      "plasma mass 3kg",
+      "amino shot caplets"
     ];
     
     result = result.filter(p => {

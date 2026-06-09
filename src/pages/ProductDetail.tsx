@@ -40,8 +40,6 @@ const ProductDetail = () => {
 
       if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
-      } else if (normalName.includes("micro power") || normalName.includes("creatin")) {
-        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
       } else if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg";
       } else if (normalName.includes("super whey")) {
@@ -71,20 +69,6 @@ const ProductDetail = () => {
       };
     }
     
-    if (!found && id === "micro-power-creatine") {
-      return {
-        id: "micro-power-creatine",
-        slug: "micro-power-creatine",
-        name: "Micro Power Creatin",
-        category: "Fitness",
-        rating: 4.9,
-        reviews: 1750,
-        price: 1299,
-        mrp: 1599,
-        tagline: "Pure micronized formulation designed to support explosive power and muscle hydration.",
-        image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"
-      };
-    }
     return found;
   }, [id, dbProduct]);
 
@@ -137,9 +121,6 @@ const ProductDetail = () => {
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", kind: "image" }
         ];
       }
-      if (normalName.includes("micro power") || product.id === "micro-power-creatine") {
-        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", kind: "image" }];
-      }
       if (normalName.includes("caffeine short") || product.id === "caffeine-short" || normalName.includes("caffeine")) {
         return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg", kind: "image" }];
       }
@@ -191,9 +172,6 @@ const ProductDetail = () => {
         { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", tag: "Back View B" }
       ];
     }
-    if (normalName.includes("micro power")) {
-      return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", tag: "Product View" }];
-    }
     if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
       return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg", tag: "Product View" }];
     }
@@ -235,12 +213,13 @@ const ProductDetail = () => {
 
   const related = useMemo(() => {
     const hiddenCatalogItems = [
-      "super whey", 
+      "super whey",
       "super whey 2kg",
-      "plasma mass", 
+      "plasma mass",
       "plasma mass 3kg",
-      "amino shot caplets", 
-      "pure creatin", 
+      "amino shot caplets",
+      "micro-power creatine",
+      "pure creatin",
       "pure creatine",
       "lean shot",
       "lean shot thermogenic",

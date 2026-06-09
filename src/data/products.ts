@@ -1,8 +1,6 @@
 // User-supplied product imagery (Supabase storage public URLs)
 const U = {
-  // Micro-Power Creatine
-  creatineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg",
-  // Hyper-NO Shot
+// Hyper-NO Shot
   hyperNoFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg",
   hyperNoBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg",
   hyperNoBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg",
@@ -102,24 +100,7 @@ export const products: Product[] = [
     rating: 4.9,
     reviews: 1342,
   },
-  {
-    id: "ergo-micropower-creatine",
-    name: "Micro-Power Creatine",
-    tagline: "Micronized creatine for strength & power",
-    price: 1499,
-    mrp: 1899,
-    category: "Performance",
-    image: U.creatineFront,
-    gallery: [U.creatineFront],
-    description:
-      "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
-    benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
-    howToUse: "Mix 1 scoop with water or your shake daily.",
-    ingredients: ["Creatine Monohydrate (Micronized)"],
-    rating: 4.9,
-    reviews: 980,
-  },
-  {
+{
     id: "ergo-caffeine-shot",
     name: "Caffeine Shot Caplets",
     tagline: "Energy caplets — push limits",
