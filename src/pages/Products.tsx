@@ -12,8 +12,6 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Products = () => {
   const [params, setParams] = useSearchParams();
-
-  // Admin-controlled products from DB (merged with the static catalog)
   const [dbProducts, setDbProducts] = useState<any[]>([]);
   
   useEffect(() => {
@@ -24,7 +22,6 @@ const Products = () => {
       .then(({ data }) => setDbProducts(data ?? []));
   }, []);
   
-  // Advanced Filter Matrix States
   const initialCat = (params.get("cat") as Category | null) ?? null;
   const [activeCategory, setActiveCategory] = useState<Category | null>(initialCat);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -32,17 +29,8 @@ const Products = () => {
   const [showOutOfStock, setShowOutOfStock] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<string>("featured");
 
-  // Accordion Sidebar Open/Close States
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({
-    search: true,
-    category: true,
-    price: true,
-    gender: false,
-    brand: false,
-    size: false,
-    color: false,
-    activity: false,
-    origin: false,
+    search: true, category: true, price: true, gender: false, brand: false, size: false, color: false, activity: false, origin: false,
   });
 
   const toggleFilterSection = (section: string) => {
@@ -65,29 +53,30 @@ const Products = () => {
 
   // Comprehensive Live Matrix Filtering Logic Engine
   const filteredProducts = useMemo(() => {
-    // DEDUPLICATION MAP: Prevents any product from showing up twice
     const uniqueProductMatrix = new Map<string, any>();
 
-    // 1. Seed static hardcoded catalogue elements 
+    // Normalization helper prevents duplicate IDs (e.g., 'ergo-super-whey' vs 'super-whey')
+    const normalizeKey = (key: string) => String(key).replace(/^ergo-/, '');
+
+    // 1. Seed static hardcoded catalogue elements
     products.forEach((p: any) => {
-      const primaryKey = p.slug || p.id;
+      const primaryKey = normalizeKey(p.slug || p.id);
       uniqueProductMatrix.set(primaryKey, { ...p });
     });
 
-    // 2. Overwrite / Append with live admin DB lines cleanly matching unique slugs
+    // 2. Overwrite / Append with live admin DB lines (DEDUPLICATION VIA MAP)
     dbProducts.forEach((d) => {
       if (!d) return;
-      const liveKey = d.slug || d.id;
+      const liveKey = normalizeKey(d.slug || d.id);
       const rawName = d.name || "";
       const normalName = String(rawName).toLowerCase().trim();
       
-      // Setup base variables safely
       let productFeaturedImage = d.image || "";
       let structuredGallery: string[] = Array.isArray(d.media)
         ? d.media.map((m: any) => m?.url).filter(Boolean)
         : [];
 
-      // STRICT OVERRIDE: Prioritize review photos based on string matching
+      // STRICT OVERRIDE: Image routing matrix based on your provided catalog assets
       if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
         structuredGallery = [
@@ -95,9 +84,12 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg"
         ];
+      } else if (normalName.includes("creatin") || normalName.includes("micro-power") || normalName.includes("micro power")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
+        structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"];
       } else if (normalName.includes("caffeine")) {
-        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg";
-        structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg"];
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg";
+        structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg"];
       } else if (normalName.includes("super whey")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg";
         structuredGallery = [
@@ -132,7 +124,7 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png"
         ];
-      } else if (normalName.includes("lean shot")) {
+      } else if (normalName.includes("lean shot") || normalName.includes("lean-shot")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg";
         structuredGallery = [
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg",
@@ -157,8 +149,6 @@ const Products = () => {
         image: productFeaturedImage,
         description: d.description ?? "",
         benefits: d.benefits ?? [],
-        howToUse: d.how_to_use ?? "",
-        ingredients: d.ingredients ?? [],
         rating: Number(d.rating) || 4.8,
         reviews: Number(d.reviews) || 0,
         gallery: structuredGallery.length > 0 ? structuredGallery : undefined,
@@ -167,66 +157,38 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. SECURE EXCLUSION FILTER: Blocks hidden items
+    // 3. SECURE EXCLUSION FILTER: Blocks hidden junk items (Valid items are removed from this list so they display!)
     const excludedProductNames = [
-      "pure creatin",
-      "pure creatine",
-      "micro-power creatine",
-      "bcaa recover",
-      "glutamine x",
-      "lean shot",
-      "lean shot thermogenic",
-      "v-shot multivitamin",
-      "daily multi",
-      "myogenetix concentrate",
-      "ginseng extract",
-      "super whey",          
-      "super whey 2kg",      
-      "plasma mass",         
-      "plasma mass 3kg",     
-      "amino shot caplets"   
+      "pure creatin", 
+      "pure creatine", 
+      "bcaa recover", 
+      "glutamine x", 
+      "v-shot multivitamin", 
+      "daily multi", 
+      "myogenetix concentrate", 
+      "ginseng extract", 
+      "amino shot caplets",
+      "super whey 2kg",
+      "plasma mass 3kg"
     ];
     
-    result = result.filter(p => {
-      const pName = p?.name ? String(p.name).toLowerCase().trim() : "";
-      return !excludedProductNames.includes(pName);
-    });
+    result = result.filter(p => !excludedProductNames.includes(String(p?.name).toLowerCase().trim()));
 
-    // 4. Text Query Search Filter Validation
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
-      result = result.filter(p => {
-        const nameStr = p?.name ? String(p.name).toLowerCase() : "";
-        const tagStr = p?.tagline ? String(p.tagline).toLowerCase() : "";
-        return nameStr.includes(query) || tagStr.includes(query);
-      });
+      result = result.filter(p => String(p?.name).toLowerCase().includes(query) || String(p?.tagline).toLowerCase().includes(query));
     }
 
-    // 5. Active Category Routing Match Filter
-    if (activeCategory) {
-      result = result.filter((p) => p.category === activeCategory);
-    }
-
-    // 6. Quantitative Price Cap Bounds Filter
+    if (activeCategory) result = result.filter((p) => p.category === activeCategory);
     result = result.filter((p) => p.price <= maxPrice);
+    if (!showOutOfStock) result = result.filter((p) => p.reviews > 5);
 
-    // 7. Availability Simulation Threshold Filter
-    if (!showOutOfStock) {
-      result = result.filter((p) => p.reviews > 5); 
-    }
-
-    // 8. Multi-Mode Sorting Execution Layer
     if (sortBy === "price-low") result.sort((a, b) => a.price - b.price);
     if (sortBy === "price-high") result.sort((a, b) => b.price - a.price);
     if (sortBy === "rating") result.sort((a, b) => b.rating - a.rating);
     
     return result;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
-
-  // Clean layout fallback wrapper logic
-  const visibleDisplayProducts = useMemo(() => {
-    return filteredProducts;
-  }, [filteredProducts]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -239,28 +201,17 @@ const Products = () => {
 
   const sectionContainerVariants: any = {
     hidden: { opacity: 0 },
-    whileInView: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.05 }
-    }
+    whileInView: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.05 } }
   };
 
   const textGlideUpVariants: any = {
     hidden: { opacity: 0, y: 60 },
-    whileInView: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
-    }
+    whileInView: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
   };
 
   const imageScrollZoomVariants: any = {
     hidden: { opacity: 0, scale: 0.85 },
-    whileInView: { 
-      opacity: 1, 
-      scale: 1, 
-      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } 
-    }
+    whileInView: { opacity: 1, scale: 1, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } }
   };
 
   const bannerHeadingCharacters = "THE COMPLETE PRODUCTS".split("");
