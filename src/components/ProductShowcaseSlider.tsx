@@ -16,10 +16,12 @@ type Slide = {
 };
 
 const slides: Slide[] = [
+  const slides: Slide[] = [
   {
-    productId: "AminoShot",
+    // Update productId here
+    productId: "ergo-aminoshot", 
     image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//8877245a-5baa-4706-8c30-20ae7ab24985%20(1).png",
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//7d6b3f9d-61aa-4dd2-baee-3d15bbd2327f.png",
     eyebrow: "300g Intra-Workout Amino",
     title: "Built For Lean Muscle",
     subtitle: "Juicy Fruit Bubblegum • 300g intra-workout amino.",
@@ -28,6 +30,7 @@ const slides: Slide[] = [
     text: "text-[#0a1b3d]",
     accent: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",
   },
+
   {
     productId: "Super Whey",
     image:
