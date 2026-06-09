@@ -1,7 +1,4 @@
-"use client";
-
-import Image from "next/image";
-import Link from "next/link";
+import React from "react";
 
 type Slide = {
   productId: string;
@@ -63,7 +60,7 @@ const slides: Slide[] = [
   },
 ];
 
-export default function HeroSlider() {
+export default function ProductShowcaseSlider() {
   return (
     <section className="w-full py-10">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 md:grid-cols-3">
@@ -86,24 +83,25 @@ export default function HeroSlider() {
                 {slide.subtitle}
               </p>
 
-              <Link href={slide.href}>
+              <a
+                href={slide.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <button
                   className={`mt-8 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 ${slide.accent}`}
                 >
                   {slide.cta}
                 </button>
-              </Link>
+              </a>
             </div>
 
             {/* Product Image */}
             <div className="relative mt-10 flex items-center justify-center">
-              <Image
+              <img
                 src={slide.image}
                 alt={slide.title}
-                width={500}
-                height={500}
                 className="h-auto w-full max-w-sm object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
-                priority
               />
             </div>
 
