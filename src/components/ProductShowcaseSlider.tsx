@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 type Slide = {
   productId: string;
@@ -7,7 +8,6 @@ type Slide = {
   title: string;
   subtitle: string;
   cta: string;
-  href: string;
   bg: string;
   text: string;
   accent: string;
@@ -16,45 +16,33 @@ type Slide = {
 const slides: Slide[] = [
   {
     productId: "ergo-aminoshot",
-    image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//7d6b3f9d-61aa-4dd2-baee-3d15bbd2327f.png",
+    image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//7d6b3f9d-61aa-4dd2-baee-3d15bbd2327f.png",
     eyebrow: "300G INTRA-WORKOUT AMINO",
     title: "Built For Lean Muscle",
-    subtitle:
-      "Juicy Fruit Bubblegum • 300g intra-workout amino for endurance, hydration, and recovery.",
+    subtitle: "Juicy Fruit Bubblegum • 300g intra-workout amino for endurance, hydration, and recovery.",
     cta: "View AminoShot",
-    href:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//7d6b3f9d-61aa-4dd2-baee-3d15bbd2327f.png",
     bg: "bg-gradient-to-br from-[#eaf1ff] via-[#f6f9ff] to-white",
     text: "text-[#0a1b3d]",
     accent: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",
   },
-
   {
     productId: "super-whey",
-    image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos/WhatsApp%20Image%202026-06-05%20at%203.24.31%20PM.jpeg",
+    image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos/WhatsApp%20Image%202026-06-05%20at%203.24.31%20PM.jpeg",
     eyebrow: "HIGH VOLTAGE PERFORMANCE",
     title: "Train At Full Throttle",
-    subtitle:
-      "Premium cold-processed whey protein engineered for rapid absorption and clean muscle growth.",
+    subtitle: "Premium cold-processed whey protein engineered for rapid absorption and clean muscle growth.",
     cta: "Shop Super Whey",
-    href: "https://ergogenicprotin.vercel.app/products/super-whey",
     bg: "bg-gradient-to-br from-[#0b1220] via-[#0d1a33] to-[#0a0f1f]",
     text: "text-white",
-    accent: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",
+    accent: "bg-[#1d4ed8] hover:!bg-[#1e40af] !text-white",
   },
-
   {
     productId: "ergo-lean-shot",
-    image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos/fa87092f-ed7a-4f2a-a943-2d5acf883b09.png",
+    image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos/fa87092f-ed7a-4f2a-a943-2d5acf883b09.png",
     eyebrow: "THERMOGENIC EDGE",
     title: "Burn Cleaner. Move Sharper.",
-    subtitle:
-      "Lean Shot supports fat metabolism with smooth energy, sharper focus, and clean performance.",
+    subtitle: "Lean Shot supports fat metabolism with smooth energy, sharper focus, and clean performance.",
     cta: "Shop Lean Shot",
-    href: "https://ergogenicprotin.vercel.app/products/ergo-lean-shot",
     bg: "bg-gradient-to-br from-white via-[#f1f5ff] to-[#dbe7ff]",
     text: "text-[#0a1b3d]",
     accent: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",
@@ -84,32 +72,24 @@ export default function ProductShowcaseSlider() {
                 {slide.subtitle}
               </p>
 
-              <a
-                href={slide.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to={`/products/${slide.productId}`}>
                 <button
                   className={`mt-8 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 ${slide.accent}`}
                 >
                   {slide.cta}
                 </button>
-              </a>
+              </Link>
             </div>
 
             {/* Clickable Product Image */}
             <div className="relative mt-10 flex items-center justify-center">
-              <a
-                href={slide.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to={`/products/${slide.productId}`}>
                 <img
                   src={slide.image}
                   alt={slide.title}
                   className="h-auto w-full max-w-sm cursor-pointer object-contain transition-transform duration-300 hover:scale-105 drop-shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Blue Glow */}
