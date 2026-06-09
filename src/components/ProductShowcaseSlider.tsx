@@ -43,7 +43,7 @@ const slides: Slide[] = [
   {
     productId: "ergo-lean-shot",
     image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-05 160514-2.png",
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//fa87092f-ed7a-4f2a-a943-2d5acf883b09.png",
     eyebrow: "THERMOGENIC EDGE",
     title: "Burn Cleaner. Move Sharper.",
     subtitle: "Lean Shot fuels fat metabolism with sustained energy and crystal focus.",
