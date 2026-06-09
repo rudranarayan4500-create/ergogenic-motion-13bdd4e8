@@ -17,13 +17,14 @@ const slides: Slide[] = [
   {
     productId: "ergo-aminoshot",
     image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos/7d6b3f9d-61aa-4dd2-baee-3d15bbd2327f.png",
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//7d6b3f9d-61aa-4dd2-baee-3d15bbd2327f.png",
     eyebrow: "300G INTRA-WORKOUT AMINO",
     title: "Built For Lean Muscle",
     subtitle:
       "Juicy Fruit Bubblegum • 300g intra-workout amino for endurance, hydration, and recovery.",
-    cta: "Shop AminoShot",
-    href: "https://ergogenicprotin.vercel.app/products/ergo-aminoshot",
+    cta: "View AminoShot",
+    href:
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//7d6b3f9d-61aa-4dd2-baee-3d15bbd2327f.png",
     bg: "bg-gradient-to-br from-[#eaf1ff] via-[#f6f9ff] to-white",
     text: "text-[#0a1b3d]",
     accent: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",
@@ -67,7 +68,7 @@ export default function ProductShowcaseSlider() {
         {slides.map((slide) => (
           <div
             key={slide.productId}
-            className={`relative overflow-hidden rounded-3xl border border-white/10 p-8 shadow-2xl ${slide.bg}`}
+            className={`relative overflow-hidden rounded-3xl border border-white/10 p-8 shadow-2xl transition-all duration-300 hover:scale-[1.02] ${slide.bg}`}
           >
             {/* Content */}
             <div className={`relative z-10 ${slide.text}`}>
@@ -96,16 +97,22 @@ export default function ProductShowcaseSlider() {
               </a>
             </div>
 
-            {/* Product Image */}
+            {/* Clickable Product Image */}
             <div className="relative mt-10 flex items-center justify-center">
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="h-auto w-full max-w-sm object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
-              />
+              <a
+                href={slide.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="h-auto w-full max-w-sm cursor-pointer object-contain transition-transform duration-300 hover:scale-105 drop-shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
+                />
+              </a>
             </div>
 
-            {/* Glow Effect */}
+            {/* Blue Glow */}
             <div className="absolute -bottom-24 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-blue-500/20 blur-3xl" />
           </div>
         ))}
