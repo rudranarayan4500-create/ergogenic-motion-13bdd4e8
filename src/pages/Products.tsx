@@ -55,7 +55,7 @@ const Products = () => {
   const filteredProducts = useMemo(() => {
     const uniqueProductMatrix = new Map<string, any>();
 
-    // Normalization helper prevents duplicate IDs (e.g., 'ergo-super-whey' vs 'super-whey')
+    // Normalization helper prevents duplicate IDs
     const normalizeKey = (key: string) => String(key).replace(/^ergo-/, '');
 
     // 1. Seed static hardcoded catalogue elements
@@ -157,7 +157,7 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. SECURE EXCLUSION FILTER: Blocks hidden junk items (Valid items are removed from this list so they display!)
+    // 3. SECURE EXCLUSION FILTER: Valid items removed so they display properly
     const excludedProductNames = [
       "pure creatin", 
       "pure creatine", 
@@ -167,9 +167,7 @@ const Products = () => {
       "daily multi", 
       "myogenetix concentrate", 
       "ginseng extract", 
-      "amino shot caplets",
-      "super whey 2kg",
-      "plasma mass 3kg"
+      "amino shot caplets"
     ];
     
     result = result.filter(p => !excludedProductNames.includes(String(p?.name).toLowerCase().trim()));
@@ -189,6 +187,11 @@ const Products = () => {
     
     return result;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
+
+  // THIS WAS MISSING AND CAUSING THE CRASH! Clean layout fallback wrapper logic.
+  const visibleDisplayProducts = useMemo(() => {
+    return filteredProducts;
+  }, [filteredProducts]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
