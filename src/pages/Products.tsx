@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { 
   ChevronRight, Star, SlidersHorizontal, RotateCcw, Search,
   Activity, ShieldCheck, ArrowDown, ChevronDown, ChevronUp 
@@ -14,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 const Products = () => {
   const [params, setParams] = useSearchParams();
 
-  
+  // Admin-controlled products from DB (merged with the static catalog)
   const [dbProducts, setDbProducts] = useState<any[]>([]);
   
   useEffect(() => {
@@ -66,6 +65,7 @@ const Products = () => {
 
   // Comprehensive Live Matrix Filtering Logic Engine
   const filteredProducts = useMemo(() => {
+    // DEDUPLICATION MAP: Prevents any product from showing up twice
     const uniqueProductMatrix = new Map<string, any>();
 
     // 1. Seed static hardcoded catalogue elements 
@@ -167,19 +167,24 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. SECURE EXCLUSION FILTER: Blocks database row lines + static copies simultaneously
+    // 3. SECURE EXCLUSION FILTER: Blocks hidden items
     const excludedProductNames = [
       "pure creatin",
       "pure creatine",
       "micro-power creatine",
       "bcaa recover",
       "glutamine x",
+      "lean shot",
       "lean shot thermogenic",
       "v-shot multivitamin",
       "daily multi",
       "myogenetix concentrate",
       "ginseng extract",
-      "amino shot caplets"
+      "super whey",          
+      "super whey 2kg",      
+      "plasma mass",         
+      "plasma mass 3kg",     
+      "amino shot caplets"   
     ];
     
     result = result.filter(p => {
@@ -261,11 +266,12 @@ const Products = () => {
   const bannerHeadingCharacters = "THE COMPLETE PRODUCTS".split("");
 
   return (
-    <div className="bg-background text-foreground min-h-screen selection:bg-slate-950 selection:text-white overflow-x-hidden antialiased">
+    <div className="bg-white text-slate-900 min-h-screen selection:bg-slate-950 selection:text-white overflow-x-hidden antialiased">
       
       {/* ==================== SECTION 1: HERO BANNER ==================== */}
-      <header className="py-24 md:py-32 bg-background border-b border-border relative overflow-hidden flex flex-col items-center justify-center text-center px-4">
-        <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-slate-100 rounded-full blur-[140px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
+      <header className="py-24 md:py-32 bg-white border-b border-slate-200 relative overflow-hidden flex flex-col items-center justify-center text-center px-4">
+        <div className="absolute inset-0 bg-grid-light opacity-30 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-blue-50/50 rounded-full blur-[140px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
 
         <div className="max-w-4xl mx-auto space-y-6 relative z-10">
           <motion.span 
@@ -315,8 +321,22 @@ const Products = () => {
         </div>
       </header>
 
-      {/* ==================== SECTION 2: SIDEBAR LAYOUT ==================== */}
-      <section className="py-16 bg-background">
+      {/* ==================== SECTION 2: LAB GIF BANNER ==================== */}
+      <section className="w-full bg-slate-50 border-b border-slate-200 overflow-hidden py-16 md:py-24">
+        <div className="container max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
+          <div className="lg:col-span-5 space-y-4">
+            <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-3 py-1 rounded border border-blue-200/50 inline-block">LAB ORIENTED FORMULAS</span>
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">PRECISE BATCH DISPENSING</h2>
+            <p className="text-sm md:text-base font-medium text-slate-500 leading-relaxed">Every scoop goes through strict packaging verification intervals. Witness the high-speed deployment track built around clinical purity parameters and micro-filtered consistency benchmarks.</p>
+          </div>
+          <div className="lg:col-span-7 rounded-3xl border border-slate-200 overflow-hidden shadow-sm bg-white p-2.5">
+            <img src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ezgif-131eb69db341388e (1).gif" alt="Batch Processing" className="w-full h-auto max-h-[400px] object-cover rounded-2xl" loading="lazy" />
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== SECTION 3: SIDEBAR LAYOUT ==================== */}
+      <section className="py-16 bg-white">
         <div className="container max-w-[1600px] mx-auto px-4">
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 items-start">
             
@@ -352,7 +372,7 @@ const Products = () => {
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           placeholder="Search products..."
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl h-11 pl-10 pr-4 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 transition-colors"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl h-11 pl-10 pr-4 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 transition-colors shadow-inner"
                         />
                         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                       </div>
@@ -455,7 +475,7 @@ const Products = () => {
                         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                         className="group flex flex-col text-left relative"
                       >
-                        <div className="w-full aspect-square relative bg-slate-50 rounded-2xl mb-3.5 flex items-center justify-center overflow-hidden border border-slate-200">
+                        <div className="w-full aspect-square relative bg-slate-50 rounded-2xl mb-3.5 flex items-center justify-center overflow-hidden border border-slate-200 shadow-sm">
                           <Link to={`/products/${dynamicSlugRoute}`} className="w-full h-full block cursor-pointer">
                             <img
                               src={p.image}
@@ -519,7 +539,7 @@ const Products = () => {
         </div>
       </section>
 
-      {/* ==================== SECTION 3: FEATURE HIGHLIGHTS ==================== */}
+      {/* ==================== SECTION 4: FEATURE HIGHLIGHTS ==================== */}
       <section className="py-28 bg-slate-50/50 border-t border-slate-200 relative">
         <div className="absolute top-1/2 left-1/2 w-[550px] h-[550px] bg-slate-100 rounded-full blur-[150px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
         
@@ -595,7 +615,7 @@ const Products = () => {
         </div>
       </section>
 
-      {/* ==================== SECTION 4: TRANSPARENCY LEDGER ==================== */}
+      {/* ==================== SECTION 5: TRANSPARENCY LEDGER ==================== */}
       <section className="py-24 bg-slate-50/50 border-t border-slate-200">
         <div className="container max-w-5xl mx-auto px-4">
           <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 grid md:grid-cols-[1fr_2px_1fr] gap-8 items-center shadow-sm">
