@@ -88,9 +88,9 @@ const Products = () => {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
         structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"];
       } else if (normalName.includes("caffeine")) {
-        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg";
-        structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg"];
-      } else if (normalName.includes("super whey")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg";
+        structuredGallery = ["https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg"];
+      } else if (normalName.includes("super whey") && !normalName.includes("2kg")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg";
         structuredGallery = [
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg",
@@ -118,13 +118,13 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg"
         ];
-      } else if (normalName.includes("plasma")) {
+      } else if (normalName.includes("plasma") && !normalName.includes("3kg")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg";
         structuredGallery = [
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png"
         ];
-      } else if (normalName.includes("lean shot") || normalName.includes("lean-shot")) {
+      } else if ((normalName.includes("lean shot") || normalName.includes("lean-shot")) && !normalName.includes("thermogenic")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg";
         structuredGallery = [
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg",
@@ -157,7 +157,7 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. SECURE EXCLUSION FILTER: Valid items removed so they display properly
+    // 3. SECURE EXCLUSION FILTER: Blocks hidden junk items and old DB variants
     const excludedProductNames = [
       "pure creatin", 
       "pure creatine", 
@@ -167,7 +167,10 @@ const Products = () => {
       "daily multi", 
       "myogenetix concentrate", 
       "ginseng extract", 
-      "amino shot caplets"
+      "amino shot caplets",
+      "lean shot thermogenic", // Added to exclude the old variant
+      "super whey 2kg",        // Added to exclude the old variant
+      "plasma mass 3kg"        // Added to exclude the old variant
     ];
     
     result = result.filter(p => !excludedProductNames.includes(String(p?.name).toLowerCase().trim()));
@@ -188,7 +191,6 @@ const Products = () => {
     return result;
   }, [activeCategory, searchQuery, maxPrice, showOutOfStock, sortBy, dbProducts]);
 
-  // THIS WAS MISSING AND CAUSING THE CRASH! Clean layout fallback wrapper logic.
   const visibleDisplayProducts = useMemo(() => {
     return filteredProducts;
   }, [filteredProducts]);
