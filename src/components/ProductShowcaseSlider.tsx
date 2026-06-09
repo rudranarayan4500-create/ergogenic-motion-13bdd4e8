@@ -19,7 +19,7 @@ const slides: Slide[] = [
   {
     productId: "super-whey",
     image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f579410b-7a2a-4db6-a058-59078cc70e1f.png",
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-05 at 3.24.31 PM.jpeg",
     eyebrow: "PREMIUM WHEY",
     title: "Built For Lean Muscle",
     subtitle: "27g of clinically dosed, cold-processed whey per scoop. Zero amino spiking.",
@@ -31,7 +31,7 @@ const slides: Slide[] = [
   {
     productId: "ergo-viper-3",
     image:
-      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-05 at 3.24.31 PM.jpeg",
+      "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 142302.png",
     eyebrow: "HIGH VOLTAGE",
     title: "Train At Full Throttle",
     subtitle: "Viper-3 unleashes explosive energy, razor focus and skin-splitting pumps.",
