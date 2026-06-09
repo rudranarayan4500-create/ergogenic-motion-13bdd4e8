@@ -12,8 +12,6 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Products = () => {
   const [params, setParams] = useSearchParams();
-
-  // Admin-controlled products from DB (merged with the static catalog)
   const [dbProducts, setDbProducts] = useState<any[]>([]);
   
   useEffect(() => {
@@ -24,7 +22,6 @@ const Products = () => {
       .then(({ data }) => setDbProducts(data ?? []));
   }, []);
   
-  // Advanced Filter Matrix States
   const initialCat = (params.get("cat") as Category | null) ?? null;
   const [activeCategory, setActiveCategory] = useState<Category | null>(initialCat);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -32,7 +29,6 @@ const Products = () => {
   const [showOutOfStock, setShowOutOfStock] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<string>("featured");
 
-  // Accordion Sidebar Open/Close States
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({
     search: true, category: true, price: true, gender: false, brand: false, size: false, color: false, activity: false, origin: false,
   });
@@ -57,7 +53,6 @@ const Products = () => {
 
   // Comprehensive Live Matrix Filtering Logic Engine
   const filteredProducts = useMemo(() => {
-    // DEDUPLICATION MAP: Prevents any product from showing up twice
     const uniqueProductMatrix = new Map<string, any>();
 
     // Normalization helper prevents duplicate IDs
@@ -76,7 +71,6 @@ const Products = () => {
       const rawName = d.name || "";
       const normalName = String(rawName).toLowerCase().trim();
       
-      // Grab fallback to preserve strict routing IDs and prevent ProductDetail crashes
       const fallbackObj = uniqueProductMatrix.get(liveKey);
 
       let productFeaturedImage = d.image || "";
@@ -84,7 +78,7 @@ const Products = () => {
         ? d.media.map((m: any) => m?.url).filter(Boolean)
         : [];
 
-      // STRICT OVERRIDE: Image routing matrix based on your provided catalog assets
+      // STRICT OVERRIDE: Image routing matrix
       if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
         structuredGallery = [
@@ -146,8 +140,8 @@ const Products = () => {
       }
 
       uniqueProductMatrix.set(liveKey, {
-        id: fallbackObj?.id || d.id || d.slug, // SECURES ROUTER ID SO DETAIL PAGE OPENS
-        slug: fallbackObj?.slug || d.slug,
+        id: fallbackObj?.id || d.id || d.slug, 
+        slug: fallbackObj?.slug || fallbackObj?.id || d.slug, // FORCE SLUG TO MATCH LOCAL ID
         name: d.name,
         tagline: d.tagline ?? fallbackObj?.tagline ?? "",
         price: Number(d.price) || fallbackObj?.price || 0,
@@ -423,7 +417,8 @@ const Products = () => {
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
                 <AnimatePresence mode="popLayout">
                   {visibleDisplayProducts.map((p, index) => {
-                    const dynamicSlugRoute = p.slug || p.id;
+                    // CRITICAL FIX: Ensure dynamicSlugRoute ALWAYS prioritizes the normalized local static ID for routing
+                    const dynamicSlugRoute = p.id || p.slug;
                     const isNewArrival = index === 0;
                     const isPriceDrop = index === 2;
 
