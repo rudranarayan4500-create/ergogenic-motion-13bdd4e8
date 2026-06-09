@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star } from "lucide-react";
+import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star, ShieldCheck, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
-import { ProductGallery, type MediaItem } from "@/components/ProductGallery";
+import { type MediaItem } from "@/components/ProductGallery";
 import { supabase } from "@/integrations/supabase/client";
-import { throttle } from "@/lib/utils";
+import { throttle, cn } from "@/lib/utils";
 import { addToCart } from "@/lib/cart";
 
 interface ScrollPosition {
@@ -22,6 +22,15 @@ const ProductDetail = () => {
   const [dbProduct, setDbProduct] = useState<any | null>(null);
   const [, setScrollPositions] = useState<{ [key: number]: ScrollPosition }>({});
   const scrollHandlerRef = useRef<(() => void) | null>(null);
+  
+  // NEW: Track the currently active image index for the new Thumbnail Gallery layout
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  // Reset active image when navigating to a new product
+  useEffect(() => {
+    setActiveImageIndex(0);
+    setQty(1);
+  }, [id]);
 
   const product = useMemo(() => {
     const found = products.find((p) => p.id === id || p.slug === id);
@@ -40,12 +49,10 @@ const ProductDetail = () => {
 
       if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg";
+      } else if (normalName.includes("micro power") || normalName.includes("creatin")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg";
       } else if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
-        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg";
-      } else if (normalName.includes("viper 3") || normalName.includes("viper-3")) {
-        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//98737dbc-d1ae-49e4-86bb-ddc9fc9f4565.png";
-      } else if (normalName.includes("lean shot")) {
-        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg";
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg";
       } else if (normalName.includes("super whey")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg";
       } else if (normalName.includes("plasma")) {
@@ -54,6 +61,8 @@ const ProductDetail = () => {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg";
       } else if (normalName.includes("aminoshot") || normalName.includes("amino shot")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg";
+      } else if (normalName.includes("lean shot") || normalName.includes("lean-shot")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg";
       }
 
       return {
@@ -73,6 +82,14 @@ const ProductDetail = () => {
       };
     }
     
+    if (!found && id === "micro-power-creatine") {
+      return {
+        id: "micro-power-creatine", slug: "micro-power-creatine", name: "Micro Power Creatin", category: "Fitness",
+        rating: 4.9, reviews: 1750, price: 1299, mrp: 1599,
+        tagline: "Pure micronized formulation designed to support explosive power and muscle hydration.",
+        image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"
+      };
+    }
     return found;
   }, [id, dbProduct]);
 
@@ -93,23 +110,12 @@ const ProductDetail = () => {
         const rect = el.getBoundingClientRect();
         const index = parseInt(el.getAttribute("data-scroll-index") || "0", 10);
         const visibility = Math.max(0, Math.min(1, 1 - rect.top / window.innerHeight));
-        setScrollPositions((prev) => ({
-          ...prev,
-          [index]: {
-            scale: 0.95 + visibility * 0.1,
-            translateY: -visibility * 20,
-          },
-        }));
+        setScrollPositions((prev) => ({ ...prev, [index]: { scale: 0.95 + visibility * 0.1, translateY: -visibility * 20 } }));
       });
     };
-
     scrollHandlerRef.current = throttle(handleScroll, 30);
     window.addEventListener("scroll", scrollHandlerRef.current);
-    return () => {
-      if (scrollHandlerRef.current) {
-        window.removeEventListener("scroll", scrollHandlerRef.current);
-      }
-    };
+    return () => { if (scrollHandlerRef.current) window.removeEventListener("scroll", scrollHandlerRef.current); };
   }, []);
 
   const gallery: MediaItem[] = useMemo(() => {
@@ -118,35 +124,31 @@ const ProductDetail = () => {
     if (product) {
       const normalName = (product.name || "").toLowerCase().trim();
       
-      if (normalName.includes("hyper no short") || product.id === "hyper-no-short" || normalName.includes("hyper-no")) {
+      if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", kind: "image" }
         ];
       }
-      if (normalName.includes("caffeine short") || product.id === "caffeine-short" || normalName.includes("caffeine")) {
-        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg", kind: "image" }];
+      if (normalName.includes("micro power") || product.id === "micro-power-creatine") {
+        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", kind: "image" }];
       }
-      if (normalName.includes("viper 3") || product.id === "viper-3" || normalName.includes("viper-3")) {
-        return [
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//98737dbc-d1ae-49e4-86bb-ddc9fc9f4565.png", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot%202026-06-09%20142302.png", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg", kind: "image" }
-        ];
-      }
-      if (normalName.includes("lean shot")) {
-        return [
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 144649.png", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//61f8ac7f-e71f-4b22-a5e5-3c1451a49775.png", kind: "image" }
-        ];
+      if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
+        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.44.38 PM.jpeg", kind: "image" }];
       }
       if (normalName.includes("super whey")) {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 5.17.38 PM.jpeg", kind: "image" }
+        ];
+      }
+      if (normalName.includes("viper 3") || normalName.includes("viper-3")) {
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//98737dbc-d1ae-49e4-86bb-ddc9fc9f4565.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot%202026-06-09%20142302.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg", kind: "image" }
         ];
       }
       if (normalName.includes("plasma")) {
@@ -169,6 +171,13 @@ const ProductDetail = () => {
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg", kind: "image" }
         ];
       }
+      if (normalName.includes("lean shot") || normalName.includes("lean-shot")) {
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 144649.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//61f8ac7f-e71f-4b22-a5e5-3c1451a49775.png", kind: "image" }
+        ];
+      }
     }
     
     if (!product) return [];
@@ -179,84 +188,17 @@ const ProductDetail = () => {
 
   const reviewVideos = useMemo(() => gallery.filter(m => m?.kind === "video"), [gallery]);
 
-  const productSnapshots = useMemo(() => {
-    if (!product) return [];
-    
-    const normalName = (product.name || "").toLowerCase().trim();
-    
-    if (normalName.includes("hyper no short") || normalName.includes("hyper-no")) {
-      return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg", tag: "Front View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg", tag: "Back View A" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", tag: "Back View B" }
-      ];
-    }
-    if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
-      return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg", tag: "Product View" }];
-    }
-    if (normalName.includes("viper 3") || normalName.includes("viper-3")) {
-      return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//98737dbc-d1ae-49e4-86bb-ddc9fc9f4565.png", tag: "Front View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot%202026-06-09%20142302.png", tag: "Front View 2" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg", tag: "Back View" }
-      ];
-    }
-    if (normalName.includes("lean shot")) {
-      return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg", tag: "Front View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 144649.png", tag: "Front View 2" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//61f8ac7f-e71f-4b22-a5e5-3c1451a49775.png", tag: "Front View 3" }
-      ];
-    }
-    if (normalName.includes("super whey")) {
-      return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg", tag: "Front View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg", tag: "Back View A" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 5.17.38 PM.jpeg", tag: "Back View B" }
-      ];
-    }
-    if (normalName.includes("plasma")) {
-      return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg", tag: "Front View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png", tag: "Back View" }
-      ];
-    }
-    if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
-      return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg", tag: "Front View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg", tag: "Back View" }
-      ];
-    }
-    if (normalName.includes("aminoshot") || normalName.includes("amino shot")) {
-      return [
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg", tag: "Front View" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 9.04.52 PM.jpeg", tag: "Back View A" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.53.29 PM.jpeg", tag: "Back View B" },
-        { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153307.png", tag: "Detail View" }
-      ];
-    }
-
-    const g = (product as any).gallery as string[] | undefined;
-    if (g && g.length > 1) {
-      return g.slice(0, 3).map((url, i) => ({ url, tag: ["Product Banner", "Front View", "Nutritional View"][i] || "Product View" }));
-    }
-    return [{ url: product.image, tag: "Product View" }];
-  }, [product]);
+  // Make sure we never index out of bounds
+  const currentMedia = gallery[activeImageIndex] || gallery[0] || { url: product?.image, kind: 'image' };
 
   if (!product) return <Navigate to="/products" replace />;
 
   const related = useMemo(() => {
     const hiddenCatalogItems = [
-      "amino shot caplets",
-      "micro-power creatine",
-      "pure creatin",
-      "pure creatine",
-      "bcaa recover",
-      "glutamine x",
-      "v-shot multivitamin",
-      "daily multi",
-      "myogenetix concentrate",
-      "ginseng extract"
+      "super whey 2kg", "plasma mass 3kg", "amino shot caplets", 
+      "pure creatin", "pure creatine", "lean shot thermogenic",
+      "bcaa recover", "glutamine x", "v-shot multivitamin", 
+      "daily multi", "myogenetix concentrate", "ginseng extract"
     ];
     return products.filter((p) => {
       const isSelf = p.id === product.id;
@@ -266,10 +208,7 @@ const ProductDetail = () => {
   }, [product.id]);
 
   const add = () => {
-    addToCart(
-      { slug: (product as any).slug || product.id, name: product.name, price: product.price, image: product.image },
-      qty
-    );
+    addToCart({ slug: (product as any).slug || product.id, name: product.name, price: product.price, image: product.image }, qty);
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
   };
 
@@ -280,189 +219,172 @@ const ProductDetail = () => {
   return (
     <div className="bg-[#FFFFFF] text-slate-900 min-h-screen antialiased selection:bg-slate-900 selection:text-white">
       
-      {/* Hero Section */}
-      <section className="py-8 md:py-16 border-b border-slate-200 relative overflow-hidden bg-white">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-        
-        <div className="container max-w-6xl mx-auto px-4 relative z-10">
-          
-          {/* Breadcrumbs Navigation */}
-          <nav className="text-xs mb-8 flex items-center gap-1.5 uppercase tracking-[0.2em] font-bold text-slate-400">
+      {/* Dynamic Breadcrumbs */}
+      <div className="bg-slate-50 border-b border-slate-200 py-4">
+        <div className="container max-w-7xl mx-auto px-4">
+          <nav className="text-[10px] flex items-center gap-1.5 uppercase tracking-widest font-black text-slate-400">
             <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
             <ChevronRight className="h-3 w-3 text-slate-300" />
             <Link to="/products" className="hover:text-slate-900 transition-colors">Products</Link>
             <ChevronRight className="h-3 w-3 text-slate-300" />
-            <span className="text-slate-600">{product.name}</span>
+            <span className="text-slate-900">{product.name}</span>
           </nav>
+        </div>
+      </div>
 
-          <div className="flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-16">
+      {/* Hero Product Section - High End E-commerce Layout */}
+      <section className="py-12 md:py-16 relative overflow-hidden bg-white">
+        <div className="container max-w-7xl mx-auto px-4 relative z-10">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
             
-            {/* Image Frame Canvas — Left Side */}
-            <div className="w-full lg:w-5/12 order-2 lg:order-1">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 relative group overflow-hidden shadow-sm min-h-[400px] flex items-center justify-center">
-                <div className="w-full h-full object-contain max-h-[450px]">
-                  <ProductGallery items={gallery} alt={product.name} />
-                </div>
+            {/* IMAGE GALLERY CANVAS — Left Side */}
+            <div className="w-full lg:w-1/2 order-2 lg:order-1 space-y-4">
+              
+              {/* Main Image Spotlight */}
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 sm:p-10 relative overflow-hidden shadow-sm flex items-center justify-center aspect-[4/5] sm:aspect-square">
+                {currentMedia.kind === "video" ? (
+                  <video src={currentMedia.url} autoPlay loop muted playsInline className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  <img
+                    src={currentMedia.url}
+                    alt={product.name}
+                    className="w-full h-full object-contain mix-blend-multiply transition-all duration-500 hover:scale-[1.02]"
+                  />
+                )}
               </div>
+
+              {/* Thumbnail Grid Below Main Image (Like Reference Image) */}
+              {gallery.length > 1 && (
+                <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 pt-2">
+                  {gallery.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={cn(
+                        "aspect-square rounded-2xl border flex items-center justify-center p-2 transition-all duration-200 overflow-hidden bg-slate-50",
+                        activeImageIndex === idx 
+                          ? "border-slate-900 shadow-md ring-1 ring-slate-900 opacity-100" 
+                          : "border-slate-200 hover:border-slate-400 opacity-60 hover:opacity-100"
+                      )}
+                    >
+                      {item.kind === "video" ? (
+                        <video src={item.url} className="w-full h-full object-cover rounded-lg" />
+                      ) : (
+                        <img src={item.url} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-contain mix-blend-multiply" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Product Meta Details — Right Side */}
-            <div className="w-full lg:w-7/12 order-1 lg:order-2 space-y-6">
-              <div className="space-y-3">
-                <span className="text-xs tracking-[0.25em] uppercase font-black px-3 py-1 bg-slate-100 border border-slate-200 text-slate-800 rounded inline-block">
-                  {product.category}
-                </span>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-none text-slate-900">
+            {/* PRODUCT META DETAILS — Right Side (Sticky Layout) */}
+            <div className="w-full lg:w-1/2 order-1 lg:order-2 lg:pl-6 space-y-8 lg:sticky lg:top-28 self-start">
+              
+              <div className="space-y-4 border-b border-slate-100 pb-8">
+                {/* Rating Badge */}
+                <div className="flex items-center gap-1.5 text-xs">
+                  <div className="flex items-center gap-0.5 px-2 py-0.5 rounded border bg-amber-50 border-amber-200 shadow-sm">
+                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                  </div>
+                  <span className="font-mono font-bold text-slate-500">{product.reviews} Reviews</span>
+                </div>
+
+                {/* Title */}
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-[0.95] text-slate-900">
                   {product.name}
                 </h1>
-              </div>
-
-              <div className="flex items-center gap-3 text-sm">
-                <div className="flex items-center gap-0.5 px-2.5 py-1 rounded-lg border bg-white border-slate-200 shadow-sm">
-                  <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
-                  <span className="ml-1.5 font-mono font-black text-slate-900">{product.rating}</span>
+                
+                {/* Pricing Blocks */}
+                <div className="flex items-baseline gap-4 pt-2">
+                  <span className="text-4xl font-black tracking-tight text-slate-900 font-mono">
+                    ₹{product.price.toLocaleString()}
+                  </span>
+                  <span className="text-lg line-through font-bold text-slate-400 font-mono">
+                    ₹{product.mrp.toLocaleString()}
+                  </span>
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider border text-emerald-700 bg-emerald-50 border-emerald-200 transform -translate-y-1">
+                    Save {product.mrp > product.price ? Math.round((1 - product.price / product.mrp) * 100) : 0}%
+                  </span>
                 </div>
+                <p className="text-xs text-slate-400 font-medium">Taxes included. Free shipping available.</p>
               </div>
 
-              <p className="text-base md:text-lg leading-relaxed text-slate-600 font-medium max-w-2xl">
-                {product.tagline}
-              </p>
+              {/* Clinical Benefits Checklist (Like Reference Image) */}
+              <div className="space-y-3 pt-2">
+                <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-lg mb-4">{product.tagline} {product.description}</p>
+                {productBenefits.slice(0, 4).map((benefit, i) => (
+                  <div key={i} className="flex items-start gap-2.5">
+                    <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" strokeWidth={3} />
+                    <span className="text-sm font-bold text-slate-800">{benefit}</span>
+                  </div>
+                ))}
+              </div>
 
-              {/* Flavor Options */}
-              <div className="space-y-2 pt-2">
-                <span className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-400 block">Available Flavors</span>
-                <div className="flex flex-wrap gap-2">
-                  {productFlavours.map((flavour) => (
-                    <span key={flavour} className="text-xs px-3.5 py-1.5 rounded-xl font-bold border bg-slate-50 border-slate-200 text-slate-700">
+              {/* Flavor Options Matrix */}
+              <div className="space-y-3 pt-6 border-t border-slate-100">
+                <span className="text-[10px] uppercase font-black tracking-[0.15em] text-slate-400 block">Select Flavour</span>
+                <div className="flex flex-wrap gap-2.5">
+                  {productFlavours.map((flavour, i) => (
+                    <span key={flavour} className={cn(
+                      "text-xs px-4 py-2.5 rounded-xl font-bold border transition-colors cursor-pointer select-none",
+                      i === 0 ? "bg-slate-900 border-slate-900 text-white shadow-md" : "bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-400"
+                    )}>
                       {flavour}
                     </span>
                   ))}
                 </div>
               </div>
 
-              {/* Pricing Blocks */}
-              <div className="flex items-baseline gap-4 pt-4 border-t border-slate-200">
-                <span className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 font-mono">
-                  ₹{product.price.toLocaleString()}
-                </span>
-                <span className="text-lg line-through font-bold text-slate-400 font-mono">
-                  ₹{product.mrp.toLocaleString()}
-                </span>
-                <span className="text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider border text-emerald-700 bg-emerald-50 border-emerald-200">
-                  Save {product.mrp > product.price ? Math.round((1 - product.price / product.mrp) * 100) : 0}%
-                </span>
-              </div>
+              {/* Add to Cart Control Deck */}
+              <div className="pt-6 space-y-4">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Quantity */}
+                  <div className="flex items-center justify-between border rounded-xl p-1 shrink-0 h-14 border-slate-300 bg-white w-full sm:w-32 shadow-sm">
+                    <button onClick={() => setQty(Math.max(1, qty - 1))} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <span className="w-8 text-center font-mono font-black text-base text-slate-900">{qty}</span>
+                    <button onClick={() => setQty(qty + 1)} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
 
-              {/* Controls */}
-              <div className="pt-4 flex flex-col sm:flex-row gap-4">
-                <div className="flex items-center justify-between border rounded-xl p-1 shrink-0 h-14 border-slate-200 bg-slate-50">
-                  <button onClick={() => setQty(Math.max(1, qty - 1))} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 transition-colors">
-                    <Minus className="h-4 w-4" />
-                  </button>
-                  <span className="w-12 text-center font-mono font-black text-base text-slate-900">{qty}</span>
-                  <button onClick={() => setQty(qty + 1)} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 transition-colors">
-                    <Plus className="h-4 w-4" />
-                  </button>
+                  {/* Add Button */}
+                  <Button onClick={add} size="lg" className="bg-orange-600 hover:bg-orange-700 text-white flex-1 font-black uppercase tracking-widest text-xs h-14 rounded-xl shadow-lg shadow-orange-600/20 transition-all">
+                    Add to Cart — ₹{(product.price * qty).toLocaleString()}
+                  </Button>
                 </div>
-
-                <Button onClick={add} size="lg" className="bg-slate-900 text-white hover:bg-slate-800 flex-1 font-black uppercase tracking-wider text-xs h-14 rounded-xl shadow-md">
-                  Add to Cart
+                
+                {/* Checkout Button */}
+                <Button asChild variant="outline" size="lg" className="w-full font-black uppercase tracking-wider text-xs h-14 rounded-xl border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-900 shadow-sm transition-all">
+                  <Link to="/checkout">Proceed to Checkout</Link>
                 </Button>
+
+                <div className="flex items-center justify-center gap-2 pt-2 text-xs font-bold text-slate-500 bg-slate-50 py-3 rounded-xl border border-slate-200">
+                  <ShieldCheck className="h-4 w-4 text-emerald-600" /> Backed By Our 100% Purity Guarantee
+                </div>
               </div>
 
-              <Button asChild variant="outline" size="lg" className="w-full font-black uppercase tracking-wider text-xs h-12 rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-all">
-                <Link to="/checkout">Buy Now</Link>
-              </Button>
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* Product Information Blocks */}
-      <section className="py-20 bg-slate-50/50 relative">
+      {/* Info Sections Below */}
+      <section className="py-20 bg-slate-50/50 relative border-t border-slate-200">
         <div className="container max-w-6xl mx-auto px-4 space-y-24">
 
-          {/* Key Benefits Section */}
-          {productBenefits.length > 0 && (
-            <div data-scroll-section data-scroll-index="0" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-              
-              {/* Left Column: Stacked Design Layout Grid */}
-              <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
-                <div className="flex flex-col gap-3">
-                  {/* First item: Top panoramic horizontal image */}
-                  {productSnapshots[0] && (
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between w-full">
-                      <div className="w-full h-48 md:h-56 flex items-center justify-center p-2">
-                        <img 
-                          src={productSnapshots[0].url} 
-                          alt={productSnapshots[0].tag} 
-                          className="w-full h-full object-contain rounded-xl group-hover:scale-[1.02] transition-transform duration-500" 
-                        />
-                      </div>
-                      <span className="text-[10px] font-mono tracking-wider text-slate-400 block text-center mt-3 border-t border-slate-100 pt-2 w-full">
-                        {productSnapshots[0].tag}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Below Items: 1x1 Side-by-side squares for image 2 and 3 */}
-                  {productSnapshots.length > 1 && (
-                    <div className="grid grid-cols-2 gap-3">
-                      {productSnapshots.slice(1, 3).map((pic, pIdx) => (
-                        <div key={pIdx} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm relative group overflow-hidden flex flex-col items-center justify-between aspect-square">
-                          <div className="w-full h-full flex items-center justify-center p-2 min-h-0">
-                            <img 
-                              src={pic.url} 
-                              alt={pic.tag} 
-                              className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" 
-                            />
-                          </div>
-                          <span className="text-[10px] font-mono tracking-wider text-slate-400 block text-center mt-2 border-t border-slate-100 pt-1.5 w-full shrink-0">
-                            {pic.tag}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                
-                {reviewVideos.length > 0 && (
-                  <div className="space-y-2 pt-2">
-                    <div className="grid grid-cols-2 gap-2">
-                      {reviewVideos.map((vid, vIdx) => (
-                        <div key={vIdx} className="aspect-video bg-slate-900 rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                          <video src={vid.url} controls muted loop autoPlay playsInline className="w-full h-full object-cover" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Right Column: Benefits List */}
-              <div className="lg:col-span-7 space-y-8">
-                <div className="space-y-4">
-                  <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Product Benefits</h2>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    {productBenefits.map((benefit) => (
-                      <div key={benefit} className="flex items-center gap-3 p-4 rounded-xl border bg-white border-slate-200 shadow-sm">
-                        <CheckCircle2 className="h-5 w-5 text-slate-800 shrink-0" />
-                        <span className="font-bold text-sm text-slate-700">{benefit}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          )}
-
-          {/* Ingredients Section */}
+          {/* Ingredients Breakdown */}
           {productIngredients.length > 0 && (
             <div data-scroll-section data-scroll-index="1" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               <div className="lg:col-span-7 space-y-6 order-2 lg:order-1">
-                <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Ingredients</h2>
+                <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Ingredients Matrix</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {productIngredients.map((ingredient, idx) => (
                     <div key={ingredient} className="flex items-center justify-between p-4 rounded-xl border bg-white border-slate-200 shadow-sm transition-all duration-300 group/item">
@@ -476,32 +398,18 @@ const ProductDetail = () => {
                   ))}
                 </div>
               </div>
-              <div className="lg:col-span-5 rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm order-1 lg:order-2">
-                <ProductGallery items={gallery.filter(m => m.kind === "image")} alt={product.name} />
+              <div className="lg:col-span-5 rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm order-1 lg:order-2 space-y-4">
+                <div className="h-12 w-12 rounded-xl bg-slate-900 flex items-center justify-center shadow-sm">
+                  <Activity className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-black tracking-tight text-slate-900 uppercase">Usage Protocol</h3>
+                <p className="text-slate-600 font-medium leading-relaxed">{product.howToUse || "Mix one serving with 250ml water and consume immediately."}</p>
+                <div className="pt-4 border-t border-slate-200">
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Store in cool, dry environment.</p>
+                </div>
               </div>
             </div>
           )}
-
-          {/* Usage Protocol */}
-          <div data-scroll-section data-scroll-index="2" className="p-8 md:p-12 border rounded-2xl bg-white border-slate-200 shadow-sm relative overflow-hidden">
-            <div className="mb-6">
-              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Usage Directions</h2>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-4">
-              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Suggested Timing</strong>
-                <p className="text-sm font-medium text-slate-600">Take before, during, or immediately after your training session.</p>
-              </div>
-              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Mixing</strong>
-                <p className="text-sm font-medium text-slate-600">Can be mixed with water, juice, or your preferred fitness shakes.</p>
-              </div>
-              <div className="p-6 rounded-xl border bg-slate-50 border-slate-200">
-                <strong className="block text-xs uppercase tracking-[0.15em] mb-2 text-slate-800 font-black">Storage</strong>
-                <p className="text-sm font-medium text-slate-600">Keep container tightly closed and store in a cool, dry place.</p>
-              </div>
-            </div>
-          </div>
 
         </div>
       </section>
@@ -509,7 +417,7 @@ const ProductDetail = () => {
       {/* Related Products */}
       <section className="py-20 border-t border-slate-200 bg-white">
         <div className="container max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8 text-slate-900">Recommended Products</h2>
+          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-8 text-slate-900 text-center">Frequently Bought With</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {related.map((p) => (
               <ProductCard key={p.id} p={p} />
@@ -518,13 +426,13 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      {/* Sticky Buy Bottom Bar */}
-      <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden backdrop-blur-md border-t p-4 flex items-center justify-between gap-4 bg-white/90 border-slate-200 shadow-lg">
+      {/* Sticky Buy Bottom Bar (Mobile Only) */}
+      <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden backdrop-blur-xl border-t p-4 flex items-center justify-between gap-4 bg-white/90 border-slate-200 shadow-2xl pb-safe">
         <div>
-          <span className="text-[10px] uppercase tracking-widest block font-bold text-slate-400">Price</span>
-          <p className="font-black text-xl text-slate-900 font-mono">₹{product.price.toLocaleString()}</p>
+          <span className="text-[10px] uppercase tracking-widest block font-bold text-slate-400">Total Price</span>
+          <p className="font-black text-xl text-slate-900 font-mono">₹{(product.price * qty).toLocaleString()}</p>
         </div>
-        <Button onClick={add} className="bg-slate-900 text-white font-black uppercase tracking-wider text-xs h-12 px-6 rounded-xl flex-1 shadow-sm">
+        <Button onClick={add} className="bg-orange-600 hover:bg-orange-700 text-white font-black uppercase tracking-wider text-xs h-12 px-8 rounded-xl shadow-md">
           Add to Cart
         </Button>
       </div>
