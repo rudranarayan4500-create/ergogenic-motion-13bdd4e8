@@ -283,7 +283,7 @@ const Products = () => {
       <section className="w-full bg-slate-50 border-b border-slate-200 overflow-hidden py-16 md:py-24">
         <div className="container max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
           <div className="lg:col-span-5 space-y-4">
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-3 py-1 rounded border border-blue-200/50 inline-block">LAB ORIENTED FORMULAS</span>
+            <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-3 py-1 rounded border border-blue-200/50 inline-block"></span>
             <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">PRECISE BATCH DISPENSING</h2>
             <p className="text-sm md:text-base font-medium text-slate-500 leading-relaxed">Every scoop goes through strict packaging verification intervals. Witness the high-speed deployment track built around clinical purity parameters and micro-filtered consistency benchmarks.</p>
           </div>
