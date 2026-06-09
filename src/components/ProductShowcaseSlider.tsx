@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type Slide = {
   productId: string;
@@ -17,7 +17,7 @@ type Slide = {
 
 const slides: Slide[] = [
   {
-    productId: "super-whey",
+    productId: "ergo-super-whey", // FIXED ID to match local database routing
     image:
       "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-05 at 3.24.31 PM.jpeg",
     eyebrow: "PREMIUM WHEY",
@@ -29,7 +29,7 @@ const slides: Slide[] = [
     accent: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",
   },
   {
-    productId: "ergo-viper-3",
+    productId: "ergo-viper-3", // MATCHES local database routing
     image:
       "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 142302.png",
     eyebrow: "HIGH VOLTAGE",
@@ -38,10 +38,10 @@ const slides: Slide[] = [
     cta: "Shop Viper-3",
     bg: "bg-gradient-to-br from-[#0b1220] via-[#0d1a33] to-[#0a0f1f]",
     text: "text-white",
-    accent: "!bg-[#1d4ed8] hover:!bg-[#1e40af] !text-white",
+    accent: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",
   },
   {
-    productId: "ergo-lean-shot",
+    productId: "ergo-lean-shot", // MATCHES local database routing
     image:
       "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//fa87092f-ed7a-4f2a-a943-2d5acf883b09.png",
     eyebrow: "THERMOGENIC EDGE",
@@ -72,7 +72,7 @@ export const ProductShowcaseSlider = () => {
           <Link
             to={`/products/${s.productId}`}
             key={s.productId}
-            className={`absolute inset-0 transition-opacity duration-[1100ms] ease-out ${
+            className={`absolute inset-0 transition-opacity duration-[1100ms] ease-out block ${
               idx === i ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
             } ${s.bg}`}
             aria-hidden={idx !== i}
@@ -88,14 +88,15 @@ export const ProductShowcaseSlider = () => {
                 <p className="mt-5 text-base md:text-lg opacity-85 max-w-md animate-fade-in">
                   {s.subtitle}
                 </p>
+                
+                {/* FIXED: Removed nested button mapping to prevent click interception inside the Link */}
                 <div className="mt-8 animate-fade-in">
-                  <Button asChild size="lg" className={`${s.accent} h-12 px-8 text-base`}>
-                    <span>
-                      {s.cta} <ChevronRight className="ml-1 h-4 w-4 inline" />
-                    </span>
-                  </Button>
+                  <span className={cn("inline-flex items-center justify-center rounded-md font-medium h-12 px-8 text-base transition-colors", s.accent)}>
+                    {s.cta} <ChevronRight className="ml-1 h-4 w-4 inline" />
+                  </span>
                 </div>
               </div>
+
               <div className="order-1 md:order-2 relative h-[40vh] md:h-full flex items-center justify-center">
                 <img
                   src={s.image}
@@ -111,14 +112,20 @@ export const ProductShowcaseSlider = () => {
         {/* Controls */}
         <button
           aria-label="Previous slide"
-          onClick={() => go(i - 1)}
+          onClick={(e) => {
+            e.preventDefault();
+            go(i - 1);
+          }}
           className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 h-11 w-11 rounded-full bg-background/70 hover:bg-background border border-border backdrop-blur grid place-items-center text-foreground transition"
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
         <button
           aria-label="Next slide"
-          onClick={() => go(i + 1)}
+          onClick={(e) => {
+            e.preventDefault();
+            go(i + 1);
+          }}
           className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 h-11 w-11 rounded-full bg-background/70 hover:bg-background border border-border backdrop-blur grid place-items-center text-foreground transition"
         >
           <ChevronRight className="h-5 w-5" />
@@ -130,7 +137,10 @@ export const ProductShowcaseSlider = () => {
             <button
               key={idx}
               aria-label={`Go to slide ${idx + 1}`}
-              onClick={() => go(idx)}
+              onClick={(e) => {
+                e.preventDefault();
+                go(idx);
+              }}
               className={`h-1.5 rounded-full transition-all ${
                 idx === i ? "w-10 bg-primary" : "w-5 bg-foreground/30 hover:bg-foreground/50"
               }`}
