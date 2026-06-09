@@ -141,7 +141,7 @@ const ProductDetail = () => {
         return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", kind: "image" }];
       }
       if (normalName.includes("caffeine short") || product.id === "caffeine-short" || normalName.includes("caffeine")) {
-        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-07%20at%209.44.38%20PM.jpeg", kind: "image" }];
+        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg", kind: "image" }];
       }
       if (normalName.includes("super whey") || product.id === "super-whe-y") {
         return [
@@ -195,7 +195,7 @@ const ProductDetail = () => {
       return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg", tag: "Product View" }];
     }
     if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
-      return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp%20Image%202026-06-07%20at%209.44.38%20PM.jpeg", tag: "Product View" }];
+      return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg", tag: "Product View" }];
     }
     if (normalName.includes("super whey")) {
       return [
