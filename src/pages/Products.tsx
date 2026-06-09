@@ -127,9 +127,10 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png"
         ];
       } else if ((normalName.includes("lean shot") || normalName.includes("lean-shot")) && !normalName.includes("thermogenic")) {
-        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg";
+        // LEAN SHOT FRONT IMAGE UPDATED HERE
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 175126.png";
         structuredGallery = [
-          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg",
+          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 175126.png",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 144649.png",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//61f8ac7f-e71f-4b22-a5e5-3c1451a49775.png"
         ];
@@ -141,7 +142,7 @@ const Products = () => {
 
       uniqueProductMatrix.set(liveKey, {
         id: fallbackObj?.id || d.id || d.slug, 
-        slug: fallbackObj?.slug || fallbackObj?.id || d.slug, // FORCE SLUG TO MATCH LOCAL ID
+        slug: fallbackObj?.slug || fallbackObj?.id || d.slug, 
         name: d.name,
         tagline: d.tagline ?? fallbackObj?.tagline ?? "",
         price: Number(d.price) || fallbackObj?.price || 0,
@@ -417,7 +418,6 @@ const Products = () => {
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
                 <AnimatePresence mode="popLayout">
                   {visibleDisplayProducts.map((p, index) => {
-                    // CRITICAL FIX: Ensure dynamicSlugRoute ALWAYS prioritizes the normalized local static ID for routing
                     const dynamicSlugRoute = p.id || p.slug;
                     const isNewArrival = index === 0;
                     const isPriceDrop = index === 2;
