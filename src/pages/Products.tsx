@@ -12,6 +12,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Products = () => {
   const [params, setParams] = useSearchParams();
+
+  // Admin-controlled products from DB (merged with the static catalog)
   const [dbProducts, setDbProducts] = useState<any[]>([]);
   
   useEffect(() => {
@@ -22,6 +24,7 @@ const Products = () => {
       .then(({ data }) => setDbProducts(data ?? []));
   }, []);
   
+  // Advanced Filter Matrix States
   const initialCat = (params.get("cat") as Category | null) ?? null;
   const [activeCategory, setActiveCategory] = useState<Category | null>(initialCat);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -29,6 +32,7 @@ const Products = () => {
   const [showOutOfStock, setShowOutOfStock] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<string>("featured");
 
+  // Accordion Sidebar Open/Close States
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({
     search: true, category: true, price: true, gender: false, brand: false, size: false, color: false, activity: false, origin: false,
   });
@@ -53,6 +57,7 @@ const Products = () => {
 
   // Comprehensive Live Matrix Filtering Logic Engine
   const filteredProducts = useMemo(() => {
+    // DEDUPLICATION MAP: Prevents any product from showing up twice
     const uniqueProductMatrix = new Map<string, any>();
 
     // Normalization helper prevents duplicate IDs
@@ -71,6 +76,9 @@ const Products = () => {
       const rawName = d.name || "";
       const normalName = String(rawName).toLowerCase().trim();
       
+      // Grab fallback to preserve strict routing IDs and prevent ProductDetail crashes
+      const fallbackObj = uniqueProductMatrix.get(liveKey);
+
       let productFeaturedImage = d.image || "";
       let structuredGallery: string[] = Array.isArray(d.media)
         ? d.media.map((m: any) => m?.url).filter(Boolean)
@@ -134,30 +142,29 @@ const Products = () => {
       }
 
       if (!productFeaturedImage || productFeaturedImage === "/placeholder.svg") {
-        const fallbackObj = uniqueProductMatrix.get(liveKey);
         productFeaturedImage = fallbackObj?.image || "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
       }
 
       uniqueProductMatrix.set(liveKey, {
-        id: d.id || d.slug, 
-        slug: d.slug,
+        id: fallbackObj?.id || d.id || d.slug, // SECURES ROUTER ID SO DETAIL PAGE OPENS
+        slug: fallbackObj?.slug || d.slug,
         name: d.name,
-        tagline: d.tagline ?? "",
-        price: Number(d.price) || 0,
-        mrp: Number(d.mrp) || Number(d.price) || 0,
-        category: d.category || "Muscle",
+        tagline: d.tagline ?? fallbackObj?.tagline ?? "",
+        price: Number(d.price) || fallbackObj?.price || 0,
+        mrp: Number(d.mrp) || Number(d.price) || fallbackObj?.mrp || 0,
+        category: d.category || fallbackObj?.category || "Muscle",
         image: productFeaturedImage,
-        description: d.description ?? "",
-        benefits: d.benefits ?? [],
-        rating: Number(d.rating) || 4.8,
-        reviews: Number(d.reviews) || 0,
-        gallery: structuredGallery.length > 0 ? structuredGallery : undefined,
+        description: d.description ?? fallbackObj?.description ?? "",
+        benefits: d.benefits?.length ? d.benefits : (fallbackObj?.benefits ?? []),
+        rating: Number(d.rating) || fallbackObj?.rating || 4.8,
+        reviews: Number(d.reviews) || fallbackObj?.reviews || 0,
+        gallery: structuredGallery.length > 0 ? structuredGallery : fallbackObj?.gallery,
       });
     });
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. SECURE EXCLUSION FILTER: Blocks hidden junk items and old DB variants
+    // 3. SECURE EXCLUSION FILTER: Blocks hidden junk items
     const excludedProductNames = [
       "pure creatin", 
       "pure creatine", 
@@ -168,9 +175,9 @@ const Products = () => {
       "myogenetix concentrate", 
       "ginseng extract", 
       "amino shot caplets",
-      "lean shot thermogenic", // Added to exclude the old variant
-      "super whey 2kg",        // Added to exclude the old variant
-      "plasma mass 3kg"        // Added to exclude the old variant
+      "lean shot thermogenic",
+      "super whey 2kg",        
+      "plasma mass 3kg"        
     ];
     
     result = result.filter(p => !excludedProductNames.includes(String(p?.name).toLowerCase().trim()));
