@@ -54,8 +54,9 @@ const ingredients = [
 const buttonClass =
   "w-full sm:w-auto min-h-[48px] px-6 md:px-8 whitespace-nowrap shadow-glow flex items-center justify-center gap-2";
 
+// FIXED: Changed object-cover to object-contain and added p-4 so the images fit perfectly inside the box
 const imageClass =
-  "w-full h-auto object-cover transition-transform duration-500 will-change-transform group-hover:scale-105";
+  "w-full h-full object-contain p-4 transition-transform duration-500 will-change-transform group-hover:scale-105";
 
 const Index = () => {
   return (
@@ -163,7 +164,7 @@ const Index = () => {
                   to={`/products/${routeParam}`}
                   className="group block w-[220px] shrink-0 overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 md:w-[260px]"
                 >
-                  <div className="aspect-[4/5] overflow-hidden bg-muted">
+                  <div className="aspect-[4/5] overflow-hidden bg-muted flex items-center justify-center">
                     <img
                       src={p.image}
                       alt={p.name}
@@ -205,7 +206,7 @@ const Index = () => {
                   to={`/products/${routeParam}`}
                   className="group block w-[220px] shrink-0 overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 md:w-[260px]"
                 >
-                  <div className="aspect-[4/5] overflow-hidden bg-muted">
+                  <div className="aspect-[4/5] overflow-hidden bg-muted flex items-center justify-center">
                     <img
                       src={p.image}
                       alt={p.name}
