@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star, ShieldCheck, Check } from "lucide-react";
+import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star, ShieldCheck, Check, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
@@ -23,7 +23,7 @@ const ProductDetail = () => {
   const [, setScrollPositions] = useState<{ [key: number]: ScrollPosition }>({});
   const scrollHandlerRef = useRef<(() => void) | null>(null);
   
-  // NEW: Track the currently active image index for the new Thumbnail Gallery layout
+  // Track the currently active image index for the new Thumbnail Gallery layout
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   // Reset active image when navigating to a new product
@@ -186,8 +186,6 @@ const ProductDetail = () => {
     return [{ url: product.image, kind: "image" }];
   }, [extraMedia, product]);
 
-  const reviewVideos = useMemo(() => gallery.filter(m => m?.kind === "video"), [gallery]);
-
   // Make sure we never index out of bounds
   const currentMedia = gallery[activeImageIndex] || gallery[0] || { url: product?.image, kind: 'image' };
 
@@ -253,7 +251,7 @@ const ProductDetail = () => {
                 )}
               </div>
 
-              {/* Thumbnail Grid Below Main Image (Like Reference Image) */}
+              {/* Thumbnail Grid Below Main Image */}
               {gallery.length > 1 && (
                 <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 pt-2">
                   {gallery.map((item, idx) => (
@@ -314,7 +312,7 @@ const ProductDetail = () => {
                 <p className="text-xs text-slate-400 font-medium">Taxes included. Free shipping available.</p>
               </div>
 
-              {/* Clinical Benefits Checklist (Like Reference Image) */}
+              {/* Clinical Benefits Checklist */}
               <div className="space-y-3 pt-2">
                 <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-lg mb-4">{product.tagline} {product.description}</p>
                 {productBenefits.slice(0, 4).map((benefit, i) => (
