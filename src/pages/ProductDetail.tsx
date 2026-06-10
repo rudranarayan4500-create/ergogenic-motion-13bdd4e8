@@ -167,8 +167,8 @@ const ProductDetail = () => {
       }
       if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
         return [
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//aa3fddab-b2b2-4531-9caf-7e74a425b153.png", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 11.48.55 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-11 014007.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-11 013911.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-11 at 12.30.35 AM.jpeg", kind: "image" }
         ];
       }
