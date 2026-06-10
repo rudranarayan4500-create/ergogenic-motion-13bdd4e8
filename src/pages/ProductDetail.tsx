@@ -58,7 +58,7 @@ const ProductDetail = () => {
       } else if (normalName.includes("plasma")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg";
       } else if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
-        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 11.48.55 PM.jpeg";
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//aa3fddab-b2b2-4531-9caf-7e74a425b153.png";
       } else if (normalName.includes("aminoshot") || normalName.includes("amino shot")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg";
       } else if (normalName.includes("lean shot") || normalName.includes("lean-shot")) {
@@ -167,7 +167,7 @@ const ProductDetail = () => {
       }
       if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
         return [
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-10 233041.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//aa3fddab-b2b2-4531-9caf-7e74a425b153.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 11.48.55 PM.jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-11 at 12.30.35 AM.jpeg", kind: "image" }
         ];
