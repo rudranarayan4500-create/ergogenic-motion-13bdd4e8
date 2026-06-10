@@ -115,15 +115,15 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153307.png"
         ];
       } else if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
-        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg";
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-10 233041.png";
         structuredGallery = [
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg"
         ];
       } else if (normalName.includes("plasma") && !normalName.includes("3kg")) {
-        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg";
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 8.15.30 PM.jpeg";
         structuredGallery = [
-          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg",
+          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 8.15.30 PM.jpeg",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png"
         ];
       } else if ((normalName.includes("lean shot") || normalName.includes("lean-shot")) && !normalName.includes("thermogenic")) {
@@ -279,19 +279,7 @@ const Products = () => {
         </div>
       </header>
 
-      {/* ==================== SECTION 2: LAB GIF BANNER ==================== */}
-      <section className="w-full bg-slate-50 border-b border-slate-200 overflow-hidden py-16 md:py-24">
-        <div className="container max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
-          <div className="lg:col-span-5 space-y-4">
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-3 py-1 rounded border border-blue-200/50 inline-block">Juicy Fruit Bubblegum</span>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none">PRECISE BATCH DISPENSING</h2>
-            <p className="text-sm md:text-base font-medium text-slate-500 leading-relaxed">Every scoop goes through strict packaging verification intervals. Witness the high-speed deployment track built around clinical purity parameters and micro-filtered consistency benchmarks.</p>
-          </div>
-          <div className="lg:col-span-7 rounded-3xl border border-slate-200 overflow-hidden shadow-sm bg-white p-2.5">
-            <img src="https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ezgif-131eb69db341388e (1).gif" alt="Batch Processing" className="w-full h-auto max-h-[400px] object-cover rounded-2xl" loading="lazy" />
-          </div>
-        </div>
-      </section>
+    
 
       {/* ==================== SECTION 3: SIDEBAR LAYOUT ==================== */}
       <section className="py-16 bg-white">

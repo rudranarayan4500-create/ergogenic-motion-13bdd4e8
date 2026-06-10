@@ -58,7 +58,7 @@ const ProductDetail = () => {
       } else if (normalName.includes("plasma")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg";
       } else if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
-        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg";
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 11.48.55 PM.jpeg";
       } else if (normalName.includes("aminoshot") || normalName.includes("amino shot")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg";
       } else if (normalName.includes("lean shot") || normalName.includes("lean-shot")) {
@@ -140,8 +140,8 @@ const ProductDetail = () => {
       if (normalName.includes("super whey")) {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.03.59 PM.jpeg", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 5.17.38 PM.jpeg", kind: "image" }
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 8.02.16 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//340c8881-4bb6-4790-a114-1d16cfdad5c3.png", kind: "image" }
         ];
       }
       if (normalName.includes("viper 3") || normalName.includes("viper-3")) {
@@ -153,7 +153,7 @@ const ProductDetail = () => {
       }
       if (normalName.includes("plasma")) {
         return [
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 1.16.35 PM (1).jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 8.15.30 PM.jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png", kind: "image" }
         ];
       }
@@ -161,14 +161,15 @@ const ProductDetail = () => {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 9.04.52 PM.jpeg", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.53.29 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//f929b74c-dad2-4b79-8c23-5b0e7e4dd5f8.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153307.png", kind: "image" }
         ];
       }
       if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
         return [
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.26 PM.jpeg", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg", kind: "image" }
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-10 233041.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 11.48.55 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-11 at 12.30.35 AM.jpeg", kind: "image" }
         ];
       }
       if (normalName.includes("lean shot") || normalName.includes("lean-shot")) {
