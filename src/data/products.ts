@@ -23,7 +23,7 @@ const U = {
   aminoShotNutritional: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153307.png",
   
   // GlutaShot
-  glutaShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//aa3fddab-b2b2-4531-9caf-7e74a425b153.png",
+  glutaShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-11 014007.png",
   glutaShotBack: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.15.34 PM.jpeg",
 
   // Lean Shot (NEW)
