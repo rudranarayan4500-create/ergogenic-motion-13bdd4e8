@@ -64,6 +64,27 @@ const Products = () => {
       uniqueProductMatrix.set(primaryKey, { ...p });
     });
 
+    // 1.5 Inject new GINSENG SHOT product manually
+    uniqueProductMatrix.set("ginseng-shot", {
+      id: "ginseng-shot",
+      slug: "ginseng-shot",
+      name: "GINSENG SHOT",
+      tagline: "Super Concentrated Red Ginseng Extract",
+      price: 1499,
+      mrp: 1999,
+      category: "Essentials",
+      image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
+      description: "Super Concentrated Red Ginseng Extract designed to enhance Cognitive function, Energy, Immunity, and Vitality.",
+      benefits: ["Cognitive", "Energy", "Immunity", "Vitality"],
+      rating: 4.9,
+      reviews: 14,
+      gallery: [
+        "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
+        "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231827.png",
+        "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png"
+      ]
+    });
+
     // 2. Overwrite / Append with live admin DB lines (DEDUPLICATION VIA MAP)
     dbProducts.forEach((d) => {
       if (!d) return;
@@ -127,12 +148,18 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png"
         ];
       } else if ((normalName.includes("lean shot") || normalName.includes("lean-shot")) && !normalName.includes("thermogenic")) {
-        // LEAN SHOT FRONT IMAGE UPDATED HERE
         productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 175126.png";
         structuredGallery = [
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 175126.png",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 144649.png",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//61f8ac7f-e71f-4b22-a5e5-3c1451a49775.png"
+        ];
+      } else if (normalName.includes("ginseng shot") || normalName.includes("ginseng-shot")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png";
+        structuredGallery = [
+          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
+          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231827.png",
+          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png"
         ];
       }
 
@@ -159,7 +186,7 @@ const Products = () => {
 
     let result = Array.from(uniqueProductMatrix.values());
 
-    // 3. SECURE EXCLUSION FILTER: Blocks hidden junk items
+    // 3. SECURE EXCLUSION FILTER: Blocks hidden junk items (Added "ginseng extract" back here)
     const excludedProductNames = [
       "pure creatin", 
       "pure creatine", 
@@ -168,11 +195,11 @@ const Products = () => {
       "v-shot multivitamin", 
       "daily multi", 
       "myogenetix concentrate", 
-      "ginseng extract", 
       "amino shot caplets",
       "lean shot thermogenic",
       "super whey 2kg",        
-      "plasma mass 3kg"        
+      "plasma mass 3kg",
+      "ginseng extract" 
     ];
     
     result = result.filter(p => !excludedProductNames.includes(String(p?.name).toLowerCase().trim()));
@@ -279,7 +306,7 @@ const Products = () => {
         </div>
       </header>
 
-    
+      
 
       {/* ==================== SECTION 3: SIDEBAR LAYOUT ==================== */}
       <section className="py-16 bg-white">

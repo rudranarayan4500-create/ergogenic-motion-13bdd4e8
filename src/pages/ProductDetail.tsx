@@ -63,6 +63,8 @@ const ProductDetail = () => {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-08 at 8.05.26 PM.jpeg";
       } else if (normalName.includes("lean shot") || normalName.includes("lean-shot")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg";
+      } else if (normalName.includes("ginseng shot") || normalName.includes("ginseng-shot") || normalName.includes("ginseng extract")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png";
       }
 
       return {
@@ -82,13 +84,26 @@ const ProductDetail = () => {
       };
     }
     
-    if (!found && id === "micro-power-creatine") {
-      return {
-        id: "micro-power-creatine", slug: "micro-power-creatine", name: "Micro Power Creatin", category: "Fitness",
-        rating: 4.9, reviews: 1750, price: 1299, mrp: 1599,
-        tagline: "Pure micronized formulation designed to support explosive power and muscle hydration.",
-        image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"
-      };
+    if (!found) {
+      if (id === "micro-power-creatine") {
+        return {
+          id: "micro-power-creatine", slug: "micro-power-creatine", name: "Micro Power Creatin", category: "Fitness",
+          rating: 4.9, reviews: 1750, price: 1299, mrp: 1599,
+          tagline: "Pure micronized formulation designed to support explosive power and muscle hydration.",
+          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"
+        };
+      }
+      if (id === "ginseng-shot") {
+        return {
+          id: "ginseng-shot", slug: "ginseng-shot", name: "GINSENG SHOT", category: "Energy",
+          rating: 4.9, reviews: 14, price: 1499, mrp: 1999,
+          tagline: "Super Concentrated Red Ginseng Extract",
+          description: "Super Concentrated Red Ginseng Extract designed to enhance Cognitive function, Energy, Immunity, and Vitality.",
+          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
+          benefits: ["Cognitive", "Energy", "Immunity", "Vitality"],
+          ingredients: ["Super Concentrated Red Ginseng Extract"]
+        };
+      }
     }
     return found;
   }, [id, dbProduct]);
@@ -193,6 +208,13 @@ const ProductDetail = () => {
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//61f8ac7f-e71f-4b22-a5e5-3c1451a49775.png", kind: "image" }
         ];
       }
+      if (normalName.includes("ginseng shot") || normalName.includes("ginseng-shot") || normalName.includes("ginseng extract") || product.id === "ginseng-shot") {
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231827.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png", kind: "image" }
+        ];
+      }
     }
     
     if (!product) return [];
@@ -211,7 +233,7 @@ const ProductDetail = () => {
       "super whey 2kg", "plasma mass 3kg", "amino shot caplets", 
       "pure creatin", "pure creatine", "lean shot thermogenic",
       "bcaa recover", "glutamine x", "v-shot multivitamin", 
-      "daily multi", "myogenetix concentrate", "ginseng extract"
+      "daily multi", "myogenetix concentrate"
     ];
     return products.filter((p) => {
       const isSelf = p.id === product.id;

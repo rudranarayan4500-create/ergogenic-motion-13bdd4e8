@@ -38,7 +38,12 @@ const U = {
   // Super Whey (NEW)
   superWheyFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 8.09.24 PM.jpeg",
   superWheyBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 8.02.16 PM.jpeg",
-  superWheyBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 5.17.38 PM.jpeg"
+  superWheyBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-06 at 5.17.38 PM.jpeg",
+
+  // Ginseng Shot (NEW)
+  ginsengShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
+  ginsengShotBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231827.png",
+  ginsengShotBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png"
 };
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
@@ -232,6 +237,23 @@ export const products: Product[] = [
     rating: 4.8,
     reviews: 410,
   },
+  {
+    id: "ginseng-shot",
+    name: "GINSENG SHOT",
+    tagline: "Super Concentrated Red Ginseng Extract",
+    price: 1499,
+    mrp: 1999,
+    category: "Essentials",
+    image: U.ginsengShotFront,
+    gallery: [U.ginsengShotFront, U.ginsengShotBack1, U.ginsengShotBack2],
+    description:
+      "Super Concentrated Red Ginseng Extract designed to seamlessly enhance cognitive function, energy, immunity, and overall vitality.",
+    benefits: ["Cognitive", "Energy", "Immunity", "Vitality"],
+    howToUse: "Take 1 shot daily or as directed by your healthcare professional.",
+    ingredients: ["Super Concentrated Red Ginseng Extract"],
+    rating: 4.9,
+    reviews: 14,
+  }
 ];
 
 export const categories: { name: Category; description: string }[] = [
