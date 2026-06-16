@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Smartphone, Truck, ShieldCheck } from "lucide-react";
+import { CreditCard, Smartphone, ShieldCheck } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,14 +58,6 @@ const Checkout = () => {
         { order_id: order.id, product_slug: "super-whey", name: "Super Whey", qty: 1, price: 4499 },
         { order_id: order.id, product_slug: "bcaa-recover", name: "BCAA Recover", qty: 1, price: 1899 },
       ]);
-
-      if (pay === "cod") {
-        await supabase.from("orders").update({ status: "placed" }).eq("id", order.id);
-        setPaid(`COD-${order.id.slice(0, 8)}`);
-        toast({ title: "Order placed", description: "Pay on delivery." });
-        setBusy(false);
-        return;
-      }
 
       // Load Razorpay dynamically
       const isScriptLoaded = await loadRazorpayScript();
@@ -125,7 +117,7 @@ const Checkout = () => {
       <section className="py-20"><div className="container max-w-lg text-center space-y-4">
         <div className="bg-card border border-white/10 rounded-xl p-8">
           <ShieldCheck className="h-12 w-12 mx-auto text-primary" />
-          <p className="text-white/60 mt-3 text-sm">{paid.startsWith("COD") ? "Order Reference ID" : "Razorpay Payment ID"}</p>
+          <p className="text-white/60 mt-3 text-sm">Razorpay Payment ID</p>
           <p className="font-mono text-lg mt-1">{paid}</p>
           <Button className="mt-6 bg-primary hover:bg-primary/90" onClick={() => nav("/products")}>Continue shopping</Button>
         </div>
@@ -158,7 +150,6 @@ const Checkout = () => {
                 {[
                   { v: "upi", l: "UPI (GPay, PhonePe, Paytm)", i: Smartphone },
                   { v: "card", l: "Credit / Debit Card", i: CreditCard },
-                  { v: "cod", l: "Cash on Delivery", i: Truck },
                 ].map((o) => (
                   <Label key={o.v} className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${pay === o.v ? "border-primary bg-primary/5" : "border-white/15 hover:border-white/30"}`}>
                     <RadioGroupItem value={o.v} />
