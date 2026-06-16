@@ -128,7 +128,7 @@ const ProductDetail = () => {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.12.52 PM.jpeg", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 5.06.26 PM.jpeg", kind: "image" }
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-16 at 11.15.18 PM.jpeg", kind: "image" }
         ];
       }
       if (normalName.includes("micro power") || product.id === "micro-power-creatine") {
@@ -158,6 +158,7 @@ const ProductDetail = () => {
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//98737dbc-d1ae-49e4-86bb-ddc9fc9f4565.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot%202026-06-09%20142302.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 223821.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 230915.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.55.42 PM.jpeg", kind: "image" }
         ];
       }
