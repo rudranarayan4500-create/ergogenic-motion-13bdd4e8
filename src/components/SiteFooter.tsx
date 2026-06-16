@@ -49,7 +49,7 @@ export const SiteFooter = () => {
           <h4 className="text-foreground font-semibold mb-4">Support</h4>
           <ul className="space-y-2 text-sm">
             <li><Link to="/shipping" className="hover:text-primary">Shipping & Returns</Link></li>
-            <li><Link to="/support" className="hover:text-primary">FAQ</Link></li>
+            <li><Link to="/support" className="hover:text-primary"></Link></li>
             <li><Link to="/contact" className="hover:text-primary">Customer Care</Link></li>
           </ul>
         </div>
