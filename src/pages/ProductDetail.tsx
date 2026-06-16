@@ -139,7 +139,12 @@ const ProductDetail = () => {
         ];
       }
       if (normalName.includes("caffeine short") || normalName.includes("caffeine")) {
-        return [{ url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg", kind: "image" }];
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-09 at 2.27.46 PM.jpeg", kind: "image" },
+           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 230231.png", kind: "image" },
+           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 230242.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//501a3a76-1817-4ff3-ad76-9ad6b3b1e3a5.png ", kind: "image" }
+        ];
       }
       if (normalName.includes("super whey")) {
         return [
