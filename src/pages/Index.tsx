@@ -4,7 +4,6 @@ import {
   Dumbbell,
   FlaskConical,
   HeartPulse,
-  Leaf,
   Sparkles,
   Zap,
 } from "lucide-react";
@@ -43,11 +42,6 @@ const ingredients = [
     name: "L-Citrulline",
     icon: FlaskConical,
     desc: "Supports blood flow and training endurance.",
-  },
-  {
-    name: "Digestive Enzymes",
-    icon: Leaf,
-    desc: "Helps support nutrient absorption.",
   },
 ];
 
