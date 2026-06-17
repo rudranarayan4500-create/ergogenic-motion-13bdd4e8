@@ -4,7 +4,6 @@ import {
   Dumbbell,
   FlaskConical,
   HeartPulse,
-  Leaf,
   Sparkles,
   Zap,
 } from "lucide-react";
@@ -43,11 +42,6 @@ const ingredients = [
     name: "L-Citrulline",
     icon: FlaskConical,
     desc: "Supports blood flow and training endurance.",
-  },
-  {
-    name: "Digestive Enzymes",
-    icon: Leaf,
-    desc: "Helps support nutrient absorption.",
   },
 ];
 
@@ -262,21 +256,27 @@ const Index = () => {
             </p>
           </ScrollReveal>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Adjusted to flex-wrap to beautifully center the 5 boxes */}
+          <div className="flex flex-wrap justify-center gap-5">
             {ingredients.map((ing, i) => (
-              <ScrollReveal key={ing.name} delay={i * 60}>
-                <div className="flex h-full flex-col items-start rounded-xl border border-border bg-card/80 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30">
-                  <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/15 text-primary">
-                    <ing.icon className="h-6 w-6" />
+              <div 
+                key={ing.name} 
+                className="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] flex"
+              >
+                <ScrollReveal delay={i * 60} className="w-full">
+                  <div className="flex h-full flex-col items-start rounded-xl border border-border bg-card/80 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30">
+                    <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/15 text-primary">
+                      <ing.icon className="h-6 w-6" />
+                    </div>
+                    <h3 className="mt-5 text-lg font-semibold text-foreground">
+                      {ing.name}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      {ing.desc}
+                    </p>
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold text-foreground">
-                    {ing.name}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {ing.desc}
-                  </p>
-                </div>
-              </ScrollReveal>
+                </ScrollReveal>
+              </div>
             ))}
           </div>
         </div>
