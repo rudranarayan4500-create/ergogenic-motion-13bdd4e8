@@ -65,6 +65,8 @@ const ProductDetail = () => {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 9.38.14 PM (1).jpeg";
       } else if (normalName.includes("ginseng shot") || normalName.includes("ginseng-shot") || normalName.includes("ginseng extract")) {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png";
+      } else if (normalName.includes("carnitine shot") || normalName.includes("carnitine-shot")) {
+        targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png";
       }
 
       return {
@@ -102,6 +104,17 @@ const ProductDetail = () => {
           image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
           benefits: ["Cognitive", "Energy", "Immunity", "Vitality"],
           ingredients: ["Super Concentrated Red Ginseng Extract"]
+        };
+      }
+      if (id === "carnitine-shot") {
+        return {
+          id: "carnitine-shot", slug: "carnitine-shot", name: "CARNITINE SHOT", category: "Essentials",
+          rating: 4.8, reviews: 12, price: 1299, mrp: 1799,
+          tagline: "Ultra Potent Fat Burning Formula",
+          description: "Ultra Potent Fat Burning Formula designed to support Recovery, Fat Loss, Energy, and Lean Muscle.",
+          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png",
+          benefits: ["Recovery", "Fat Loss", "Energy", "Lean Muscle"],
+          ingredients: ["L-Carnitine Base Formula"]
         };
       }
     }
@@ -213,6 +226,11 @@ const ProductDetail = () => {
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231827.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png", kind: "image" }
+        ];
+      }
+      if (normalName.includes("carnitine shot") || normalName.includes("carnitine-shot") || product.id === "carnitine-shot") {
+        return [
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png", kind: "image" }
         ];
       }
     }
@@ -352,7 +370,7 @@ const ProductDetail = () => {
               {/* Clinical Benefits Checklist */}
               <div className="space-y-3 pt-2">
                 <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-lg mb-4">{product.tagline} {product.description}</p>
-                {productBenefits.slice(0, 4).map((benefit, i) => (
+                {productBenefits.slice(0, 4).map((benefit: string, i: number) => (
                   <div key={i} className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" strokeWidth={3} />
                     <span className="text-sm font-bold text-slate-800">{benefit}</span>
@@ -364,7 +382,7 @@ const ProductDetail = () => {
               <div className="space-y-3 pt-6 border-t border-slate-100">
                 <span className="text-[10px] uppercase font-black tracking-[0.15em] text-slate-400 block">Select Flavour</span>
                 <div className="flex flex-wrap gap-2.5">
-                  {productFlavours.map((flavour, i) => (
+                  {productFlavours.map((flavour: string, i: number) => (
                     <span key={flavour} className={cn(
                       "text-xs px-4 py-2.5 rounded-xl font-bold border transition-colors cursor-pointer select-none",
                       i === 0 ? "bg-slate-900 border-slate-900 text-white shadow-md" : "bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-400"
@@ -421,7 +439,7 @@ const ProductDetail = () => {
               <div className="lg:col-span-7 space-y-6 order-2 lg:order-1">
                 <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Ingredients Matrix</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {productIngredients.map((ingredient, idx) => (
+                  {productIngredients.map((ingredient: string, idx: number) => (
                     <div key={ingredient} className="flex items-center justify-between p-4 rounded-xl border bg-white border-slate-200 shadow-sm transition-all duration-300 group/item">
                       <div className="flex items-center gap-3 min-w-0">
                         <span className="h-7 w-7 rounded-lg text-xs font-mono font-black flex items-center justify-center shrink-0 bg-slate-100 border border-slate-200 text-slate-800">
