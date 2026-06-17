@@ -16,7 +16,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
           <div style={{ maxWidth: 560, textAlign: "center" }}>
             <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>Something broke loading the app.</h1>
             <p style={{ opacity: 0.75, marginBottom: 16 }}>
-               make sure these
+              If you're deploying this site outside Lovable (Vercel / Bolt / Netlify), make sure these
               environment variables are set in the deployment dashboard, then redeploy:
             </p>
             <pre style={{ textAlign: "left", background: "#161616", padding: 16, borderRadius: 8, fontSize: 12, overflowX: "auto" }}>

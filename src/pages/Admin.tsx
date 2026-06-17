@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Trash2, Edit2 } from "lucide-react";
+import { Eye, EyeOff, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { MediaLibrary, MediaPicker } from "@/components/MediaPicker";
 import { MediaGalleryEditor } from "@/components/MediaGalleryEditor";
@@ -71,21 +71,6 @@ export default function Admin() {
   const deleteProduct = async (id: string) => {
     await supabase.from("products").delete().eq("id", id);
     loadAll();
-  };
-
-  // Quick inline price update function
-  const updateProductPrice = async (id: string, currentPrice: number) => {
-    const newPriceStr = prompt("Enter new price (₹):", currentPrice.toString());
-    if (newPriceStr !== null && newPriceStr.trim() !== "") {
-      const newPrice = Number(newPriceStr);
-      if (!isNaN(newPrice)) {
-        const { error } = await supabase.from("products").update({ price: newPrice }).eq("id", id);
-        if (error) toast({ title: "Failed to update price", description: error.message, variant: "destructive" });
-        else { toast({ title: "Price updated successfully" }); loadAll(); }
-      } else {
-        toast({ title: "Invalid number", variant: "destructive" });
-      }
-    }
   };
 
   const saveProductMedia = async (media: any[]) => {
@@ -214,8 +199,8 @@ export default function Admin() {
                     <div className="mt-1"><MediaPicker value={productImage} onChange={setProductImage} /></div>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    <div><Label>Price (₹)</Label><Input name="price" type="number" min="0" required className="mt-1 bg-background border-white/15" /></div>
-                    <div><Label>MRP (₹)</Label><Input name="mrp" type="number" min="0" className="mt-1 bg-background border-white/15" /></div>
+                    <div><Label>Price</Label><Input name="price" type="number" required className="mt-1 bg-background border-white/15" /></div>
+                    <div><Label>MRP</Label><Input name="mrp" type="number" className="mt-1 bg-background border-white/15" /></div>
                   </div>
                   <div><Label>Description</Label><Textarea name="description" rows={3} className="mt-1 bg-background border-white/15" /></div>
                   <Button type="submit" className="bg-primary hover:bg-primary/90 w-full">Save</Button>
@@ -226,20 +211,7 @@ export default function Admin() {
                 <div className="space-y-2">
                   {products.map(p => (
                     <div key={p.id} className="flex items-center justify-between p-3 bg-background/40 border border-white/5 rounded-lg">
-                      <div>
-                        <div className="font-semibold">{p.name} <span className="text-xs text-white/40">/ {p.category}</span></div>
-                        <div className="text-xs text-white/50 flex items-center gap-2 mt-1">
-                          <span>{p.slug}</span>
-                          <span>•</span>
-                          <span className="font-medium text-white/80">₹{p.price}</span>
-                          <button 
-                            onClick={() => updateProductPrice(p.id, p.price)} 
-                            className="text-primary hover:text-primary/80 flex items-center gap-1"
-                          >
-                            <Edit2 className="h-3 w-3" /> Edit Price
-                          </button>
-                        </div>
-                      </div>
+                      <div><div className="font-semibold">{p.name} <span className="text-xs text-white/40">/ {p.category}</span></div><div className="text-xs text-white/50">{p.slug} • ₹{p.price}</div></div>
                       <div className="flex items-center gap-2">
                         <Button size="sm" variant="outline" className="border-white/15" onClick={() => setMediaProduct(p)}>
                           Gallery ({(p.media ?? []).length})
