@@ -85,6 +85,25 @@ const Products = () => {
       ]
     });
 
+    // 1.6 Inject new CARNITINE SHOT product manually
+    uniqueProductMatrix.set("carnitine-shot", {
+      id: "carnitine-shot",
+      slug: "carnitine-shot",
+      name: "CARNITINE SHOT",
+      tagline: "Ultra Potent Fat Burning Formula",
+      price: 1299,
+      mrp: 1799,
+      category: "Essentials",
+      image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png",
+      description: "Ultra Potent Fat Burning Formula from Ergogenic Nutrition (EN) designed to support Recovery, Fat Loss, Energy, and Lean Muscle.",
+      benefits: ["Recovery", "Fat Loss", "Energy", "Lean Muscle"],
+      rating: 4.8,
+      reviews: 12,
+      gallery: [
+        "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png"
+      ]
+    });
+
     // 2. Overwrite / Append with live admin DB lines (DEDUPLICATION VIA MAP)
     dbProducts.forEach((d) => {
       if (!d) return;
@@ -160,6 +179,11 @@ const Products = () => {
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231827.png",
           "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png"
+        ];
+      } else if (normalName.includes("carnitine shot") || normalName.includes("carnitine-shot")) {
+        productFeaturedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png";
+        structuredGallery = [
+          "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png"
         ];
       }
 
