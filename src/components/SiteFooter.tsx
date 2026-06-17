@@ -47,7 +47,7 @@ export const SiteFooter = () => {
           <ul className="space-y-2 text-sm">
             <li><Link to="/support" className="hover:text-primary">Shipping</Link></li>
             <li><Link to="/support" className="hover:text-primary">Returns</Link></li>
-            <li><Link to="/support" className="hover:text-primary">FAQ</Link></li>
+            <li><Link to="/support" className="hover:text-primary"></Link></li>
             <li><Link to="/contact" className="hover:text-primary">Customer Care</Link></li>
           </ul>
         </div>
