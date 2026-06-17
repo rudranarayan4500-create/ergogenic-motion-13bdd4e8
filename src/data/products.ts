@@ -43,7 +43,10 @@ const U = {
   // Ginseng Shot (NEW)
   ginsengShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
   ginsengShotBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231827.png",
-  ginsengShotBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png"
+  ginsengShotBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png",
+
+  // Carnitine Shot (NEW)
+  carnitineShotFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png"
 };
 
 export type Category = "Muscle" | "Performance" | "Recovery" | "Essentials";
@@ -253,6 +256,23 @@ export const products: Product[] = [
     ingredients: ["Super Concentrated Red Ginseng Extract"],
     rating: 4.9,
     reviews: 14,
+  },
+  {
+    id: "carnitine-shot",
+    name: "CARNITINE SHOT",
+    tagline: "Ultra Potent Fat Burning Formula",
+    price: 1299,
+    mrp: 1799,
+    category: "Essentials",
+    image: U.carnitineShotFront,
+    gallery: [U.carnitineShotFront],
+    description:
+      "Ultra Potent Fat Burning Formula from Ergogenic Nutrition (EN) designed to support Recovery, Fat Loss, Energy, and Lean Muscle.",
+    benefits: ["Recovery", "Fat Loss", "Energy", "Lean Muscle"],
+    howToUse: "Take 1 serving before training or as directed by your healthcare professional.",
+    ingredients: ["L-Carnitine Base Formula"],
+    rating: 4.8,
+    reviews: 12,
   }
 ];
 
