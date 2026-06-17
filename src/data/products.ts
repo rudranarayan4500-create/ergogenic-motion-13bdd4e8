@@ -2,7 +2,8 @@
 const U = {
   // Micro-Power Creatine
   creatineFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg",
-  creatineFront1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-17 144859.png",
+  creatineBack1: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-17 144859.png",
+  creatineBack2: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-17 144909-2.png",
   
   // Hyper-NO Shot
   hyperNoFront: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.15.53 PM (1).jpeg",
@@ -193,19 +194,19 @@ export const products: Product[] = [
     id: "ergo-micropower-creatine",
     name: "Micro-Power Creatine",
     tagline: "Micronized creatine for strength & power",
-    price: 1499,
-    mrp: 1899,
+    price: 1399,
+    mrp: 1699,
     category: "Performance",
     image: U.creatineFront,
-    gallery: [U.creatineFront],
+    gallery: [U.creatineFront, U.creatineBack1, U.creatineBack2],
     flavours: ["Unflavored"],
     description:
-      "Power Crea delivers pure micronized creatine monohydrate to support strength, power output and lean muscle.",
-    benefits: ["5g micronized creatine", "Strength & power", "Faster recovery", "Lean muscle support"],
+      "Purest micronized creatine monohydrate • 300g Micro-Power Creatine is an ultra-potent micronized creatine matrix for power, energy and strength. Lab-tested and third-party verified for purity.",
+    benefits: ["Power", "Energy", "Strength", "Lean mass"],
     howToUse: "Mix 1 scoop with water or your shake daily.",
     ingredients: ["Creatine Monohydrate (Micronized)"],
-    rating: 4.9,
-    reviews: 980,
+    rating: 5.0,
+    reviews: 275,
   },
   {
     id: "ergo-caffeine-shot",
