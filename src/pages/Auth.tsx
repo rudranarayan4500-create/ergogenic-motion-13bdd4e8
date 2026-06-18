@@ -195,7 +195,7 @@ export default function AuthPage() {
                 key={m}
                 type="button"
                 onClick={() => setMode(m)}
-                className={`py-2.5 rounded-full text-sm font-semibold transition-all ${
+                className={`py-2.5 rounded-full text-[13px] sm:text-sm font-semibold transition-all ${
                   mode === m ? "bg-primary text-primary-foreground shadow-glow" : "text-white/60 hover:text-white"
                 }`}
               >
@@ -301,7 +301,7 @@ export default function AuthPage() {
                   <Label>Street address</Label>
                   <Input required value={address} onChange={(e) => setAddress(e.target.value)} placeholder="House no, street, locality" className="mt-1.5 h-11 bg-background border-white/15 text-base sm:text-sm" />
                 </div>
-                {/* Changed to 1 column on phone, 2 columns on tablet/PC */}
+                {/* Responsive grid for shipping info */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div><Label>City</Label><Input required value={city} placeholder="Enter city" onChange={(e) => setCity(e.target.value)} className="mt-1.5 h-11 bg-background border-white/15 text-base sm:text-sm" /></div>
                   <div><Label>State</Label><Input required value={stateName} placeholder="Enter state" onChange={(e) => setStateName(e.target.value)} className="mt-1.5 h-11 bg-background border-white/15 text-base sm:text-sm" /></div>
@@ -311,17 +311,17 @@ export default function AuthPage() {
               </div>
             )}
 
-            {/* Captcha */}
+            {/* Captcha block with flex-wrap and min-w to prevent squishing on mobile */}
             <div className="pt-4 mt-2 border-t border-white/10">
               <Label className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-primary" />Security check</Label>
-              <div className="mt-1.5 flex gap-2 items-center">
+              <div className="mt-1.5 flex flex-wrap gap-2 items-center">
                 <div className="select-none h-11 px-3 sm:px-4 flex items-center justify-center font-mono font-bold text-base sm:text-lg bg-gradient-to-r from-primary/20 to-primary/5 border border-primary/30 rounded-md tracking-widest shrink-0">
                   {captcha.q} = ?
                 </div>
                 <button type="button" onClick={() => { setCaptcha(genCaptcha()); setCaptchaInput(""); }} className="h-11 w-11 shrink-0 flex items-center justify-center border border-white/15 rounded-md text-white/60 hover:text-white hover:bg-white/5 transition-colors" title="Refresh">
                   <RefreshCw className="h-4 w-4" />
                 </button>
-                <Input required type="number" value={captchaInput} onChange={(e) => setCaptchaInput(e.target.value)} placeholder="Answer" className="flex-1 h-11 bg-background border-white/15 text-base sm:text-sm min-w-0" />
+                <Input required type="number" value={captchaInput} onChange={(e) => setCaptchaInput(e.target.value)} placeholder="Answer" className="flex-1 min-w-[120px] h-11 bg-background border-white/15 text-base sm:text-sm" />
               </div>
             </div>
 
