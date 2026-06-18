@@ -9,12 +9,10 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
 import { Logo } from "@/components/Logo";
 import { TypewriterText } from "@/components/TypewriterText";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ProductShowcaseSlider } from "@/components/ProductShowcaseSlider";
-
 import { products } from "@/data/products";
 
 const ingredients = [
@@ -48,7 +46,6 @@ const ingredients = [
 const buttonClass =
   "w-full sm:w-auto min-h-[48px] px-6 md:px-8 whitespace-nowrap shadow-glow flex items-center justify-center gap-2";
 
-// FIXED: Changed object-cover to object-contain and added p-4 so the images fit perfectly inside the box
 const imageClass =
   "w-full h-full object-contain p-4 transition-transform duration-500 will-change-transform group-hover:scale-105";
 
@@ -91,7 +88,8 @@ const Index = () => {
             Transparently dosed, made for evolution.
           </p>
 
-          <div className="mx-auto mt-8 flex max-w-sm flex-col gap-3 px-4 sm:max-w-none sm:flex-row sm:justify-center sm:px-0">
+          {/* Cleaned up wrapper for a single button */}
+          <div className="mx-auto mt-8 flex justify-center px-4 sm:px-0">
             <Button
               asChild
               size="lg"
@@ -135,7 +133,6 @@ const Index = () => {
 
         {/* Outer scrolling container */}
         <div className="relative flex w-full overflow-x-hidden select-none group/marquee">
-          {/* Track wrapper - Splitting into two sibling tracking columns ensures continuous CSS performance without clipping boundaries */}
           <div className="flex flex-nowrap gap-4 md:gap-6 animate-marquee whitespace-nowrap py-2 group-hover/marquee:[animation-play-state:paused]">
             
             {/* Array Track Item Set A */}
@@ -199,3 +196,79 @@ const Index = () => {
                   </div>
 
                   <div className="p-4 text-left whitespace-normal">
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
+                      {p.category}
+                    </p>
+                    <h3 className="mt-2 line-clamp-1 text-base font-bold text-foreground">
+                      {p.name}
+                    </h3>
+                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                      {p.tagline}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-base font-bold text-foreground font-mono">
+                        ₹{p.price.toLocaleString()}
+                      </span>
+                      <span className="inline-flex items-center text-xs font-medium text-primary">
+                        Shop
+                        <ChevronRight className="ml-1 h-3 w-3" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+            
+          </div>
+
+          {/* Vignette Overlays */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10 md:w-24" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10 md:w-24" />
+        </div>
+      </section>
+
+      {/* INGREDIENTS */}
+      <section className="relative overflow-hidden bg-background py-16 md:py-24">
+        <div className="container relative z-10 px-4">
+          <ScrollReveal className="mx-auto mb-12 max-w-2xl text-center">
+            <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-primary sm:text-xs">
+              TECH ARSENAL
+            </p>
+            <h2 className="text-3xl font-bold text-foreground md:text-5xl">
+              The science behind every scoop
+            </h2>
+            <p className="mt-4 text-sm text-muted-foreground md:text-base">
+              A closer look at the key ingredients powering our formulations.
+            </p>
+          </ScrollReveal>
+
+          <div className="flex flex-wrap justify-center gap-5">
+            {ingredients.map((ing, i) => (
+              <div 
+                key={ing.name} 
+                className="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] flex"
+              >
+                <ScrollReveal delay={i * 60} className="w-full">
+                  <div className="flex h-full flex-col items-start rounded-xl border border-border bg-card/80 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30">
+                    <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/15 text-primary">
+                      <ing.icon className="h-6 w-6" />
+                    </div>
+                    <h3 className="mt-5 text-lg font-semibold text-foreground">
+                      {ing.name}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      {ing.desc}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+};
+
+export default Index;
