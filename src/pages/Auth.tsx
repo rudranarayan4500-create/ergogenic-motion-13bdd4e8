@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -327,15 +327,6 @@ export default function AuthPage() {
             <Button disabled={busy} type="submit" size="lg" className="w-full h-12 mt-2 bg-primary hover:bg-primary/90 shadow-glow text-base font-semibold">
               {busy ? "Please wait…" : mode === "login" ? "Sign in securely" : "Create my account"}
             </Button>
-
-            <div className="space-y-2 mt-4">
-              <p className="text-xs text-center text-muted-foreground px-2 leading-relaxed">
-                By continuing you agree to our Terms & Privacy Policy. Your data is encrypted and stored securely.
-              </p>
-              <p className="text-xs text-center text-muted-foreground">
-                <Link to="/admin-login" className="hover:text-primary transition-colors">Admin sign in →</Link>
-              </p>
-            </div>
           </form>
         </div>
       </section>
