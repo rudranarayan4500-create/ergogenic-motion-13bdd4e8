@@ -37,7 +37,7 @@ export const SiteFooter = () => {
         <div>
           <h4 className="text-foreground font-semibold mb-4">Company</h4>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/ingredients" className="hover:text-primary">Ingredients</Link></li>
+            <li><Link to="/ingredients" className="hover:text-primary"></Link></li>
             <li><Link to="/privacy-policy" className="hover:text-primary">Privacy Policy</Link></li>
             <li><Link to="/terms-conditions" className="hover:text-primary">Terms & Conditions</Link></li>
             <li><Link to="/contact" className="hover:text-primary">Contact</Link></li>
