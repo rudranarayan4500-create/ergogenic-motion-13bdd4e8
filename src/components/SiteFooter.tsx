@@ -54,7 +54,7 @@ export const SiteFooter = () => {
       <div className="border-t border-border">
         <div className="container py-6 text-xs text-muted-foreground flex flex-col md:flex-row items-center justify-between gap-3">
           <p>© {new Date().getFullYear()} Ergogenic Nutrients. All rights reserved.</p>
-          <p>FSSAI Approved · Lab Tested · Made for Athletes</p>
+          <p> Made for Athletes</p>
         </div>
       </div>
     </footer>
