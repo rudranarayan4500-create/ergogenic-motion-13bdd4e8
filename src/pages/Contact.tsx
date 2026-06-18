@@ -20,9 +20,9 @@ const Contact = () => {
         <div className="container grid lg:grid-cols-3 gap-10">
           <div className="space-y-6">
             {[
-              { i: Phone, t: "Phone", d: "+91 98765 43210", s: "Mon-Sat, 10am – 7pm IST" },
-              { i: Mail, t: "Email", d: "support@ergogenic.in", s: "We reply within 24 hours" },
-              { i: MapPin, t: "Address", d: "Sector 18, Gurugram, India", s: "HQ & Fulfilment Center" },
+              { i: Phone, t: "Phone", d: "+91 82880 01279", s: "Mon-Sat, 10am – 7pm IST" },
+              { i: Mail, t: "Email", d: "info@ergogenic-nutrition.com", s: "We reply within 24 hours" },
+              { i: MapPin, t: "Address", d: "Bulk Powders Nutraceuticals Private Limited VILLAGE SOHIAN KALAN, FATEHGARH CHURIAN MAIN ROAD, TEHSIL MAJITHA, DISTRICT AMRITSAR, Punjab, India - 143601." },
             ].map((c) => (
               <div key={c.t} className="flex gap-4 p-5 bg-card border border-border rounded-xl">
                 <div className="h-11 w-11 rounded-lg bg-primary/15 grid place-items-center text-primary shrink-0">
