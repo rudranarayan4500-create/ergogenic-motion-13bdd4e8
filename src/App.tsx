@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+
+// Pages
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Products from "./pages/Products.tsx";
@@ -16,6 +18,13 @@ import Checkout from "./pages/Checkout.tsx";
 import AuthPage from "./pages/Auth.tsx";
 import AdminLogin from "./pages/AdminLogin.tsx";
 import Admin from "./pages/Admin.tsx";
+
+// New Pages
+import ShippingReturns from "./pages/ShippingReturns.tsx";
+import TermsConditions from "./pages/TermsConditions.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
+
+// Components & Hooks
 import { AdminGuard } from "./components/AdminGuard.tsx";
 import { AuthProvider } from "./hooks/useAuth.tsx";
 import { ThemeProvider } from "./hooks/useTheme.tsx";
@@ -47,6 +56,13 @@ const App = () => (
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>} />
+              
+              {/* Added Routes for Footer Links */}
+              <Route path="/shipping-returns" element={<ShippingReturns />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              
+              {/* Catch-all 404 Route */}
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
