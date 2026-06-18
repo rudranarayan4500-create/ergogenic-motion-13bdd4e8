@@ -110,11 +110,11 @@ const Contact = () => {
             <div className="grid md:grid-cols-2 gap-5">
               <div>
                 <Label>Email *</Label>
-                <Input name="email" type="email" required className="mt-1.5" placeholder="john@example.com" />
+                <Input name="email" type="email" required className="mt-1.5" placeholder="gmail@example.com" />
               </div>
               <div>
                 <Label>Phone Number *</Label>
-                <Input name="phone" required className="mt-1.5" placeholder="+91 98765 43210" />
+                <Input name="phone" required className="mt-1.5" placeholder="Enter Your Phone Number" />
               </div>
             </div>
             <div>
