@@ -92,7 +92,8 @@ const ProductDetail = () => {
           id: "micro-power-creatine", slug: "micro-power-creatine", name: "Micro Power Creatin", category: "Fitness",
           rating: 4.9, reviews: 1750, price: 1299, mrp: 1599,
           tagline: "Pure micronized formulation designed to support explosive power and muscle hydration.",
-          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg"
+          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg",
+          ingredients: ["Creatine Monohydrate", "Creatine Ethyl Ester", "Creatine Nitrate"]
         };
       }
       if (id === "ginseng-shot") {
@@ -208,7 +209,6 @@ const ProductDetail = () => {
       if (normalName.includes("glutashot") || normalName.includes("gluta shot")) {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-11 014007.png", kind: "image" },
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-11 013911.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-11 at 12.30.35 AM.jpeg", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-11 012205.png", kind: "image" }
         ];
@@ -264,9 +264,21 @@ const ProductDetail = () => {
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
   };
 
-  const productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Formula Specific Compounds"];
+  const normalNameCheck = (product.name || "").toLowerCase().trim();
+  
+  // Custom specific flavour inject
+  let productFlavours = (product as any).flavours || ["Unflavored"];
+  if (normalNameCheck.includes("super whey")) {
+    productFlavours = ["Tiramisu", "Alphonso Mango", "Vanilla Toffee", "Pistachio Gelato"];
+  }
+
+  // Custom specific ingredients inject
+  let productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Formula Specific Compounds"];
+  if (normalNameCheck.includes("micro power") || product.id === "micro-power-creatine") {
+    productIngredients = ["Creatine Monohydrate", "Creatine Ethyl Ester", "Creatine Nitrate"];
+  }
+
   const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["Supports Performance Output", "Promotes Cellular Hydration", "Assists Structured Recovery"];
-  const productFlavours = (product as any).flavours || ["Unflavored"];
 
   return (
     <div className="bg-[#FFFFFF] text-slate-900 min-h-screen antialiased selection:bg-slate-900 selection:text-white">
