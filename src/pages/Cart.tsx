@@ -199,11 +199,7 @@ export const Cart = () => {
                 <div className="flex justify-between">
                   <span className="text-neutral-400 font-medium">Logistic Despatch Rate</span>
                   <span className="font-mono text-neutral-200">
-                    {shipping === 0 ? (
-                      <span className="text-primary font-black text-xs uppercase tracking-widest bg-primary/10 border border-primary/20 px-2 py-0.5 rounded">FREE</span>
-                    ) : (
-                      `₹${shipping.toLocaleString()}`
-                    )}
+                    ₹{shipping.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between text-xl font-black border-t border-white/10 pt-4 mt-4">
