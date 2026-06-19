@@ -267,18 +267,36 @@ const ProductDetail = () => {
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
   };
 
-  const normalNameCheck = (product.name || "").toLowerCase().trim();
+  const normalNameCheck = String(product.name || "").toLowerCase().trim();
+  const idCheck = String(product.id || "").toLowerCase();
+  const slugCheck = String((product as any).slug || "").toLowerCase();
   
   // Custom specific flavour inject
   let productFlavours = (product as any).flavours || ["Unflavored"];
-  if (normalNameCheck.includes("super whey")) {
+  if (normalNameCheck.includes("super whey") || idCheck.includes("super-whey") || slugCheck.includes("super-whey")) {
     productFlavours = ["Tiramisu", "Alphonso Mango", "Vanilla Toffee", "Pistachio Gelato"];
   }
 
   // Custom specific ingredients inject
-  let productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Formula Specific Compounds"];
-  if (normalNameCheck.includes("micro power") || product.id === "micro-power-creatine") {
+  let productIngredients = (product as any).mainIngredients || (product as any).ingredients;
+  
+  // Coerce to array if somehow empty
+  if (!Array.isArray(productIngredients)) {
+    productIngredients = [];
+  }
+
+  // Aggressive check for ANY variation of creatine in name, id, or slug
+  const isCreatineProduct = 
+    normalNameCheck.includes("micro power") || 
+    normalNameCheck.includes("creatin") || 
+    idCheck.includes("creatin") || 
+    idCheck.includes("micro-power") ||
+    slugCheck.includes("creatin");
+
+  if (isCreatineProduct) {
     productIngredients = ["Creatine Monohydrate", "Creatine Ethyl Ester", "Creatine Nitrate"];
+  } else if (productIngredients.length === 0) {
+    productIngredients = ["Formula Specific Compounds"];
   }
 
   const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["Supports Performance Output", "Promotes Cellular Hydration", "Assists Structured Recovery"];
