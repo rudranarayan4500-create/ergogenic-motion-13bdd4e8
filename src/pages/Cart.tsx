@@ -4,7 +4,7 @@ import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Bell, Activity } from "lu
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { calculateShipping, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { getCart, updateQty as updateQtyLs, removeItem as removeItemLs, type CartItem } from "@/lib/cart";
 
 export const Cart = () => {
@@ -44,8 +44,7 @@ export const Cart = () => {
   };
 
   const subtotal = items.reduce((s, i) => s + (i.price ?? 0) * i.qty, 0);
-  const shipping = calculateShipping(subtotal);
-  const total = subtotal + shipping;
+  const total = subtotal;
 
   if (loading) {
     return (
@@ -196,12 +195,7 @@ export const Cart = () => {
                   <span className="text-neutral-400 font-medium">Subtotal Valuation</span>
                   <span className="font-mono text-neutral-200 font-bold">₹{subtotal.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-neutral-400 font-medium">Logistic Despatch Rate</span>
-                  <span className="font-mono text-neutral-200">
-                    ₹{shipping.toLocaleString()}
-                  </span>
-                </div>
+                
                 <div className="flex justify-between text-xl font-black border-t border-white/10 pt-4 mt-4">
                   <span className="uppercase tracking-tight">Gross Balance</span>
                   <span className="font-mono text-primary font-black text-2xl">₹{total.toLocaleString()}</span>
