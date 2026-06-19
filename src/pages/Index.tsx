@@ -102,17 +102,6 @@ const Index = () => {
                 <ChevronRight className="h-4 w-4 shrink-0" />
               </Link>
             </Button>
-
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className={`${buttonClass} border-border bg-transparent hover:bg-muted`}
-            >
-              <Link to="/ingredients">
-                Explore Science
-              </Link>
-            </Button>
           </div>
         </div>
       </section>
