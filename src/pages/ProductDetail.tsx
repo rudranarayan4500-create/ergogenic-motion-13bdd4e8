@@ -219,7 +219,6 @@ const ProductDetail = () => {
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 162527.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 162544.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 144649.png", kind: "image" }
-        
         ];
       }
       if (normalName.includes("ginseng shot") || normalName.includes("ginseng-shot") || normalName.includes("ginseng extract") || product.id === "ginseng-shot") {
@@ -231,11 +230,11 @@ const ProductDetail = () => {
       }
       if (normalName.includes("carnitine shot") || normalName.includes("carnitine-shot") || product.id === "carnitine-shot") {
         return [
-          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png", kind: "image" }
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 163501.png", kind: "image" },
-           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 163520.png", kind: "image" }
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 163520.png", kind: "image" }
         ];
-      
+      }
     }
     
     if (!product) return [];
