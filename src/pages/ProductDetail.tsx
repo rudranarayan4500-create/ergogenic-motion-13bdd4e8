@@ -23,13 +23,15 @@ const ProductDetail = () => {
   const [, setScrollPositions] = useState<{ [key: number]: ScrollPosition }>({});
   const scrollHandlerRef = useRef<(() => void) | null>(null);
   
-  // Track the currently active image index for the new Thumbnail Gallery layout
+  // Track active image and active flavor
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [selectedFlavour, setSelectedFlavour] = useState<string | null>(null);
 
-  // Reset active image when navigating to a new product
+  // Reset states when navigating to a new product
   useEffect(() => {
     setActiveImageIndex(0);
     setQty(1);
+    setSelectedFlavour(null);
   }, [id]);
 
   const product = useMemo(() => {
@@ -245,7 +247,6 @@ const ProductDetail = () => {
     return [{ url: product.image, kind: "image" }];
   }, [extraMedia, product]);
 
-  // Make sure we never index out of bounds
   const currentMedia = gallery[activeImageIndex] || gallery[0] || { url: product?.image, kind: 'image' };
 
   if (!product) return <Navigate to="/products" replace />;
@@ -279,15 +280,16 @@ const ProductDetail = () => {
     productFlavours = ["Tiramisu", "Alphonso Mango", "Vanilla Toffee", "Pistachio Gelato"];
   }
 
+  // Set active flavor fallback
+  const activeFlavour = selectedFlavour || productFlavours[0];
+
   // Custom specific ingredients inject
   let productIngredients = (product as any).mainIngredients || (product as any).ingredients;
   
-  // Coerce to array if somehow empty
   if (!Array.isArray(productIngredients)) {
     productIngredients = [];
   }
 
-  // Aggressive check for ANY variation of creatine in name, id, or slug
   const isCreatineProduct = 
     normalNameCheck.includes("micro power") || 
     normalNameCheck.includes("creatin") || 
@@ -319,15 +321,13 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      {/* Hero Product Section - High End E-commerce Layout */}
+      {/* Hero Product Section */}
       <section className="py-12 md:py-16 relative overflow-hidden bg-white">
         <div className="container max-w-7xl mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
             
             {/* IMAGE GALLERY CANVAS — Left Side */}
             <div className="w-full lg:w-1/2 order-2 lg:order-1 space-y-4">
-              
-              {/* Main Image Spotlight */}
               <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 sm:p-10 relative overflow-hidden shadow-sm flex items-center justify-center aspect-[4/5] sm:aspect-square">
                 {currentMedia.kind === "video" ? (
                   <video src={currentMedia.url} autoPlay loop muted playsInline className="w-full h-full object-cover rounded-xl" />
@@ -340,7 +340,6 @@ const ProductDetail = () => {
                 )}
               </div>
 
-              {/* Thumbnail Grid Below Main Image */}
               {gallery.length > 1 && (
                 <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 pt-2">
                   {gallery.map((item, idx) => (
@@ -369,7 +368,6 @@ const ProductDetail = () => {
             <div className="w-full lg:w-1/2 order-1 lg:order-2 lg:pl-6 space-y-8 lg:sticky lg:top-28 self-start">
               
               <div className="space-y-4 border-b border-slate-100 pb-8">
-                {/* Rating Badge */}
                 <div className="flex items-center gap-1.5 text-xs">
                   <div className="flex items-center gap-0.5 px-2 py-0.5 rounded border bg-amber-50 border-amber-200 shadow-sm">
                     <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
@@ -381,12 +379,10 @@ const ProductDetail = () => {
                   <span className="font-mono font-bold text-slate-500">{product.reviews} Reviews</span>
                 </div>
 
-                {/* Title */}
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-[0.95] text-slate-900">
                   {product.name}
                 </h1>
                 
-                {/* Pricing Blocks */}
                 <div className="flex items-baseline gap-4 pt-2">
                   <span className="text-4xl font-black tracking-tight text-slate-900 font-mono">
                     ₹{product.price.toLocaleString()}
@@ -401,7 +397,6 @@ const ProductDetail = () => {
                 <p className="text-xs text-slate-400 font-medium">Taxes included. Free shipping available.</p>
               </div>
 
-              {/* Clinical Benefits Checklist */}
               <div className="space-y-3 pt-2">
                 <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-lg mb-4">{product.tagline} {product.description}</p>
                 {productBenefits.slice(0, 4).map((benefit: string, i: number) => (
@@ -412,25 +407,33 @@ const ProductDetail = () => {
                 ))}
               </div>
 
-              {/* Flavor Options Matrix */}
+              {/* Flavor Options Matrix - Now Interactive */}
               <div className="space-y-3 pt-6 border-t border-slate-100">
                 <span className="text-[10px] uppercase font-black tracking-[0.15em] text-slate-400 block">Select Flavour</span>
                 <div className="flex flex-wrap gap-2.5">
-                  {productFlavours.map((flavour: string, i: number) => (
-                    <span key={flavour} className={cn(
-                      "text-xs px-4 py-2.5 rounded-xl font-bold border transition-colors cursor-pointer select-none",
-                      i === 0 ? "bg-slate-900 border-slate-900 text-white shadow-md" : "bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-400"
-                    )}>
-                      {flavour}
-                    </span>
-                  ))}
+                  {productFlavours.map((flavour: string) => {
+                    const isSelected = activeFlavour === flavour;
+                    return (
+                      <button 
+                        key={flavour} 
+                        type="button"
+                        onClick={() => setSelectedFlavour(flavour)}
+                        className={cn(
+                          "text-xs px-4 py-2.5 rounded-xl font-bold border transition-all cursor-pointer select-none",
+                          isSelected 
+                            ? "bg-slate-900 border-slate-900 text-white shadow-md scale-105" 
+                            : "bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-400 hover:bg-slate-100"
+                        )}
+                      >
+                        {flavour}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Add to Cart Control Deck */}
               <div className="pt-6 space-y-4">
                 <div className="flex flex-col sm:flex-row gap-4">
-                  {/* Quantity */}
                   <div className="flex items-center justify-between border rounded-xl p-1 shrink-0 h-14 border-slate-300 bg-white w-full sm:w-32 shadow-sm">
                     <button onClick={() => setQty(Math.max(1, qty - 1))} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
                       <Minus className="h-4 w-4" />
@@ -441,13 +444,11 @@ const ProductDetail = () => {
                     </button>
                   </div>
 
-                  {/* Add Button */}
                   <Button onClick={add} size="lg" className="bg-orange-600 hover:bg-orange-700 text-white flex-1 font-black uppercase tracking-widest text-xs h-14 rounded-xl shadow-lg shadow-orange-600/20 transition-all">
                     Add to Cart — ₹{(product.price * qty).toLocaleString()}
                   </Button>
                 </div>
                 
-                {/* Checkout Button */}
                 <Button asChild variant="outline" size="lg" className="w-full font-black uppercase tracking-wider text-xs h-14 rounded-xl border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-900 shadow-sm transition-all">
                   <Link to="/checkout">Proceed to Checkout</Link>
                 </Button>
@@ -458,7 +459,6 @@ const ProductDetail = () => {
               </div>
 
             </div>
-
           </div>
         </div>
       </section>
