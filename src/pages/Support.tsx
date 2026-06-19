@@ -16,7 +16,7 @@ const Support = () => (
         </div>
         <div>
           <h2 className="text-2xl font-bold mb-4">Customer Support</h2>
-          <p className="text-white/75">Our team is available Monday to Saturday, 10am to 7pm IST. Email support@ergogenic.in or call +91 82880 01279. We typically reply within a few hours.</p>
+          <p className="text-white/75">Our team is available Monday to Saturday, 10am to 7pm IST. Email support@ergogenic.in or call +91 98765 43210. We typically reply within a few hours.</p>
         </div>
         <div>
           <h2 className="text-2xl font-bold mb-6">FAQ</h2>

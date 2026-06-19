@@ -9,10 +9,12 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+
 import { Logo } from "@/components/Logo";
 import { TypewriterText } from "@/components/TypewriterText";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ProductShowcaseSlider } from "@/components/ProductShowcaseSlider";
+
 import { products } from "@/data/products";
 
 const ingredients = [
@@ -46,6 +48,7 @@ const ingredients = [
 const buttonClass =
   "w-full sm:w-auto min-h-[48px] px-6 md:px-8 whitespace-nowrap shadow-glow flex items-center justify-center gap-2";
 
+// FIXED: Changed object-cover to object-contain and added p-4 so the images fit perfectly inside the box
 const imageClass =
   "w-full h-full object-contain p-4 transition-transform duration-500 will-change-transform group-hover:scale-105";
 
@@ -88,8 +91,7 @@ const Index = () => {
             Transparently dosed, made for evolution.
           </p>
 
-          {/* Cleaned up wrapper for a single button */}
-          <div className="mx-auto mt-8 flex justify-center px-4 sm:px-0">
+          <div className="mx-auto mt-8 flex max-w-sm flex-col gap-3 px-4 sm:max-w-none sm:flex-row sm:justify-center sm:px-0">
             <Button
               asChild
               size="lg"
@@ -98,6 +100,17 @@ const Index = () => {
               <Link to="/products">
                 Shop Now
                 <ChevronRight className="h-4 w-4 shrink-0" />
+              </Link>
+            </Button>
+
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className={`${buttonClass} border-border bg-transparent hover:bg-muted`}
+            >
+              <Link to="/ingredients">
+                Explore Science
               </Link>
             </Button>
           </div>
@@ -133,6 +146,7 @@ const Index = () => {
 
         {/* Outer scrolling container */}
         <div className="relative flex w-full overflow-x-hidden select-none group/marquee">
+          {/* Track wrapper - Splitting into two sibling tracking columns ensures continuous CSS performance without clipping boundaries */}
           <div className="flex flex-nowrap gap-4 md:gap-6 animate-marquee whitespace-nowrap py-2 group-hover/marquee:[animation-play-state:paused]">
             
             {/* Array Track Item Set A */}
@@ -242,6 +256,7 @@ const Index = () => {
             </p>
           </ScrollReveal>
 
+          {/* Adjusted to flex-wrap to beautifully center the 5 boxes */}
           <div className="flex flex-wrap justify-center gap-5">
             {ingredients.map((ing, i) => (
               <div 
