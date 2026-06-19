@@ -233,7 +233,7 @@ const ProductDetail = () => {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png", kind: "image" }
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 163501.png", kind: "image" },
-           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 163520.png", kind: "image" },
+           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 163520.png", kind: "image" }
         ];
       }
     }
