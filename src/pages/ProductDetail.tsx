@@ -194,6 +194,8 @@ const ProductDetail = () => {
       if (normalName.includes("plasma")) {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-10 at 8.15.30 PM.jpeg", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//7a68e172-6fba-4cac-b68f-f59e974777e5.png", kind: "image" },
+          { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c6922b91-5abf-4e27-9e29-51bd6e7625d1.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 153607.png", kind: "image" }
         ];
       }
