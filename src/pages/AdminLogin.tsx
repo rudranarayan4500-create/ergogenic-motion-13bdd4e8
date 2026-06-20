@@ -90,7 +90,7 @@ export default function AdminLogin() {
                 type="text" 
                 value={loginId} 
                 onChange={(e) => setLoginId(e.target.value)} 
-                placeholder="admin@example.com or +1234567890"
+                placeholder="Enter the Email"
                 className="mt-1.5 bg-background border-white/15" 
               />
             </div>
