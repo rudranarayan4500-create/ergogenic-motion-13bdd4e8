@@ -16,9 +16,9 @@ const genCaptcha = () => {
 };
 
 export default function AdminLogin() {
-  // Pre-fill both email and password from Vite environment variables
-  const [loginId, setLoginId] = useState(import.meta.env.VITE_ADMIN_EMAIL || "");
-  const [password, setPassword] = useState(import.meta.env.VITE_ADMIN_PASSWORD || "");
+  // Hardcoded email and password for local testing
+  const [loginId, setLoginId] = useState("info@ergogenic-nutrition.com");
+  const [password, setPassword] = useState("egro-admin@!1244");
   const [showPassword, setShowPassword] = useState(false);
   
   const [captcha, setCaptcha] = useState(genCaptcha());
