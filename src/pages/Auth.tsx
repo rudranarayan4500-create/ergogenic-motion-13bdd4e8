@@ -106,14 +106,12 @@ export default function AuthPage() {
 
         if (error) throw error;
 
-        // If auto-confirm is on, we'll get an immediate session
         if (data?.session) {
           toast({ title: "Welcome to Ergogenic", description: "Account created successfully." });
           nav("/");
           return;
         }
 
-        // If email confirmation is required, handle cleanly instead of letting sign-in crash the thread
         try {
           const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
           if (signInErr) throw signInErr;
@@ -187,6 +185,7 @@ export default function AuthPage() {
       <section className="py-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
         <div className="container max-w-2xl relative">
+          
           {/* Tabs */}
           <div className="grid grid-cols-2 p-1 bg-card border border-white/10 rounded-full mb-8 max-w-sm mx-auto">
             {(["login", "signup"] as const).map((m) => (
@@ -194,8 +193,10 @@ export default function AuthPage() {
                 key={m}
                 type="button"
                 onClick={() => setMode(m)}
-                className={`py-2.5 rounded-full text-sm font-semibold transition-all ${
-                  mode === m ? "bg-primary text-primary-foreground shadow-glow" : "text-white/60 hover:text-white"
+                className={`py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  mode === m 
+                    ? "bg-primary text-white shadow-glow" 
+                    : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {m === "login" ? "Sign in" : "Create account"}
@@ -318,7 +319,7 @@ export default function AuthPage() {
               </div>
             </div>
 
-            <Button disabled={busy} type="submit" size="lg" className="w-full h-12 bg-primary hover:bg-primary/90 shadow-glow text-base font-semibold">
+            <Button disabled={busy} type="submit" size="lg" className="w-full h-12 bg-primary hover:bg-primary/90 shadow-glow text-base text-white font-semibold">
               {busy ? "Please wait…" : mode === "login" ? "Sign in securely" : "Create my account"}
             </Button>
 
