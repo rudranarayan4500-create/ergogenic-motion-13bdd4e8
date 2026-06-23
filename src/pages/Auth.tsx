@@ -186,8 +186,8 @@ export default function AuthPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
         <div className="container max-w-2xl relative">
           
-          {/* Tabs */}
-          <div className="grid grid-cols-2 p-1 bg-card border border-white/10 rounded-full mb-8 max-w-sm mx-auto">
+          {/* Tabs - Updated with Black background and Light Blue active state */}
+          <div className="grid grid-cols-2 p-1 bg-black/80 border border-white/10 rounded-full mb-8 max-w-sm mx-auto shadow-inner">
             {(["login", "signup"] as const).map((m) => (
               <button
                 key={m}
@@ -195,8 +195,8 @@ export default function AuthPage() {
                 onClick={() => setMode(m)}
                 className={`py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
                   mode === m 
-                    ? "bg-primary text-white shadow-glow" 
-                    : "text-white/60 hover:text-white hover:bg-white/5"
+                    ? "bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]" 
+                    : "text-white/60 hover:text-white hover:bg-white/10"
                 }`}
               >
                 {m === "login" ? "Sign in" : "Create account"}
