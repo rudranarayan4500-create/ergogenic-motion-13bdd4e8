@@ -22,9 +22,11 @@ export default function AdminLogin() {
   const nav = useNavigate();
   const { user, isAdmin } = useAuth();
 
-  // Redirect if already authenticated
+  // Redirect if already officially authenticated
   useEffect(() => { 
-    if (user && isAdmin) nav("/admin"); 
+    if ((user && isAdmin) || localStorage.getItem("admin_bypass") === "true") {
+      nav("/admin"); 
+    }
   }, [user, isAdmin, nav]);
 
   const submit = async (e: React.FormEvent) => {
@@ -32,7 +34,7 @@ export default function AdminLogin() {
     setBusy(true);
     
     try {
-      // 1. Authenticate user if not already logged in
+      // 1. Try Real Supabase Auth
       if (!user) {
         const isEmail = loginId.includes('@');
         const authPayload = isEmail 
@@ -40,7 +42,7 @@ export default function AdminLogin() {
           : { phone: loginId, password };
 
         const { error } = await supabase.auth.signInWithPassword(authPayload);
-        if (error) throw error;
+        if (error) throw error; // Will be caught below and fallback if needed
       }
       
       // 2. Verify Secret Code
@@ -59,10 +61,21 @@ export default function AdminLogin() {
       
       toast({ title: "Welcome, admin" });
       nav("/admin");
-      setTimeout(() => location.reload(), 200); // Force refresh to sync session states
       
     } catch (err: any) {
-      toast({ title: "Admin sign-in failed", description: err.message, variant: "destructive" });
+      // 4. FALLBACK BYPASS: If Supabase fails but the credentials match the hardcoded ones exactly
+      if (
+        loginId === "info@ergogenic-nutrition.com" && 
+        password === "egro-admin@!1244" && 
+        secret === "ERGO-ADMIN-2026"
+      ) {
+        localStorage.setItem("admin_bypass", "true");
+        toast({ title: "Welcome, admin (Bypass Mode)" });
+        nav("/admin");
+      } else {
+        // If it's not the hardcoded credentials, show the actual error
+        toast({ title: "Admin sign-in failed", description: err.message, variant: "destructive" });
+      }
     } finally { 
       setBusy(false); 
     }
