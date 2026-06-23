@@ -48,7 +48,6 @@ export const SiteFooter = () => {
           <ul className="space-y-2 text-sm">
             {/* Updated to point to the new combined Shipping & Returns route */}
             <li><Link to="/shipping-returns" className="hover:text-primary">Shipping & Returns</Link></li>
-            <li><Link to="/support" className="hover:text-primary">FAQ & Support</Link></li>
             <li><Link to="/contact" className="hover:text-primary">Customer Care</Link></li>
           </ul>
         </div>
