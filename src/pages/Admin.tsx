@@ -117,6 +117,13 @@ export default function Admin() {
     else toast({ title: "Settings saved" });
   };
 
+  // Ensure the frontend bypass gets cleared when you sign out
+  const handleSignOut = async () => {
+    localStorage.removeItem("admin_bypass");
+    await signOut();
+    window.location.href = "/";
+  };
+
   return (
     <>
       <PageHero eyebrow="Admin" title="Control Center" subtitle="Manage users, orders, products and messages." />
@@ -128,7 +135,8 @@ export default function Admin() {
                 <div key={s.l} className="bg-card border border-white/10 rounded-xl p-4"><div className="text-xs text-white/50">{s.l}</div><div className="text-2xl font-bold">{s.v}</div></div>
               ))}
             </div>
-            <Button variant="outline" onClick={() => signOut().then(() => location.href = "/")} className="border-white/15">Sign out</Button>
+            {/* Updated onClick to use handleSignOut */}
+            <Button variant="outline" onClick={handleSignOut} className="border-white/15">Sign out</Button>
           </div>
 
           <Tabs defaultValue="users">
