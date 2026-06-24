@@ -1,4 +1,3 @@
-
 -- Roles
 CREATE TYPE public.app_role AS ENUM ('admin', 'user');
 
@@ -54,14 +53,14 @@ CREATE POLICY "admins read settings" ON public.admin_settings FOR SELECT TO auth
 CREATE POLICY "admins update settings" ON public.admin_settings FOR UPDATE TO authenticated USING (public.has_role(auth.uid(),'admin'));
 INSERT INTO public.admin_settings (id) VALUES (1) ON CONFLICT DO NOTHING;
 
--- Verify admin secret (security definer so non-admins can call it during admin login)
+-- Verify admin secret
 CREATE OR REPLACE FUNCTION public.verify_admin_secret(_code text)
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
   SELECT EXISTS (SELECT 1 FROM public.admin_settings WHERE id = 1 AND secret_code = _code)
 $$;
 GRANT EXECUTE ON FUNCTION public.verify_admin_secret(text) TO authenticated;
 
--- Claim-admin function: first authorized user with the admin_email (or first user ever if email blank) gets admin
+-- Claim-admin function
 CREATE OR REPLACE FUNCTION public.claim_admin(_code text)
 RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
 DECLARE
@@ -82,7 +81,7 @@ BEGIN
 END $$;
 GRANT EXECUTE ON FUNCTION public.claim_admin(text) TO authenticated;
 
--- Auto-create profile + default user role on signup
+-- Auto-create profile
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
 BEGIN
@@ -97,7 +96,7 @@ BEGIN
   RETURN NEW;
 END $$;
 
-CREATE TRIGGER on_auth_user_created
+CREATE OR REPLACE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
@@ -129,18 +128,19 @@ CREATE POLICY "admins write products" ON public.products FOR INSERT TO authentic
 CREATE POLICY "admins update products" ON public.products FOR UPDATE TO authenticated USING (public.has_role(auth.uid(),'admin'));
 CREATE POLICY "admins delete products" ON public.products FOR DELETE TO authenticated USING (public.has_role(auth.uid(),'admin'));
 
--- Orders
+-- Orders (Added seen_by_admin)
 CREATE TABLE public.orders (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
   total numeric NOT NULL,
   status text NOT NULL DEFAULT 'created',
+  seen_by_admin boolean DEFAULT false, 
   razorpay_order_id text,
   razorpay_payment_id text,
   shipping jsonb,
   created_at timestamptz NOT NULL DEFAULT now()
 );
-GRANT SELECT, INSERT ON public.orders TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON public.orders TO authenticated;
 GRANT ALL ON public.orders TO service_role;
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "users view own orders" ON public.orders FOR SELECT TO authenticated USING (auth.uid() = user_id);
@@ -148,6 +148,7 @@ CREATE POLICY "users insert own orders" ON public.orders FOR INSERT TO authentic
 CREATE POLICY "admins view all orders" ON public.orders FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin'));
 CREATE POLICY "admins update orders" ON public.orders FOR UPDATE TO authenticated USING (public.has_role(auth.uid(),'admin'));
 
+-- Order Items
 CREATE TABLE public.order_items (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   order_id uuid NOT NULL REFERENCES public.orders(id) ON DELETE CASCADE,
@@ -184,6 +185,23 @@ ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "anyone inserts message" ON public.contact_messages FOR INSERT TO anon, authenticated WITH CHECK (true);
 CREATE POLICY "admins read messages" ON public.contact_messages FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin'));
 CREATE POLICY "admins delete messages" ON public.contact_messages FOR DELETE TO authenticated USING (public.has_role(auth.uid(),'admin'));
+
+-- Reviews (Missing Table Added)
+CREATE TABLE public.reviews (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  product_slug text REFERENCES public.products(slug) ON DELETE CASCADE,
+  rating int NOT NULL,
+  title text,
+  body text,
+  approved boolean DEFAULT false,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+GRANT INSERT ON public.reviews TO authenticated;
+GRANT SELECT, UPDATE, DELETE ON public.reviews TO authenticated;
+GRANT ALL ON public.reviews TO service_role;
+ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anyone reads approved reviews" ON public.reviews FOR SELECT TO anon, authenticated USING (approved = true);
+CREATE POLICY "admins manage reviews" ON public.reviews FOR ALL TO authenticated USING (public.has_role(auth.uid(),'admin'));
 
 -- Seed catalog
 INSERT INTO public.products (slug,name,tagline,price,mrp,category,description,benefits,how_to_use,ingredients,rating,reviews) VALUES
