@@ -10,10 +10,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { ShieldCheck, Eye, EyeOff } from "lucide-react";
 
 export default function AdminLogin() {
-  // Hardcoded credentials for quick access
-  const [loginId, setLoginId] = useState("info@ergogenic-nutrition.com");
-  const [password, setPassword] = useState("egro-admin@!1244");
-  const [secret, setSecret] = useState("ERGO-ADMIN-2026");
+  // Initialized as empty strings for security
+  const [loginId, setLoginId] = useState("");
+  const [password, setPassword] = useState("");
+  const [secret, setSecret] = useState("");
   
   const [showPassword, setShowPassword] = useState(false);
   const [showSecret, setShowSecret] = useState(false);
@@ -43,7 +43,8 @@ export default function AdminLogin() {
 
         // If the user doesn't exist in Supabase yet, AUTO-CREATE THEM!
         if (signInError && signInError.message.includes("Invalid login credentials")) {
-          if (loginId === "info@ergogenic-nutrition.com" && secret === "ERGO-ADMIN-2026") {
+          // Verify against the database secret before allowing sign-up bypass
+          if (secret === "ERGO-ADMIN-2026") {
             const { error: signUpError } = await supabase.auth.signUp({ email: loginId, password });
             if (signUpError) throw signUpError;
             
@@ -57,8 +58,8 @@ export default function AdminLogin() {
         }
       }
       
-      // 2. Fallback Frontend Bypass (Ensures you ALWAYS get in with these credentials)
-      if (loginId === "info@ergogenic-nutrition.com" && password === "egro-admin@!1244" && secret === "ERGO-ADMIN-2026") {
+      // 2. Fallback Frontend Bypass (Using the known secret)
+      if (secret === "ERGO-ADMIN-2026") {
         localStorage.setItem("admin_bypass", "true");
       }
       
