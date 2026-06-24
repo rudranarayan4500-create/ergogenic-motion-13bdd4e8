@@ -49,7 +49,7 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Data States (Your exact backend logic)
+  // Data States
   const [profiles, setProfiles] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
@@ -60,23 +60,30 @@ export default function Admin() {
   const [newOrderCount, setNewOrderCount] = useState(0);
 
   const loadAll = async () => {
-    const [p, o, pr, m, s, rv] = await Promise.all([
-      supabase.from("profiles").select("*").order("created_at", { ascending: false }),
-      supabase.from("orders").select("*").order("created_at", { ascending: false }),
-      supabase.from("products").select("*").order("created_at", { ascending: false }),
-      supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
-      supabase.from("admin_settings").select("*").eq("id", 1).maybeSingle(),
-      supabase.from("reviews").select("*").order("created_at", { ascending: false }),
-    ]);
-    
-    setProfiles(p.data ?? []);
-    setOrders(o.data ?? []);
-    setProducts(pr.data ?? []);
-    setMessages(m.data ?? []);
-    setReviews(rv.data ?? []);
-    
-    setNewOrderCount((o.data ?? []).filter((x: any) => !x.seen_by_admin).length);
-    if (s.data) setSettings(s.data);
+    try {
+      const [p, o, pr, m, s, rv] = await Promise.all([
+        supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+        supabase.from("orders").select("*").order("created_at", { ascending: false }),
+        supabase.from("products").select("*").order("created_at", { ascending: false }),
+        supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
+        supabase.from("admin_settings").select("*").eq("id", 1).maybeSingle(),
+        supabase.from("reviews").select("*").order("created_at", { ascending: false }),
+      ]);
+      
+      if (p.error) console.error("Profiles error:", p.error.message);
+      if (o.error) console.error("Orders error:", o.error.message);
+
+      setProfiles(p.data ?? []);
+      setOrders(o.data ?? []);
+      setProducts(pr.data ?? []);
+      setMessages(m.data ?? []);
+      setReviews(rv.data ?? []);
+      
+      setNewOrderCount((o.data ?? []).filter((x: any) => !x.seen_by_admin).length);
+      if (s.data) setSettings(s.data);
+    } catch (err) {
+      toast({ title: "Sync Error", description: "Could not load complete dashboard data.", variant: "destructive" });
+    }
   };
 
   useEffect(() => { loadAll(); }, []);
@@ -94,9 +101,14 @@ export default function Admin() {
   };
 
   const makeAdmin = async (uid: string) => {
+    // Inserts utilizing the custom app_role enum
     const { error } = await supabase.from("user_roles").insert({ user_id: uid, role: "admin" });
-    if (error) toast({ title: "Failed", description: error.message, variant: "destructive" });
-    else toast({ title: "Role granted" });
+    if (error) {
+        if (error.code === '23505') toast({ title: "Already Admin", description: "User already has an admin role." });
+        else toast({ title: "Failed", description: error.message, variant: "destructive" });
+    } else {
+        toast({ title: "Role granted successfully" });
+    }
   };
 
   const updateOrderStatus = async (id: string, status: string) => {
@@ -183,7 +195,7 @@ export default function Admin() {
         />
       )}
 
-      {/* Left Sidebar (Black) */}
+      {/* Left Sidebar */}
       <aside className={`
         fixed md:sticky top-0 left-0 z-50 h-screen w-72 bg-black text-white flex flex-col shadow-2xl md:shadow-none
         transition-transform duration-300 ease-in-out
@@ -217,7 +229,6 @@ export default function Admin() {
                   <Icon size={20} className={isActive ? "text-white" : "text-white/60"} />
                   {item.label}
                 </div>
-                {/* Notification Badge for Orders in Sidebar */}
                 {item.id === "orders" && newOrderCount > 0 && (
                   <span className="h-5 min-w-5 px-1.5 rounded-full bg-red-500 text-[11px] font-bold text-white flex items-center justify-center animate-pulse">
                     {newOrderCount}
@@ -239,7 +250,7 @@ export default function Admin() {
         </div>
       </aside>
 
-      {/* Main Content Area (White / Light) */}
+      {/* Main Content Area */}
       <main className="flex-1 p-6 md:p-10 w-full overflow-x-hidden">
         
         <div className="mb-8">
@@ -251,8 +262,6 @@ export default function Admin() {
           </p>
         </div>
 
-        {/* --- TABS CONTENT MAPPED FROM YOUR ORIGINAL CODE --- */}
-        
         {activeTab === "dashboard" && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
