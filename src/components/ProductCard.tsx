@@ -7,15 +7,21 @@ import { toast } from "@/hooks/use-toast";
 
 export const ProductCard = ({ p }: { p: Product }) => {
   const dynamicSlugRoute = p.slug || p.id;
+  const outOfStock = (p as any).in_stock === false;
 
   return (
     <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-border hover-lift flex flex-col justify-between">
       <div>
         <Link to={`/products/${dynamicSlugRoute}`} className="block aspect-[4/5] overflow-hidden bg-slate-50 border-b border-slate-100 relative flex items-center justify-center">
+          {outOfStock && (
+            <span className="absolute top-3 left-3 z-10 bg-red-600 text-white text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded shadow">
+              Out of stock
+            </span>
+          )}
           <img
             src={p.image}
             alt={p.name}
-            className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105 select-none pointer-events-none"
+            className={`h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105 select-none pointer-events-none ${outOfStock ? "opacity-50 grayscale" : ""}`}
             loading="lazy"
             onError={(e) => {
               (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
@@ -42,14 +48,16 @@ export const ProductCard = ({ p }: { p: Product }) => {
           </div>
           <Button
             size="sm"
-            className="bg-slate-900 text-white hover:bg-slate-800 font-black uppercase tracking-wider text-[11px] rounded-lg px-4 h-9 shadow-sm"
+            disabled={outOfStock}
+            className="bg-slate-900 text-white hover:bg-slate-800 font-black uppercase tracking-wider text-[11px] rounded-lg px-4 h-9 shadow-sm disabled:bg-slate-300 disabled:cursor-not-allowed"
             onClick={(e) => {
               e.preventDefault();
+              if (outOfStock) return;
               addToCart({ slug: dynamicSlugRoute, name: p.name, price: p.price, image: p.image });
               toast({ title: "Added to cart", description: p.name });
             }}
           >
-            Add
+            {outOfStock ? "Sold Out" : "Add"}
           </Button>
         </div>
       </div>

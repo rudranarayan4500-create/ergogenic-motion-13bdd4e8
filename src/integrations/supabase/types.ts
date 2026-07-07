@@ -251,6 +251,7 @@ export type Database = {
           how_to_use: string | null
           id: string
           image: string | null
+          in_stock: boolean
           ingredients: string[] | null
           media: Json
           mrp: number | null
@@ -270,6 +271,7 @@ export type Database = {
           how_to_use?: string | null
           id?: string
           image?: string | null
+          in_stock?: boolean
           ingredients?: string[] | null
           media?: Json
           mrp?: number | null
@@ -289,6 +291,7 @@ export type Database = {
           how_to_use?: string | null
           id?: string
           image?: string | null
+          in_stock?: boolean
           ingredients?: string[] | null
           media?: Json
           mrp?: number | null

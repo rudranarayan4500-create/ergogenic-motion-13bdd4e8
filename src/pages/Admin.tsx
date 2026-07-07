@@ -26,6 +26,8 @@ import {
   Pencil,
   Save,
   KeyRound,
+  PackageX,
+  PackageCheck,
 } from "lucide-react";
 
 const menu = [
@@ -191,6 +193,20 @@ export default function Admin() {
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) return toast({ title: "Delete failed", description: error.message, variant: "destructive" });
     toast({ title: "Product deleted" });
+    loadAll();
+  };
+
+  const toggleStock = async (id: string, in_stock: boolean) => {
+    const { error } = await supabase.from("products").update({ in_stock }).eq("id", id);
+    if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    toast({ title: in_stock ? "Marked in stock" : "Marked out of stock" });
+    loadAll();
+  };
+
+  const toggleActive = async (id: string, active: boolean) => {
+    const { error } = await supabase.from("products").update({ active }).eq("id", id);
+    if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    toast({ title: active ? "Product visible on site" : "Product hidden from site" });
     loadAll();
   };
 
@@ -463,6 +479,8 @@ export default function Admin() {
                       <th className="py-3 font-medium">Category</th>
                       <th className="py-3 font-medium">Price</th>
                       <th className="py-3 font-medium">MRP</th>
+                      <th className="py-3 font-medium">Stock</th>
+                      <th className="py-3 font-medium">Visible</th>
                       <th className="py-3"></th>
                     </tr>
                   </thead>
@@ -499,6 +517,32 @@ export default function Admin() {
                             ) : (
                               <span className="text-slate-500">₹{Number(p.mrp || 0).toLocaleString()}</span>
                             )}
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => toggleStock(p.id, !(p.in_stock ?? true))}
+                              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition ${
+                                (p.in_stock ?? true)
+                                  ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                                  : "bg-red-100 text-red-800 hover:bg-red-200"
+                              }`}
+                              title="Toggle stock"
+                            >
+                              {(p.in_stock ?? true) ? (<><PackageCheck className="h-3.5 w-3.5" /> In stock</>) : (<><PackageX className="h-3.5 w-3.5" /> Out of stock</>)}
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => toggleActive(p.id, !(p.active ?? true))}
+                              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition ${
+                                (p.active ?? true)
+                                  ? "bg-sky-100 text-sky-800 hover:bg-sky-200"
+                                  : "bg-slate-200 text-slate-700 hover:bg-slate-300"
+                              }`}
+                              title="Show/hide on website"
+                            >
+                              {(p.active ?? true) ? "Visible" : "Hidden"}
+                            </button>
                           </td>
                           <td className="text-right space-x-1 whitespace-nowrap">
                             {isEditing ? (

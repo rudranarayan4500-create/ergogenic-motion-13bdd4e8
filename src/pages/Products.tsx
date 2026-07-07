@@ -205,6 +205,7 @@ const Products = () => {
         rating: Number(d.rating) || fallbackObj?.rating || 4.8,
         reviews: Number(d.reviews) || fallbackObj?.reviews || 0,
         gallery: structuredGallery.length > 0 ? structuredGallery : fallbackObj?.gallery,
+        in_stock: d.in_stock !== false,
       });
     });
 
