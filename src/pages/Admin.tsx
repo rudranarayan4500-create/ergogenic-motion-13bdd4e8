@@ -23,6 +23,9 @@ import {
   Eye,
   EyeOff,
   Trash2,
+  Pencil,
+  Save,
+  KeyRound,
 } from "lucide-react";
 
 const menu = [
@@ -58,6 +61,14 @@ export default function Admin() {
   const [settings, setSettings] = useState<any>({ secret_code: "", admin_email: "" });
   const [productImage, setProductImage] = useState("");
   const [newOrderCount, setNewOrderCount] = useState(0);
+
+  // Product editing
+  const [editingProduct, setEditingProduct] = useState<any | null>(null);
+
+  // Account credentials
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [savingCreds, setSavingCreds] = useState(false);
 
   const loadAll = async () => {
     try {
@@ -165,6 +176,48 @@ export default function Admin() {
     
     if (error) toast({ title: "Failed", description: error.message, variant: "destructive" });
     else toast({ title: "Settings saved" });
+  };
+
+  const updateProduct = async (id: string, patch: any) => {
+    const { error } = await supabase.from("products").update(patch).eq("id", id);
+    if (error) return toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    toast({ title: "Product updated" });
+    setEditingProduct(null);
+    loadAll();
+  };
+
+  const deleteProduct = async (id: string) => {
+    if (!confirm("Delete this product?")) return;
+    const { error } = await supabase.from("products").delete().eq("id", id);
+    if (error) return toast({ title: "Delete failed", description: error.message, variant: "destructive" });
+    toast({ title: "Product deleted" });
+    loadAll();
+  };
+
+  const updateAccountEmail = async () => {
+    if (!newEmail) return;
+    setSavingCreds(true);
+    const { error } = await supabase.auth.updateUser({ email: newEmail });
+    setSavingCreds(false);
+    if (error) toast({ title: "Email update failed", description: error.message, variant: "destructive" });
+    else {
+      toast({ title: "Confirmation sent", description: "Check both inboxes to confirm the email change." });
+      setNewEmail("");
+    }
+  };
+
+  const updateAccountPassword = async () => {
+    if (!newPassword || newPassword.length < 6) {
+      return toast({ title: "Password too short", description: "Use at least 6 characters.", variant: "destructive" });
+    }
+    setSavingCreds(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setSavingCreds(false);
+    if (error) toast({ title: "Password update failed", description: error.message, variant: "destructive" });
+    else {
+      toast({ title: "Password updated" });
+      setNewPassword("");
+    }
   };
 
   const handleSignOut = async () => {
@@ -363,7 +416,7 @@ export default function Admin() {
         )}
 
         {activeTab === "products" && (
-          <div className="max-w-2xl">
+          <div className="space-y-6">
             <Section>
               <h3 className="text-xl font-bold mb-4 text-slate-900">Add New Product</h3>
               <form onSubmit={saveProduct} className="space-y-4 text-sm">
@@ -397,6 +450,82 @@ export default function Admin() {
                   Save Product
                 </Button>
               </form>
+            </Section>
+
+            <Section>
+              <h3 className="text-xl font-bold mb-4 text-slate-900">Existing Products ({products.length})</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-slate-500 text-left border-b border-slate-200">
+                    <tr>
+                      <th className="py-3 font-medium">Name</th>
+                      <th className="py-3 font-medium">Slug</th>
+                      <th className="py-3 font-medium">Category</th>
+                      <th className="py-3 font-medium">Price</th>
+                      <th className="py-3 font-medium">MRP</th>
+                      <th className="py-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((p) => {
+                      const isEditing = editingProduct?.id === p.id;
+                      return (
+                        <tr key={p.id} className="border-b border-slate-100 hover:bg-slate-50">
+                          <td className="py-3">
+                            {isEditing ? (
+                              <Input value={editingProduct.name ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })} className="bg-white border-slate-200 text-slate-900 h-9" />
+                            ) : (
+                              <span className="font-medium text-slate-900">{p.name}</span>
+                            )}
+                          </td>
+                          <td className="text-slate-600 font-mono text-xs">{p.slug}</td>
+                          <td>
+                            {isEditing ? (
+                              <Input value={editingProduct.category ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })} className="bg-white border-slate-200 text-slate-900 h-9" />
+                            ) : (
+                              <span className="text-slate-600">{p.category}</span>
+                            )}
+                          </td>
+                          <td>
+                            {isEditing ? (
+                              <Input type="number" value={editingProduct.price ?? 0} onChange={(e) => setEditingProduct({ ...editingProduct, price: Number(e.target.value) })} className="bg-white border-slate-200 text-slate-900 h-9 w-24" />
+                            ) : (
+                              <span className="text-slate-900 font-medium">₹{Number(p.price).toLocaleString()}</span>
+                            )}
+                          </td>
+                          <td>
+                            {isEditing ? (
+                              <Input type="number" value={editingProduct.mrp ?? 0} onChange={(e) => setEditingProduct({ ...editingProduct, mrp: Number(e.target.value) })} className="bg-white border-slate-200 text-slate-900 h-9 w-24" />
+                            ) : (
+                              <span className="text-slate-500">₹{Number(p.mrp || 0).toLocaleString()}</span>
+                            )}
+                          </td>
+                          <td className="text-right space-x-1 whitespace-nowrap">
+                            {isEditing ? (
+                              <>
+                                <Button size="sm" className="bg-sky-500 hover:bg-sky-600 text-white" onClick={() => updateProduct(p.id, { name: editingProduct.name, category: editingProduct.category, price: editingProduct.price, mrp: editingProduct.mrp })}>
+                                  <Save className="h-4 w-4 mr-1" /> Save
+                                </Button>
+                                <Button size="sm" variant="outline" className="border-slate-200" onClick={() => setEditingProduct(null)}>Cancel</Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button size="icon" variant="ghost" className="text-slate-500 hover:text-sky-600 hover:bg-sky-50" onClick={() => setEditingProduct(p)}>
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button size="icon" variant="ghost" className="text-slate-500 hover:text-red-600 hover:bg-red-50" onClick={() => deleteProduct(p.id)}>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {!products.length && <p className="text-slate-400 text-sm py-6 text-center">No products yet.</p>}
+              </div>
             </Section>
           </div>
         )}
@@ -464,7 +593,7 @@ export default function Admin() {
         )}
 
         {activeTab === "settings" && (
-          <div className="max-w-md">
+          <div className="max-w-md space-y-6">
             <Section>
               <h3 className="text-xl font-bold mb-4 text-slate-900">Admin Settings</h3>
               <div className="space-y-5">
@@ -487,6 +616,41 @@ export default function Admin() {
                 <Button onClick={saveSettings} className="bg-sky-500 hover:bg-sky-600 text-white w-full py-6 text-md font-semibold">
                   Save Settings
                 </Button>
+              </div>
+            </Section>
+
+            <Section>
+              <h3 className="text-xl font-bold mb-1 text-slate-900 flex items-center gap-2">
+                <KeyRound className="h-5 w-5 text-sky-500" /> My Login Credentials
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">Update the email or password of your own admin account.</p>
+              <div className="space-y-5">
+                <div>
+                  <Label className="text-slate-700">Change Login Email</Label>
+                  <Input
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    placeholder="new@email.com"
+                    className="mt-1.5 bg-white border-slate-200 text-slate-900 focus-visible:ring-sky-500"
+                  />
+                  <Button onClick={updateAccountEmail} disabled={savingCreds || !newEmail} className="mt-2 bg-slate-900 hover:bg-slate-800 text-white w-full">
+                    Update Email
+                  </Button>
+                </div>
+                <div className="border-t border-slate-200 pt-5">
+                  <Label className="text-slate-700">Change Password</Label>
+                  <Input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="At least 6 characters"
+                    className="mt-1.5 bg-white border-slate-200 text-slate-900 focus-visible:ring-sky-500"
+                  />
+                  <Button onClick={updateAccountPassword} disabled={savingCreds || !newPassword} className="mt-2 bg-slate-900 hover:bg-slate-800 text-white w-full">
+                    Update Password
+                  </Button>
+                </div>
               </div>
             </Section>
           </div>
