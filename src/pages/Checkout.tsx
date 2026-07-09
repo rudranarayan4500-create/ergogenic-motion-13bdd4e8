@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Smartphone, Truck, ShieldCheck } from "lucide-react";
+import { CreditCard, Smartphone, ShieldCheck } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { getCart, setCart, type CartItem } from "@/lib/cart";
 
 const Checkout = () => {
   const [pay, setPay] = useState("upi");
@@ -16,13 +17,43 @@ const Checkout = () => {
   const [paid, setPaid] = useState<string | null>(null);
   const { user, loading } = useAuth();
   const nav = useNavigate();
-  const total = 6398;
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [priced, setPriced] = useState<CartItem[]>([]);
+
+  useEffect(() => { setItems(getCart()); }, []);
+
+  // Revalidate every item's price against the DB (source of truth).
+  useEffect(() => {
+    (async () => {
+      if (!items.length) { setPriced([]); return; }
+      const slugs = items.map((i) => i.slug);
+      const { data } = await supabase.from("products").select("slug,name,price,image,in_stock,active").in("slug", slugs);
+      const bySlug = new Map((data ?? []).map((p: any) => [p.slug, p]));
+      const merged = items
+        .map((i) => {
+          const db = bySlug.get(i.slug);
+          if (!db || db.active === false || db.in_stock === false) return null;
+          return { ...i, name: db.name ?? i.name, image: db.image ?? i.image, price: Number(db.price) };
+        })
+        .filter(Boolean) as CartItem[];
+      setPriced(merged);
+    })();
+  }, [items]);
+
+  const total = useMemo(
+    () => priced.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.qty) || 0), 0),
+    [priced]
+  );
 
   useEffect(() => { if (!loading && !user) nav("/auth"); }, [user, loading, nav]);
 
   const placeOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user) return;
+    if (!priced.length || total <= 0) {
+      toast({ title: "Cart is empty", description: "Add products before checking out.", variant: "destructive" });
+      return;
+    }
     setBusy(true);
     const fd = new FormData(e.currentTarget);
     const shipping: Record<string, string> = {};
@@ -34,18 +65,15 @@ const Checkout = () => {
       }).select().single();
       if (error) throw error;
 
-      await supabase.from("order_items").insert([
-        { order_id: order.id, product_slug: "super-whey", name: "Super Whey", qty: 1, price: 4499 },
-        { order_id: order.id, product_slug: "bcaa-recover", name: "BCAA Recover", qty: 1, price: 1899 },
-      ]);
-
-      if (pay === "cod") {
-        await supabase.from("orders").update({ status: "placed" }).eq("id", order.id);
-        setPaid(`COD-${order.id.slice(0, 8)}`);
-        toast({ title: "Order placed", description: "Pay on delivery." });
-        setBusy(false);
-        return;
-      }
+      await supabase.from("order_items").insert(
+        priced.map((i) => ({
+          order_id: order.id,
+          product_slug: i.slug,
+          name: i.name,
+          qty: i.qty,
+          price: i.price,
+        }))
+      );
 
       // Razorpay real test checkout
       const Razorpay = (window as any).Razorpay;
@@ -71,6 +99,7 @@ const Checkout = () => {
             razorpay_payment_id: resp.razorpay_payment_id,
           }).eq("id", order.id);
           setPaid(resp.razorpay_payment_id);
+          setCart([]);
           toast({ title: "Payment successful (test mode)", description: `Order #${order.id.slice(0, 8)} confirmed.` });
         },
         modal: {
@@ -131,7 +160,6 @@ const Checkout = () => {
                 {[
                   { v: "upi", l: "UPI (Razorpay test)", i: Smartphone },
                   { v: "card", l: "Card via Razorpay (test 4111 1111 1111 1111)", i: CreditCard },
-                  { v: "cod", l: "Cash on Delivery", i: Truck },
                 ].map((o) => (
                   <Label key={o.v} className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer ${pay === o.v ? "border-primary bg-primary/5" : "border-white/15"}`}>
                     <RadioGroupItem value={o.v} />
@@ -144,12 +172,21 @@ const Checkout = () => {
           </div>
           <aside className="bg-card border border-white/10 rounded-xl p-6 h-fit space-y-4">
             <h3 className="font-bold text-lg">Order Summary</h3>
+            <div className="space-y-2 text-sm max-h-52 overflow-y-auto pr-1">
+              {priced.length === 0 && <p className="text-white/50 text-xs">Your cart is empty.</p>}
+              {priced.map((i) => (
+                <div key={i.slug} className="flex justify-between gap-2">
+                  <span className="text-white/70 truncate">{i.name} × {i.qty}</span>
+                  <span className="font-mono">₹{(i.price * i.qty).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between"><span className="text-white/60">Subtotal</span><span>₹{total.toLocaleString()}</span></div>
               <div className="flex justify-between"><span className="text-white/60">Shipping</span><span>FREE</span></div>
               <div className="flex justify-between text-lg font-bold border-t border-white/10 pt-3 mt-3"><span>Total</span><span>₹{total.toLocaleString()}</span></div>
             </div>
-            <Button disabled={busy} type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 shadow-glow">{busy ? "Processing payment…" : "Pay with Razorpay (Test)"}</Button>
+            <Button disabled={busy || total <= 0} type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 shadow-glow">{busy ? "Processing payment…" : `Pay ₹${total.toLocaleString()} with Razorpay`}</Button>
             <p className="text-xs text-white/40 flex items-center gap-1.5"><ShieldCheck className="h-3 w-3" /> Order &amp; payment stored securely on server.</p>
           </aside>
         </form>
