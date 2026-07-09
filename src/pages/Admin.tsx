@@ -181,8 +181,17 @@ export default function Admin() {
   };
 
   const updateProduct = async (id: string, patch: any) => {
-    const { error } = await supabase.from("products").update(patch).eq("id", id);
+    // SECURITY/ROBUSTNESS FIX: Ensure price and mrp are strictly processed as Numbers, 
+    // guaranteeing the database registers the new float/integer value correctly.
+    const sanitizedPatch = {
+      ...patch,
+      price: patch.price !== undefined ? Number(patch.price) : undefined,
+      mrp: patch.mrp !== undefined ? Number(patch.mrp) : undefined,
+    };
+
+    const { error } = await supabase.from("products").update(sanitizedPatch).eq("id", id);
     if (error) return toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    
     toast({ title: "Product updated" });
     setEditingProduct(null);
     loadAll();
