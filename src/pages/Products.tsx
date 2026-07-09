@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { 
-  ChevronRight, Star, SlidersHorizontal, RotateCcw, Search,
-  Activity, ShieldCheck, ArrowDown, ChevronDown, ChevronUp 
+import {
+  ChevronRight, SlidersHorizontal, RotateCcw, Search,
+  Activity, ShieldCheck, ArrowDown, ChevronDown, ChevronUp
 } from "lucide-react";
 import { categories, products, type Category } from "@/data/products";
 import { cn } from "@/lib/utils";
@@ -502,15 +502,6 @@ const Products = () => {
                           <h3 className="text-sm font-black tracking-tight text-slate-800 group-hover:text-slate-900 transition-colors line-clamp-1">
                             <Link to={`/products/${dynamicSlugRoute}`}>{p.name}</Link>
                           </h3>
-                          
-                          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
-                            <div className="flex items-center text-amber-500">
-                              <Star className="h-3 w-3 fill-amber-500 stroke-none" /> 
-                              <span className="text-slate-700 ml-0.5 font-sans">{p.rating || 4.5}</span>
-                            </div>
-                            <span className="text-slate-300">|</span>
-                            <span className="font-medium text-slate-500 font-mono">{p.reviews || 12} Reviews</span>
-                          </div>
 
                           <div className="flex items-center gap-2 pt-0.5 text-xs">
                             <span className="font-black text-slate-900 text-sm font-mono">₹{p.price.toLocaleString()}</span>
@@ -576,17 +567,6 @@ const Products = () => {
                   <p className="text-slate-600 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
                     {p.tagline} Carefully crafted using quality parameters to ensure consistent nutritional value, fitting seamlessly into your structured fitness targets.
                   </p>
-
-                  <div className="grid grid-cols-2 gap-3 pt-2 text-left max-w-xs mx-auto lg:mx-0">
-                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                      <span className="block text-[8px] font-mono text-slate-400 uppercase">Rating Index</span>
-                      <span className="text-base font-black text-slate-800 flex items-center gap-1 mt-0.5 font-mono">{p.rating} <Star className="h-3 w-3 fill-amber-500 text-amber-500" /></span>
-                    </div>
-                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                      <span className="block text-[8px] font-mono text-slate-400 uppercase">Product Status</span>
-                      <span className="text-xs font-black text-emerald-600 block mt-1.5 uppercase tracking-wide">Purity Checked</span>
-                    </div>
-                  </div>
 
                   <div className="pt-4">
                     <Link to={`/products/${dynamicSlugRoute}`}>

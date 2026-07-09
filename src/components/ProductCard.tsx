@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/data/products";
 import { addToCart } from "@/lib/cart";
@@ -29,10 +28,6 @@ export const ProductCard = ({ p }: { p: Product }) => {
           />
         </Link>
         <div className="p-5 text-left space-y-1">
-          <div className="flex items-center gap-1 text-xs font-bold text-amber-500 mb-1">
-            <Star className="h-3 w-3 fill-amber-500 stroke-none" />
-            <span className="text-slate-700 font-sans">{p.rating || 4.8} <span className="text-slate-400 font-mono">({p.reviews || 0})</span></span>
-          </div>
           <h3 className="font-black text-base tracking-tight text-slate-800 line-clamp-1">
             <Link to={`/products/${dynamicSlugRoute}`} className="hover:text-primary transition-colors">{p.name}</Link>
           </h3>

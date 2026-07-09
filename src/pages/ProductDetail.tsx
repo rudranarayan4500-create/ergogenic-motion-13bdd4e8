@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star, ShieldCheck, Check, Activity } from "lucide-react";
+import { ChevronRight, Minus, Plus, ShieldCheck, Check, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
@@ -391,16 +391,9 @@ const ProductDetail = () => {
             <div className="w-full lg:w-1/2 order-1 lg:order-2 lg:pl-6 space-y-8 lg:sticky lg:top-28 self-start">
               
               <div className="space-y-4 border-b border-slate-100 pb-8">
-                <div className="flex items-center gap-1.5 text-xs">
-                  <div className="flex items-center gap-0.5 px-2 py-0.5 rounded border bg-amber-50 border-amber-200 shadow-sm">
-                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                  </div>
-                  <span className="font-mono font-bold text-slate-500">{product.reviews} Reviews</span>
-                </div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-slate-500">
+                  {product.category}
+                </p>
 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-[0.95] text-slate-900">
                   {product.name}
