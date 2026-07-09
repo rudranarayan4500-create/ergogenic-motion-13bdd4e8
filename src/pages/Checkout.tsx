@@ -26,16 +26,43 @@ const Checkout = () => {
   useEffect(() => {
     (async () => {
       if (!items.length) { setPriced([]); return; }
-      const slugs = items.map((i) => i.slug);
-      const { data } = await supabase.from("products").select("slug,name,price,image,in_stock,active").in("slug", slugs);
-      const bySlug = new Map((data ?? []).map((p: any) => [p.slug, p]));
+      
+      const identifiers = items.map((i) => i.slug);
+      
+      // FIX: Separate UUIDs from normal text slugs so Postgres doesn't throw an error
+      const uuids = identifiers.filter(id => id.length === 36 && id.includes('-'));
+      const slugs = identifiers.filter(id => !uuids.includes(id));
+
+      let dbItems: any[] = [];
+
+      // Fetch by text slug
+      if (slugs.length > 0) {
+        const { data } = await supabase.from("products").select("id,slug,name,price,image,in_stock,active").in("slug", slugs);
+        if (data) dbItems = [...dbItems, ...data];
+      }
+      
+      // Fetch by UUID
+      if (uuids.length > 0) {
+        const { data } = await supabase.from("products").select("id,slug,name,price,image,in_stock,active").in("id", uuids);
+        if (data) dbItems = [...dbItems, ...data];
+      }
+
+      // Map both slug and ID so the cart item always finds its live DB match
+      const dbMap = new Map();
+      dbItems.forEach(p => {
+        dbMap.set(p.slug, p);
+        dbMap.set(p.id, p);
+      });
+
       const merged = items
         .map((i) => {
-          const db = bySlug.get(i.slug);
+          const db = dbMap.get(i.slug);
           if (!db || db.active === false || db.in_stock === false) return null;
+          // strictly forces the live database price into the checkout
           return { ...i, name: db.name ?? i.name, image: db.image ?? i.image, price: Number(db.price) };
         })
         .filter(Boolean) as CartItem[];
+        
       setPriced(merged);
     })();
   }, [items]);
