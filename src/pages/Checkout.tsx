@@ -22,7 +22,7 @@ const Checkout = () => {
 
   useEffect(() => { setItems(getCart()); }, []);
 
-  // Revalidate every item's price against the DB (source of truth).
+  // Revalidate every item's price against the DB
   useEffect(() => {
     (async () => {
       if (!items.length) { setPriced([]); return; }
@@ -60,14 +60,14 @@ const Checkout = () => {
     fd.forEach((v, k) => { shipping[k] = String(v); });
     
     try {
-      // IMPORTANT: In live mode, you MUST fetch this `order_id` from your backend 
-      // by calling the Razorpay Orders API. Generating it on the frontend is insecure 
-      // and will be rejected by Razorpay's live servers.
-      const rzpOrderId = `order_${Math.random().toString(36).slice(2, 12)}`; 
-      
+      // 1. Save the order to your Supabase SQL database first (Status: Created)
       const { data: order, error } = await supabase.from("orders").insert({
-        user_id: user.id, total, status: "created", razorpay_order_id: rzpOrderId, shipping,
+        user_id: user.id, 
+        total, 
+        status: "created", 
+        shipping,
       }).select().single();
+      
       if (error) throw error;
 
       await supabase.from("order_items").insert(
@@ -80,40 +80,43 @@ const Checkout = () => {
         }))
       );
 
-      // Razorpay real/live checkout
+      // 2. Open Razorpay Window
       const Razorpay = (window as any).Razorpay;
-      if (!Razorpay) throw new Error("Razorpay SDK not loaded. Refresh and try again.");
+      if (!Razorpay) throw new Error("Razorpay SDK not loaded. Check your internet connection.");
+      
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_LIVE_KEY || "rzp_live_mrY8DTan2XlmdQ", // Replace with your LIVE key
-        amount: total * 100, // Amount in paise (multiply by 100)
+        // Your LIVE Razorpay Key
+        key: "rzp_live_mrY8DTan2XlmdQ", 
+        amount: total * 100, // Razorpay needs the amount in paise
         currency: "INR",
         name: "Ergogenic Nutrients",
         description: `Order #${order.id.slice(0, 8)}`,
         image: "/favicon.png",
-        order_id: rzpOrderId, // This must be a valid backend-generated Razorpay order ID in live mode
+        
         prefill: {
           name: `${shipping.first_name ?? ""} ${shipping.last_name ?? ""}`.trim(),
           email: shipping.email ?? user.email ?? "",
           contact: shipping.phone ?? "",
         },
-        notes: { order_id: order.id },
-        theme: { color: "#E50914" },
+        notes: { order_id: order.id }, // Passing your DB order ID in the notes
+        theme: { color: "#2563EB" }, // Blue UI theme
         method: pay === "upi" ? { upi: true, card: false, netbanking: false, wallet: false } : undefined,
+        
         handler: async (resp: any) => {
+          // 3. Update your SQL database when payment succeeds
           await supabase.from("orders").update({
             status: "paid",
             razorpay_payment_id: resp.razorpay_payment_id,
-            // In a real app, also store resp.razorpay_signature and verify it on your backend
           }).eq("id", order.id);
           
           setPaid(resp.razorpay_payment_id);
-          setCart([]);
-          toast({ title: "Payment successful", description: `Order #${order.id.slice(0, 8)} confirmed.` });
+          setCart([]); // Clear the cart
+          toast({ title: "Payment successful", description: `Order confirmed.` });
         },
         modal: {
           ondismiss: () => {
             setBusy(false);
-            toast({ title: "Payment cancelled", description: "You closed the checkout.", variant: "destructive" });
+            toast({ title: "Payment cancelled", description: "You closed the payment window.", variant: "destructive" });
           },
         },
       };
@@ -121,7 +124,7 @@ const Checkout = () => {
       const rzp = new Razorpay(options);
       rzp.on("payment.failed", (resp: any) => {
         setBusy(false);
-        toast({ title: "Payment failed", description: resp.error?.description ?? "Try again.", variant: "destructive" });
+        toast({ title: "Payment failed", description: resp.error?.description ?? "Transaction declined. Try again.", variant: "destructive" });
       });
       rzp.open();
     } catch (err: any) {
@@ -135,10 +138,10 @@ const Checkout = () => {
       <PageHero eyebrow="Confirmed" title="Payment successful" subtitle="Your payment has been securely captured and saved." />
       <section className="py-20"><div className="container max-w-lg text-center space-y-4">
         <div className="bg-white border-2 border-blue-500 rounded-xl p-8 shadow-sm">
-          <ShieldCheck className="h-12 w-12 mx-auto text-primary" />
+          <ShieldCheck className="h-12 w-12 mx-auto text-blue-600" />
           <p className="text-gray-500 mt-3 text-sm">Transaction / Payment ID</p>
           <p className="font-mono text-gray-900 font-medium">{paid}</p>
-          <Button className="mt-6 bg-primary hover:bg-primary/90" onClick={() => nav("/products")}>Continue shopping</Button>
+          <Button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => nav("/products")}>Continue shopping</Button>
         </div>
       </div></section>
     </div>
@@ -198,7 +201,7 @@ const Checkout = () => {
               <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span className="font-medium text-green-600">FREE</span></div>
               <div className="flex justify-between text-lg font-bold border-t border-blue-200 pt-3 mt-3 text-gray-900"><span>Total</span><span>₹{total.toLocaleString()}</span></div>
             </div>
-            <Button disabled={busy || total <= 0} type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 shadow-sm text-white">{busy ? "Processing payment…" : `Pay ₹${total.toLocaleString()}`}</Button>
+            <Button disabled={busy || total <= 0} type="submit" size="lg" className="w-full bg-blue-600 hover:bg-blue-700 shadow-sm text-white">{busy ? "Processing payment…" : `Pay ₹${total.toLocaleString()}`}</Button>
             <p className="text-xs text-gray-400 flex items-center justify-center gap-1.5 mt-2"><ShieldCheck className="h-3.5 w-3.5" /> Order &amp; payment stored securely.</p>
           </aside>
         </form>
