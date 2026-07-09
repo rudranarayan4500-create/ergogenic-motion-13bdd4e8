@@ -1,0 +1,53 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+serve(async (req) => {
+  // Handle CORS preflight requests (Required for your React frontend to talk to it)
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  try {
+    const { amount, receipt_id } = await req.json()
+
+    // 🛑 REPLACE THESE WITH YOUR BRAND NEW KEYS:
+    const key_id = "YOUR_NEW_KEY_ID"; 
+    const key_secret = "YOUR_NEW_KEY_SECRET"; 
+
+    // Encode the keys for Razorpay authentication
+    const credentials = btoa(`${key_id}:${key_secret}`);
+
+    // Call Razorpay API to securely create a server-side order
+    const rzpResponse = await fetch("https://api.razorpay.com/v1/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Basic ${credentials}`
+      },
+      body: JSON.stringify({
+        amount: Math.round(amount * 100), // Razorpay requires the amount in paise
+        currency: "INR",
+        receipt: receipt_id
+      })
+    });
+
+    const orderData = await rzpResponse.json();
+
+    if (orderData.error) throw new Error(orderData.error.description);
+
+    // Send the official Razorpay Order ID back to your React frontend
+    return new Response(JSON.stringify(orderData), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 200,
+    })
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 400,
+    })
+  }
+})
