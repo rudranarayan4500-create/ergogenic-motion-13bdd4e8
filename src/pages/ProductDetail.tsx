@@ -21,7 +21,6 @@ const ProductDetail = () => {
   const [extraMedia, setExtraMedia] = useState<MediaItem[]>([]);
   const [dbProduct, setDbProduct] = useState<any | null>(null);
   
-  // FIX: Added a loading state so the page doesn't kick you out before Supabase finishes loading
   const [isLoading, setIsLoading] = useState(true); 
   
   const [, setScrollPositions] = useState<{ [key: number]: ScrollPosition }>({});
@@ -76,7 +75,6 @@ const ProductDetail = () => {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png";
       }
 
-      // FIX: Ensure strict overriding from Database over Base Fallback for Price & MRP
       return {
         ...base,
         name: dbProduct.name ?? base.name,
@@ -130,27 +128,22 @@ const ProductDetail = () => {
     return found;
   }, [id, dbProduct]);
 
-  // FIX: Robust DB Fetching with Smart Search and Loading State
   useEffect(() => {
     if (!id) return;
 
     const fetchLiveProduct = async () => {
-      setIsLoading(true); // Tell the page we are loading!
+      setIsLoading(true); 
 
-      // 1. Try finding by exact slug
       let { data } = await supabase.from("products").select("*").eq("slug", id).maybeSingle();
       
-      // 2. If it fails, the URL might be passing the UUID. Try finding by ID safely.
       if (!data) {
         try {
           const { data: idData } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
           if (idData) data = idData;
         } catch (e) {
-          // Ignores error if the string is not a valid UUID format
         }
       }
 
-      // 3. SMART SEARCH SAFETY NET: If the ID still doesn't match perfectly, guess the name!
       if (!data) {
         const searchTerm = id.replace(/-/g, ' '); 
         const { data: fuzzyData } = await supabase
@@ -164,7 +157,6 @@ const ProductDetail = () => {
         }
       }
 
-      // 4. Set the state
       if (data) {
         setDbProduct(data);
         const m = (data?.media as any[]) ?? [];
@@ -173,7 +165,7 @@ const ProductDetail = () => {
         setDbProduct(null);
       }
       
-      setIsLoading(false); // Database is done, stop loading!
+      setIsLoading(false); 
     };
 
     fetchLiveProduct();
@@ -270,14 +262,14 @@ const ProductDetail = () => {
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-09 144649.png", kind: "image" }
         ];
       }
-      if (normalName.includes("ginseng shot") || normalName.includes("ginseng-shot") || normalName.includes("ginseng extract") || product.id === "ginseng-shot") {
+      if (normalName.includes("ginseng shot") || normalName.includes("ginseng-shot") || normalName.includes("ginseng extract") || product?.id === "ginseng-shot") {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231827.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-16 231840.png", kind: "image" }
         ];
       }
-      if (normalName.includes("carnitine shot") || normalName.includes("carnitine-shot") || product.id === "carnitine-shot") {
+      if (normalName.includes("carnitine shot") || normalName.includes("carnitine-shot") || product?.id === "carnitine-shot") {
         return [
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png", kind: "image" },
           { url: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//Screenshot 2026-06-19 163501.png", kind: "image" },
@@ -294,20 +286,9 @@ const ProductDetail = () => {
 
   const currentMedia = gallery[activeImageIndex] || gallery[0] || { url: product?.image, kind: 'image' };
 
-  // FIX: Render loading screen while waiting for Supabase, so the Navigate redirect doesn't fire too early
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white text-slate-900">
-         <Loader2 className="h-8 w-8 animate-spin text-slate-400 mb-4" />
-         <p className="text-sm font-mono font-bold tracking-widest text-slate-500 uppercase">Loading Product...</p>
-      </div>
-    );
-  }
-
-  // If the product truly doesn't exist after loading finishes, then kick them out
-  if (!product && !isLoading) return <Navigate to="/products" replace />;
-
+  // FIX: Moved the `related` calculation hook ABOVE the early returns!
   const related = useMemo(() => {
+    if (!product) return []; // Safeguard if product isn't loaded yet
     const hiddenCatalogItems = [
       "super whey 2kg", "plasma mass 3kg", "amino shot caplets", 
       "pure creatin", "pure creatine", "lean shot thermogenic",
@@ -319,7 +300,20 @@ const ProductDetail = () => {
       const cleanName = p.name ? String(p.name).toLowerCase().trim() : "";
       return !isSelf && !hiddenCatalogItems.includes(cleanName);
     }).slice(0, 4);
-  }, [product.id]);
+  }, [product?.id]);
+
+  // ALL HOOKS ARE FINISHED. NOW WE CAN SAFELY RENDER EARLY RETURNS!
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white text-slate-900">
+         <Loader2 className="h-8 w-8 animate-spin text-slate-400 mb-4" />
+         <p className="text-sm font-mono font-bold tracking-widest text-slate-500 uppercase">Loading Product...</p>
+      </div>
+    );
+  }
+
+  if (!product && !isLoading) return <Navigate to="/products" replace />;
 
   const add = () => {
     addToCart({ slug: (product as any).slug || product.id, name: product.name, price: product.price, image: product.image }, qty);
@@ -330,16 +324,13 @@ const ProductDetail = () => {
   const idCheck = String(product.id || "").toLowerCase();
   const slugCheck = String((product as any).slug || "").toLowerCase();
   
-  // Custom specific flavour inject
   let productFlavours = (product as any).flavours || ["Unflavored"];
   if (normalNameCheck.includes("super whey") || idCheck.includes("super-whey") || slugCheck.includes("super-whey")) {
     productFlavours = ["Tiramisu", "Alphonso Mango", "Vanilla Toffee", "Pistachio Gelato"];
   }
 
-  // Set active flavor fallback
   const activeFlavour = selectedFlavour || productFlavours[0];
 
-  // Custom specific ingredients inject
   let productIngredients = (product as any).mainIngredients || (product as any).ingredients;
   
   if (!Array.isArray(productIngredients)) {
