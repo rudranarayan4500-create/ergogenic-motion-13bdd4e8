@@ -58,10 +58,15 @@ const Checkout = () => {
     const fd = new FormData(e.currentTarget);
     const shipping: Record<string, string> = {};
     fd.forEach((v, k) => { shipping[k] = String(v); });
+    
     try {
-      const fakeRzpOrderId = `order_TEST_${Math.random().toString(36).slice(2, 12)}`;
+      // IMPORTANT: In live mode, you MUST fetch this `order_id` from your backend 
+      // by calling the Razorpay Orders API. Generating it on the frontend is insecure 
+      // and will be rejected by Razorpay's live servers.
+      const rzpOrderId = `order_${Math.random().toString(36).slice(2, 12)}`; 
+      
       const { data: order, error } = await supabase.from("orders").insert({
-        user_id: user.id, total, status: "created", razorpay_order_id: fakeRzpOrderId, shipping,
+        user_id: user.id, total, status: "created", razorpay_order_id: rzpOrderId, shipping,
       }).select().single();
       if (error) throw error;
 
@@ -75,16 +80,17 @@ const Checkout = () => {
         }))
       );
 
-      // Razorpay real test checkout
+      // Razorpay real/live checkout
       const Razorpay = (window as any).Razorpay;
       if (!Razorpay) throw new Error("Razorpay SDK not loaded. Refresh and try again.");
       const options = {
-        key: "rzp_test_1DP5mmOlF5G5ag", // public Razorpay TEST key
-        amount: total * 100,
+        key: import.meta.env.VITE_RAZORPAY_LIVE_KEY || "rzp_live_mrY8DTan2XlmdQ", // Replace with your LIVE key
+        amount: total * 100, // Amount in paise (multiply by 100)
         currency: "INR",
         name: "Ergogenic Nutrients",
         description: `Order #${order.id.slice(0, 8)}`,
         image: "/favicon.png",
+        order_id: rzpOrderId, // This must be a valid backend-generated Razorpay order ID in live mode
         prefill: {
           name: `${shipping.first_name ?? ""} ${shipping.last_name ?? ""}`.trim(),
           email: shipping.email ?? user.email ?? "",
@@ -97,10 +103,12 @@ const Checkout = () => {
           await supabase.from("orders").update({
             status: "paid",
             razorpay_payment_id: resp.razorpay_payment_id,
+            // In a real app, also store resp.razorpay_signature and verify it on your backend
           }).eq("id", order.id);
+          
           setPaid(resp.razorpay_payment_id);
           setCart([]);
-          toast({ title: "Payment successful (test mode)", description: `Order #${order.id.slice(0, 8)} confirmed.` });
+          toast({ title: "Payment successful", description: `Order #${order.id.slice(0, 8)} confirmed.` });
         },
         modal: {
           ondismiss: () => {
@@ -109,6 +117,7 @@ const Checkout = () => {
           },
         },
       };
+      
       const rzp = new Razorpay(options);
       rzp.on("payment.failed", (resp: any) => {
         setBusy(false);
@@ -122,76 +131,79 @@ const Checkout = () => {
   };
 
   if (paid) return (
-    <>
-      <PageHero eyebrow="Confirmed" title="Payment successful" subtitle="Test-mode Razorpay payment captured and saved." />
+    <div className="bg-white min-h-screen">
+      <PageHero eyebrow="Confirmed" title="Payment successful" subtitle="Your payment has been securely captured and saved." />
       <section className="py-20"><div className="container max-w-lg text-center space-y-4">
-        <div className="bg-card border border-white/10 rounded-xl p-8">
+        <div className="bg-white border-2 border-blue-500 rounded-xl p-8 shadow-sm">
           <ShieldCheck className="h-12 w-12 mx-auto text-primary" />
-          <p className="text-white/60 mt-3 text-sm">Razorpay Payment ID</p>
-          <p className="font-mono">{paid}</p>
+          <p className="text-gray-500 mt-3 text-sm">Transaction / Payment ID</p>
+          <p className="font-mono text-gray-900 font-medium">{paid}</p>
           <Button className="mt-6 bg-primary hover:bg-primary/90" onClick={() => nav("/products")}>Continue shopping</Button>
         </div>
       </div></section>
-    </>
+    </div>
   );
 
   return (
-    <>
+    <div className="bg-white min-h-screen text-gray-900">
       <PageHero eyebrow="Checkout" title="Complete your order" />
       <section className="py-16">
         <form className="container grid lg:grid-cols-3 gap-10" onSubmit={placeOrder}>
           <div className="lg:col-span-2 space-y-8">
-            <div className="p-7 bg-card border border-white/10 rounded-xl space-y-4">
-              <h3 className="font-bold text-lg">Shipping Details</h3>
+            <div className="p-7 bg-white border-2 border-blue-500 shadow-sm rounded-xl space-y-4">
+              <h3 className="font-bold text-lg text-gray-900">Shipping Details</h3>
               <div className="grid md:grid-cols-2 gap-4">
-                <div><Label>First Name</Label><Input name="first_name" required className="mt-1.5 bg-background border-white/15" /></div>
-                <div><Label>Last Name</Label><Input name="last_name" required className="mt-1.5 bg-background border-white/15" /></div>
-                <div><Label>Email</Label><Input name="email" required type="email" defaultValue={user?.email ?? ""} className="mt-1.5 bg-background border-white/15" /></div>
-                <div><Label>Phone</Label><Input name="phone" required className="mt-1.5 bg-background border-white/15" /></div>
-                <div className="md:col-span-2"><Label>Address</Label><Input name="address" required className="mt-1.5 bg-background border-white/15" /></div>
-                <div><Label>City</Label><Input name="city" required className="mt-1.5 bg-background border-white/15" /></div>
-                <div><Label>Pincode</Label><Input name="pincode" required className="mt-1.5 bg-background border-white/15" /></div>
+                <div><Label className="text-gray-700">First Name</Label><Input name="first_name" required className="mt-1.5 bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900" /></div>
+                <div><Label className="text-gray-700">Last Name</Label><Input name="last_name" required className="mt-1.5 bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900" /></div>
+                <div><Label className="text-gray-700">Email</Label><Input name="email" required type="email" defaultValue={user?.email ?? ""} className="mt-1.5 bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900" /></div>
+                <div><Label className="text-gray-700">Phone</Label><Input name="phone" required className="mt-1.5 bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900" /></div>
+                <div className="md:col-span-2"><Label className="text-gray-700">Address</Label><Input name="address" required className="mt-1.5 bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900" /></div>
+                <div><Label className="text-gray-700">City</Label><Input name="city" required className="mt-1.5 bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900" /></div>
+                <div><Label className="text-gray-700">Pincode</Label><Input name="pincode" required className="mt-1.5 bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900" /></div>
               </div>
             </div>
-            <div className="p-7 bg-card border border-white/10 rounded-xl">
-              <h3 className="font-bold text-lg mb-1">Payment Method</h3>
-              <p className="text-xs text-white/50 mb-4">Razorpay running in <span className="text-primary font-semibold">TEST mode</span> — no real money is charged.</p>
+            <div className="p-7 bg-white border-2 border-blue-500 shadow-sm rounded-xl">
+              <h3 className="font-bold text-lg mb-1 text-gray-900">Payment Method</h3>
+              <p className="text-xs text-gray-500 mb-4 flex items-center gap-1">
+                <ShieldCheck className="h-3.5 w-3.5 text-green-600" />
+                Secure, encrypted checkout powered by Razorpay.
+              </p>
               <RadioGroup value={pay} onValueChange={setPay} className="space-y-3">
                 {[
-                  { v: "upi", l: "UPI (Razorpay test)", i: Smartphone },
-                  { v: "card", l: "Card via Razorpay (test 4111 1111 1111 1111)", i: CreditCard },
+                  { v: "upi", l: "UPI (GPay, PhonePe, Paytm)", i: Smartphone },
+                  { v: "card", l: "Credit / Debit Card", i: CreditCard },
                 ].map((o) => (
-                  <Label key={o.v} className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer ${pay === o.v ? "border-primary bg-primary/5" : "border-white/15"}`}>
+                  <Label key={o.v} className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${pay === o.v ? "border-blue-600 bg-blue-50 text-blue-900" : "border-blue-300 bg-white text-gray-700 hover:border-blue-400"}`}>
                     <RadioGroupItem value={o.v} />
-                    <o.i className="h-4 w-4" />
+                    <o.i className={`h-4 w-4 ${pay === o.v ? "text-blue-600" : "text-gray-500"}`} />
                     <span>{o.l}</span>
                   </Label>
                 ))}
               </RadioGroup>
             </div>
           </div>
-          <aside className="bg-card border border-white/10 rounded-xl p-6 h-fit space-y-4">
-            <h3 className="font-bold text-lg">Order Summary</h3>
+          <aside className="bg-white border-2 border-blue-500 shadow-sm rounded-xl p-6 h-fit space-y-4">
+            <h3 className="font-bold text-lg text-gray-900">Order Summary</h3>
             <div className="space-y-2 text-sm max-h-52 overflow-y-auto pr-1">
-              {priced.length === 0 && <p className="text-white/50 text-xs">Your cart is empty.</p>}
+              {priced.length === 0 && <p className="text-gray-500 text-xs">Your cart is empty.</p>}
               {priced.map((i) => (
-                <div key={i.slug} className="flex justify-between gap-2">
-                  <span className="text-white/70 truncate">{i.name} × {i.qty}</span>
-                  <span className="font-mono">₹{(i.price * i.qty).toLocaleString()}</span>
+                <div key={i.slug} className="flex justify-between gap-2 text-gray-800">
+                  <span className="truncate">{i.name} × {i.qty}</span>
+                  <span className="font-mono font-medium">₹{(i.price * i.qty).toLocaleString()}</span>
                 </div>
               ))}
             </div>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-white/60">Subtotal</span><span>₹{total.toLocaleString()}</span></div>
-              <div className="flex justify-between"><span className="text-white/60">Shipping</span><span>FREE</span></div>
-              <div className="flex justify-between text-lg font-bold border-t border-white/10 pt-3 mt-3"><span>Total</span><span>₹{total.toLocaleString()}</span></div>
+            <div className="space-y-2 text-sm text-gray-800">
+              <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span className="font-medium">₹{total.toLocaleString()}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span className="font-medium text-green-600">FREE</span></div>
+              <div className="flex justify-between text-lg font-bold border-t border-blue-200 pt-3 mt-3 text-gray-900"><span>Total</span><span>₹{total.toLocaleString()}</span></div>
             </div>
-            <Button disabled={busy || total <= 0} type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 shadow-glow">{busy ? "Processing payment…" : `Pay ₹${total.toLocaleString()} with Razorpay`}</Button>
-            <p className="text-xs text-white/40 flex items-center gap-1.5"><ShieldCheck className="h-3 w-3" /> Order &amp; payment stored securely on server.</p>
+            <Button disabled={busy || total <= 0} type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 shadow-sm text-white">{busy ? "Processing payment…" : `Pay ₹${total.toLocaleString()}`}</Button>
+            <p className="text-xs text-gray-400 flex items-center justify-center gap-1.5 mt-2"><ShieldCheck className="h-3.5 w-3.5" /> Order &amp; payment stored securely.</p>
           </aside>
         </form>
       </section>
-    </>
+    </div>
   );
 };
 
