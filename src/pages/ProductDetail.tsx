@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ChevronRight, Minus, Plus, ShieldCheck, Check, Activity } from "lucide-react";
+import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star, ShieldCheck, Check, Activity, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
@@ -20,6 +20,10 @@ const ProductDetail = () => {
   const [qty, setQty] = useState(1);
   const [extraMedia, setExtraMedia] = useState<MediaItem[]>([]);
   const [dbProduct, setDbProduct] = useState<any | null>(null);
+  
+  // FIX: Added a loading state so the page doesn't kick you out before Supabase finishes loading
+  const [isLoading, setIsLoading] = useState(true); 
+  
   const [, setScrollPositions] = useState<{ [key: number]: ScrollPosition }>({});
   const scrollHandlerRef = useRef<(() => void) | null>(null);
   
@@ -126,13 +130,15 @@ const ProductDetail = () => {
     return found;
   }, [id, dbProduct]);
 
-  // FIX: Robust DB Fetching. Checks SLUG first, then falls back to UUID if slug misses.
+  // FIX: Robust DB Fetching with Smart Search and Loading State
   useEffect(() => {
     if (!id) return;
 
     const fetchLiveProduct = async () => {
-      // 1. Try finding by slug
-      let { data, error } = await supabase.from("products").select("*").eq("slug", id).maybeSingle();
+      setIsLoading(true); // Tell the page we are loading!
+
+      // 1. Try finding by exact slug
+      let { data } = await supabase.from("products").select("*").eq("slug", id).maybeSingle();
       
       // 2. If it fails, the URL might be passing the UUID. Try finding by ID safely.
       if (!data) {
@@ -144,7 +150,21 @@ const ProductDetail = () => {
         }
       }
 
-      // 3. Set the state
+      // 3. SMART SEARCH SAFETY NET: If the ID still doesn't match perfectly, guess the name!
+      if (!data) {
+        const searchTerm = id.replace(/-/g, ' '); 
+        const { data: fuzzyData } = await supabase
+          .from("products")
+          .select("*")
+          .or(`slug.ilike.%${id}%,name.ilike.%${searchTerm}%`)
+          .limit(1);
+          
+        if (fuzzyData && fuzzyData.length > 0) {
+          data = fuzzyData[0];
+        }
+      }
+
+      // 4. Set the state
       if (data) {
         setDbProduct(data);
         const m = (data?.media as any[]) ?? [];
@@ -152,6 +172,8 @@ const ProductDetail = () => {
       } else {
         setDbProduct(null);
       }
+      
+      setIsLoading(false); // Database is done, stop loading!
     };
 
     fetchLiveProduct();
@@ -272,7 +294,18 @@ const ProductDetail = () => {
 
   const currentMedia = gallery[activeImageIndex] || gallery[0] || { url: product?.image, kind: 'image' };
 
-  if (!product) return <Navigate to="/products" replace />;
+  // FIX: Render loading screen while waiting for Supabase, so the Navigate redirect doesn't fire too early
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white text-slate-900">
+         <Loader2 className="h-8 w-8 animate-spin text-slate-400 mb-4" />
+         <p className="text-sm font-mono font-bold tracking-widest text-slate-500 uppercase">Loading Product...</p>
+      </div>
+    );
+  }
+
+  // If the product truly doesn't exist after loading finishes, then kick them out
+  if (!product && !isLoading) return <Navigate to="/products" replace />;
 
   const related = useMemo(() => {
     const hiddenCatalogItems = [
