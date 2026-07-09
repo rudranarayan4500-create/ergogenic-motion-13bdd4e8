@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Smartphone, ShieldCheck } from "lucide-react";
+import { ShieldCheck, QrCode, CreditCard, Smartphone } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,8 @@ import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { getCart, setCart, type CartItem } from "@/lib/cart";
+
+const RAZORPAY_KEY = "rzp_live_mrY8DTan2XlmdQ";
 
 const Checkout = () => {
   const [pay, setPay] = useState("upi");
@@ -22,32 +24,26 @@ const Checkout = () => {
 
   useEffect(() => { setItems(getCart()); }, []);
 
-  // Revalidate every item's price against the DB
   useEffect(() => {
     (async () => {
       if (!items.length) { setPriced([]); return; }
-      
+
       const identifiers = items.map((i) => i.slug);
-      
-      // FIX: Separate UUIDs from normal text slugs so Postgres doesn't throw an error
       const uuids = identifiers.filter(id => id.length === 36 && id.includes('-'));
       const slugs = identifiers.filter(id => !uuids.includes(id));
 
       let dbItems: any[] = [];
 
-      // Fetch by text slug
       if (slugs.length > 0) {
         const { data } = await supabase.from("products").select("id,slug,name,price,image,in_stock,active").in("slug", slugs);
         if (data) dbItems = [...dbItems, ...data];
       }
-      
-      // Fetch by UUID
+
       if (uuids.length > 0) {
         const { data } = await supabase.from("products").select("id,slug,name,price,image,in_stock,active").in("id", uuids);
         if (data) dbItems = [...dbItems, ...data];
       }
 
-      // Map both slug and ID so the cart item always finds its live DB match
       const dbMap = new Map();
       dbItems.forEach(p => {
         dbMap.set(p.slug, p);
@@ -58,11 +54,10 @@ const Checkout = () => {
         .map((i) => {
           const db = dbMap.get(i.slug);
           if (!db || db.active === false || db.in_stock === false) return null;
-          // strictly forces the live database price into the checkout
           return { ...i, name: db.name ?? i.name, image: db.image ?? i.image, price: Number(db.price) };
         })
         .filter(Boolean) as CartItem[];
-        
+
       setPriced(merged);
     })();
   }, [items]);
@@ -85,16 +80,15 @@ const Checkout = () => {
     const fd = new FormData(e.currentTarget);
     const shipping: Record<string, string> = {};
     fd.forEach((v, k) => { shipping[k] = String(v); });
-    
+
     try {
-      // 1. Save the order to your Supabase SQL database first (Status: Created)
       const { data: order, error } = await supabase.from("orders").insert({
-        user_id: user.id, 
-        total, 
-        status: "created", 
+        user_id: user.id,
+        total,
+        status: "created",
         shipping,
       }).select().single();
-      
+
       if (error) throw error;
 
       await supabase.from("order_items").insert(
@@ -107,38 +101,52 @@ const Checkout = () => {
         }))
       );
 
-      // 2. Open Razorpay Window
       const Razorpay = (window as any).Razorpay;
       if (!Razorpay) throw new Error("Razorpay SDK not loaded. Check your internet connection.");
-      
-      const options = {
-        // Your exact live key is added right here!
-        key: "rzp_live_mrY8DTan2XlmdQ", 
-        amount: total * 100, // Razorpay needs the amount in paise
+
+      const methodConfig: Record<string, any> = {
+        upi: { upi: true, card: false, netbanking: false, wallet: false },
+        card: { upi: false, card: true, netbanking: false, wallet: false },
+        all: {},
+      };
+
+      const options: Record<string, any> = {
+        key: RAZORPAY_KEY,
+        amount: total * 100,
         currency: "INR",
         name: "Ergogenic Nutrients",
         description: `Order #${order.id.slice(0, 8)}`,
         image: "/favicon.png",
-        
         prefill: {
           name: `${shipping.first_name ?? ""} ${shipping.last_name ?? ""}`.trim(),
           email: shipping.email ?? user.email ?? "",
           contact: shipping.phone ?? "",
         },
-        notes: { order_id: order.id }, // Passing your DB order ID in the notes
-        theme: { color: "#2563EB" }, // Blue UI theme
-        method: pay === "upi" ? { upi: true, card: false, netbanking: false, wallet: false } : undefined,
-        
+        notes: { order_id: order.id },
+        theme: { color: "#2563EB" },
+        config: {
+          display: {
+            blocks: {
+              utib: {
+                name: pay === "upi" ? "Pay via UPI / QR" : "Pay via Card",
+                instruments: pay === "upi"
+                  ? [{ method: "upi" }]
+                  : [{ method: "card" }],
+              },
+            },
+            sequence: ["block.utib"],
+            preferences: { show_default_blocks: pay === "all" },
+          },
+        },
         handler: async (resp: any) => {
-          // 3. Update your SQL database when payment succeeds
           await supabase.from("orders").update({
             status: "paid",
             razorpay_payment_id: resp.razorpay_payment_id,
           }).eq("id", order.id);
-          
+
           setPaid(resp.razorpay_payment_id);
-          setCart([]); // Clear the cart
-          toast({ title: "Payment successful", description: `Order confirmed.` });
+          setCart([]);
+          toast({ title: "Payment successful", description: "Order confirmed." });
         },
         modal: {
           ondismiss: () => {
@@ -147,7 +155,11 @@ const Checkout = () => {
           },
         },
       };
-      
+
+      if (pay !== "all") {
+        options.method = methodConfig[pay] ?? {};
+      }
+
       const rzp = new Razorpay(options);
       rzp.on("payment.failed", (resp: any) => {
         setBusy(false);
@@ -192,27 +204,66 @@ const Checkout = () => {
                 <div><Label className="text-gray-700">Pincode</Label><Input name="pincode" required className="mt-1.5 bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900" /></div>
               </div>
             </div>
+
             <div className="p-7 bg-white border-2 border-blue-500 shadow-sm rounded-xl">
               <h3 className="font-bold text-lg mb-1 text-gray-900">Payment Method</h3>
-              <p className="text-xs text-gray-500 mb-4 flex items-center gap-1">
+              <p className="text-xs text-gray-500 mb-5 flex items-center gap-1.5">
                 <ShieldCheck className="h-3.5 w-3.5 text-green-600" />
                 Secure, encrypted checkout powered by Razorpay.
               </p>
               <RadioGroup value={pay} onValueChange={setPay} className="space-y-3">
                 {[
-                  { v: "upi", l: "UPI (GPay, PhonePe, Paytm)", i: Smartphone },
-                  { v: "card", l: "Credit / Debit Card", i: CreditCard },
+                  {
+                    v: "upi",
+                    label: "UPI / QR Code",
+                    sub: "GPay, PhonePe, Paytm, scanner",
+                    icon: QrCode,
+                  },
+                  {
+                    v: "card",
+                    label: "Credit / Debit Card",
+                    sub: "Visa, Mastercard, RuPay",
+                    icon: CreditCard,
+                  },
+                  {
+                    v: "all",
+                    label: "All Payment Methods",
+                    sub: "Net banking, wallets & more",
+                    icon: Smartphone,
+                  },
                 ].map((o) => (
-                  <Label key={o.v} className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${pay === o.v ? "border-blue-600 bg-blue-50 text-blue-900" : "border-blue-300 bg-white text-gray-700 hover:border-blue-400"}`}>
+                  <Label
+                    key={o.v}
+                    className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer transition-all ${
+                      pay === o.v
+                        ? "border-blue-600 bg-blue-50 shadow-sm"
+                        : "border-gray-200 bg-white hover:border-blue-300"
+                    }`}
+                  >
                     <RadioGroupItem value={o.v} />
-                    <o.i className={`h-4 w-4 ${pay === o.v ? "text-blue-600" : "text-gray-500"}`} />
-                    <span>{o.l}</span>
+                    <div className={`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 ${pay === o.v ? "bg-blue-100" : "bg-gray-100"}`}>
+                      <o.icon className={`h-5 w-5 ${pay === o.v ? "text-blue-600" : "text-gray-500"}`} />
+                    </div>
+                    <div>
+                      <p className={`font-semibold text-sm ${pay === o.v ? "text-blue-900" : "text-gray-800"}`}>{o.label}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{o.sub}</p>
+                    </div>
                   </Label>
                 ))}
               </RadioGroup>
+
+              {pay === "upi" && (
+                <div className="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
+                  <QrCode className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+                  <p className="text-xs text-blue-800 leading-relaxed">
+                    After clicking Pay, Razorpay will show a <strong>QR code</strong> you can scan with any UPI app, or enter your UPI ID directly.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
-          <aside className="bg-white border-2 border-blue-500 shadow-sm rounded-xl p-6 h-fit space-y-4">
+
+          <aside className="bg-white border-2 border-blue-500 shadow-sm rounded-xl p-6 h-fit space-y-4 lg:sticky lg:top-24">
             <h3 className="font-bold text-lg text-gray-900">Order Summary</h3>
             <div className="space-y-2 text-sm max-h-52 overflow-y-auto pr-1">
               {priced.length === 0 && <p className="text-gray-500 text-xs">Your cart is empty.</p>}
@@ -228,8 +279,12 @@ const Checkout = () => {
               <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span className="font-medium text-green-600">FREE</span></div>
               <div className="flex justify-between text-lg font-bold border-t border-blue-200 pt-3 mt-3 text-gray-900"><span>Total</span><span>₹{total.toLocaleString()}</span></div>
             </div>
-            <Button disabled={busy || total <= 0} type="submit" size="lg" className="w-full bg-blue-600 hover:bg-blue-700 shadow-sm text-white">{busy ? "Processing payment…" : `Pay ₹${total.toLocaleString()}`}</Button>
-            <p className="text-xs text-gray-400 flex items-center justify-center gap-1.5 mt-2"><ShieldCheck className="h-3.5 w-3.5" /> Order &amp; payment stored securely.</p>
+            <Button disabled={busy || total <= 0} type="submit" size="lg" className="w-full bg-blue-600 hover:bg-blue-700 shadow-sm text-white font-bold">
+              {busy ? "Opening payment..." : `Pay ₹${total.toLocaleString()}`}
+            </Button>
+            <p className="text-xs text-gray-400 flex items-center justify-center gap-1.5 mt-2">
+              <ShieldCheck className="h-3.5 w-3.5" /> Order &amp; payment stored securely.
+            </p>
           </aside>
         </form>
       </section>
