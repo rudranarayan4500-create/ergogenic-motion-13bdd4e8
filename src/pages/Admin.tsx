@@ -488,8 +488,8 @@ export default function Admin() {
                     {products.map((p) => {
                       const isEditing = editingProduct?.id === p.id;
                       return (
-                        <>
-                        <tr key={p.id} className="border-b border-slate-100 hover:bg-slate-50">
+                        <React.Fragment key={p.id}>
+                        <tr className="border-b border-slate-100 hover:bg-slate-50">
                           <td className="py-3">
                             {isEditing ? (
                               <Input value={editingProduct.name ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })} className="bg-white border-slate-200 text-slate-900 h-9" />
@@ -566,7 +566,7 @@ export default function Admin() {
                           </td>
                         </tr>
                         {isEditing && (
-                          <tr key={p.id + "-edit"} className="border-b border-slate-100 bg-sky-50/40">
+                          <tr className="border-b border-slate-100 bg-sky-50/40">
                             <td colSpan={8} className="p-4 space-y-3">
                               <div>
                                 <Label className="text-slate-700 text-xs">Tagline</Label>
@@ -585,7 +585,7 @@ export default function Admin() {
                             </td>
                           </tr>
                         )}
-                        </>
+                        </React.Fragment>
                       );
                     })}
                   </tbody>
