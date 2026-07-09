@@ -85,7 +85,7 @@ const Checkout = () => {
       if (!Razorpay) throw new Error("Razorpay SDK not loaded. Check your internet connection.");
       
       const options = {
-        // Your LIVE Razorpay Key
+        // Your exact live key is added right here!
         key: "rzp_live_mrY8DTan2XlmdQ", 
         amount: total * 100, // Razorpay needs the amount in paise
         currency: "INR",
