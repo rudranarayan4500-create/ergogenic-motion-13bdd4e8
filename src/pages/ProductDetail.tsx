@@ -38,7 +38,8 @@ const ProductDetail = () => {
     const found = products.find((p) => p.id === id || p.slug === id);
     if (dbProduct) {
       const base: any = found ?? {
-        id: dbProduct.slug, slug: dbProduct.slug,
+        id: dbProduct.slug || dbProduct.id, 
+        slug: dbProduct.slug || dbProduct.id,
         category: dbProduct.category,
         benefits: dbProduct.benefits ?? [],
         howToUse: dbProduct.how_to_use ?? "",
@@ -71,17 +72,18 @@ const ProductDetail = () => {
         targetedImage = "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png";
       }
 
+      // FIX: Ensure strict overriding from Database over Base Fallback for Price & MRP
       return {
         ...base,
         name: dbProduct.name ?? base.name,
         tagline: dbProduct.tagline ?? base.tagline ?? "",
         description: dbProduct.description ?? base.description ?? "",
-        price: Number(dbProduct.price) || base.price,
-        mrp: Number(dbProduct.mrp) || base.mrp,
+        price: dbProduct.price !== null && dbProduct.price !== undefined ? Number(dbProduct.price) : base.price,
+        mrp: dbProduct.mrp !== null && dbProduct.mrp !== undefined ? Number(dbProduct.mrp) : base.mrp,
         category: dbProduct.category || base.category,
         image: targetedImage,
-        rating: Number(dbProduct.rating) || base.rating || 4.8,
-        reviews: Number(dbProduct.reviews) || base.reviews || 0,
+        rating: dbProduct.rating !== null && dbProduct.rating !== undefined ? Number(dbProduct.rating) : (base.rating || 4.8),
+        reviews: dbProduct.reviews !== null && dbProduct.reviews !== undefined ? Number(dbProduct.reviews) : (base.reviews || 0),
         benefits: (dbProduct.benefits?.length ? dbProduct.benefits : base.benefits) ?? [],
         ingredients: (dbProduct.ingredients?.length ? dbProduct.ingredients : base.ingredients) ?? [],
         howToUse: dbProduct.how_to_use || base.howToUse,
@@ -124,14 +126,35 @@ const ProductDetail = () => {
     return found;
   }, [id, dbProduct]);
 
+  // FIX: Robust DB Fetching. Checks SLUG first, then falls back to UUID if slug misses.
   useEffect(() => {
     if (!id) return;
-    supabase.from("products").select("*").eq("slug", id).maybeSingle()
-      .then(({ data }) => {
-        setDbProduct(data ?? null);
+
+    const fetchLiveProduct = async () => {
+      // 1. Try finding by slug
+      let { data, error } = await supabase.from("products").select("*").eq("slug", id).maybeSingle();
+      
+      // 2. If it fails, the URL might be passing the UUID. Try finding by ID safely.
+      if (!data) {
+        try {
+          const { data: idData } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
+          if (idData) data = idData;
+        } catch (e) {
+          // Ignores error if the string is not a valid UUID format
+        }
+      }
+
+      // 3. Set the state
+      if (data) {
+        setDbProduct(data);
         const m = (data?.media as any[]) ?? [];
         setExtraMedia(m.filter((x) => x?.url).map((x) => ({ url: x.url, kind: x.kind })));
-      });
+      } else {
+        setDbProduct(null);
+      }
+    };
+
+    fetchLiveProduct();
   }, [id]);
 
   useEffect(() => {
