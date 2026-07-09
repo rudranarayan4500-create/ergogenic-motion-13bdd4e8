@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -181,8 +181,17 @@ export default function Admin() {
   };
 
   const updateProduct = async (id: string, patch: any) => {
-    const { error } = await supabase.from("products").update(patch).eq("id", id);
+    // SECURITY/ROBUSTNESS FIX: Ensure price and mrp are strictly processed as Numbers, 
+    // guaranteeing the database registers the new float/integer value correctly.
+    const sanitizedPatch = {
+      ...patch,
+      price: patch.price !== undefined ? Number(patch.price) : undefined,
+      mrp: patch.mrp !== undefined ? Number(patch.mrp) : undefined,
+    };
+
+    const { error } = await supabase.from("products").update(sanitizedPatch).eq("id", id);
     if (error) return toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    
     toast({ title: "Product updated" });
     setEditingProduct(null);
     loadAll();
@@ -488,7 +497,8 @@ export default function Admin() {
                     {products.map((p) => {
                       const isEditing = editingProduct?.id === p.id;
                       return (
-                        <tr key={p.id} className="border-b border-slate-100 hover:bg-slate-50">
+                        <React.Fragment key={p.id}>
+                        <tr className="border-b border-slate-100 hover:bg-slate-50">
                           <td className="py-3">
                             {isEditing ? (
                               <Input value={editingProduct.name ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })} className="bg-white border-slate-200 text-slate-900 h-9" />
@@ -547,7 +557,7 @@ export default function Admin() {
                           <td className="text-right space-x-1 whitespace-nowrap">
                             {isEditing ? (
                               <>
-                                <Button size="sm" className="bg-sky-500 hover:bg-sky-600 text-white" onClick={() => updateProduct(p.id, { name: editingProduct.name, category: editingProduct.category, price: editingProduct.price, mrp: editingProduct.mrp })}>
+                                <Button size="sm" className="bg-sky-500 hover:bg-sky-600 text-white" onClick={() => updateProduct(p.id, { name: editingProduct.name, category: editingProduct.category, price: editingProduct.price, mrp: editingProduct.mrp, tagline: editingProduct.tagline, description: editingProduct.description, image: editingProduct.image })}>
                                   <Save className="h-4 w-4 mr-1" /> Save
                                 </Button>
                                 <Button size="sm" variant="outline" className="border-slate-200" onClick={() => setEditingProduct(null)}>Cancel</Button>
@@ -564,6 +574,27 @@ export default function Admin() {
                             )}
                           </td>
                         </tr>
+                        {isEditing && (
+                          <tr className="border-b border-slate-100 bg-sky-50/40">
+                            <td colSpan={8} className="p-4 space-y-3">
+                              <div>
+                                <Label className="text-slate-700 text-xs">Tagline</Label>
+                                <Input value={editingProduct.tagline ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, tagline: e.target.value })} className="mt-1 bg-white border-slate-200 text-slate-900 h-9" />
+                              </div>
+                              <div>
+                                <Label className="text-slate-700 text-xs">Description</Label>
+                                <Textarea rows={4} value={editingProduct.description ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })} className="mt-1 bg-white border-slate-200 text-slate-900" />
+                              </div>
+                              <div>
+                                <Label className="text-slate-700 text-xs">Main Image</Label>
+                                <div className="mt-1">
+                                  <MediaPicker value={editingProduct.image ?? ""} onChange={(url) => setEditingProduct({ ...editingProduct, image: url })} />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                        </React.Fragment>
                       );
                     })}
                   </tbody>
