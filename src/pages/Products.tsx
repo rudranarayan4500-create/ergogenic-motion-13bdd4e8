@@ -104,14 +104,29 @@ const Products = () => {
       ]
     });
 
-    // 2. Overwrite / Append with live admin DB lines (DEDUPLICATION VIA MAP)
+    // 2. Overwrite / Append with live admin DB lines
     dbProducts.forEach((d) => {
       if (!d) return;
       const liveKey = normalizeKey(d.slug || d.id);
       const rawName = d.name || "";
       const normalName = String(rawName).toLowerCase().trim();
       
-      const fallbackObj = uniqueProductMatrix.get(liveKey);
+      // FIX: Smart Matcher. If the slug from the DB is a UUID and doesn't match the hardcoded map,
+      // it will search the map by product name to ensure it overwrites the old prices properly.
+      let matchedKey = liveKey;
+      let fallbackObj = uniqueProductMatrix.get(liveKey);
+      
+      if (!fallbackObj) {
+         const possibleKeys = Array.from(uniqueProductMatrix.keys());
+         const foundKey = possibleKeys.find(k => {
+             const fbName = String(uniqueProductMatrix.get(k).name).toLowerCase().trim();
+             return (normalName && fbName && (normalName.includes(fbName) || fbName.includes(normalName)));
+         });
+         if (foundKey) {
+             matchedKey = foundKey;
+             fallbackObj = uniqueProductMatrix.get(foundKey);
+         }
+      }
 
       let productFeaturedImage = d.image || "";
       let structuredGallery: string[] = Array.isArray(d.media)
@@ -191,13 +206,14 @@ const Products = () => {
         productFeaturedImage = fallbackObj?.image || "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
       }
 
-      uniqueProductMatrix.set(liveKey, {
-        id: fallbackObj?.id || d.id || d.slug, 
-        slug: fallbackObj?.slug || fallbackObj?.id || d.slug, 
+      uniqueProductMatrix.set(matchedKey, {
+        id: d.id || fallbackObj?.id, 
+        slug: d.slug || fallbackObj?.slug, 
         name: d.name,
         tagline: d.tagline ?? fallbackObj?.tagline ?? "",
-        price: Number(d.price) || fallbackObj?.price || 0,
-        mrp: Number(d.mrp) || Number(d.price) || fallbackObj?.mrp || 0,
+        // FIX: Strictly override fallback pricing with Database Live Pricing
+        price: d.price !== null && d.price !== undefined ? Number(d.price) : (fallbackObj?.price || 0),
+        mrp: d.mrp !== null && d.mrp !== undefined ? Number(d.mrp) : (fallbackObj?.mrp || 0),
         category: d.category || fallbackObj?.category || "Muscle",
         image: productFeaturedImage,
         description: d.description ?? fallbackObj?.description ?? "",
@@ -458,7 +474,7 @@ const Products = () => {
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
                 <AnimatePresence mode="popLayout">
                   {visibleDisplayProducts.map((p, index) => {
-                    const dynamicSlugRoute = p.id || p.slug;
+                    const dynamicSlugRoute = p.slug || p.id;
                     const isNewArrival = index === 0;
                     const isPriceDrop = index === 2;
 
