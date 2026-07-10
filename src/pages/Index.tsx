@@ -16,6 +16,7 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 import { ProductShowcaseSlider } from "@/components/ProductShowcaseSlider";
 
 import { products } from "@/data/products";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const ingredients = [
   {
@@ -53,6 +54,7 @@ const imageClass =
   "w-full h-full object-contain p-4 transition-transform duration-500 will-change-transform group-hover:scale-105";
 
 const Index = () => {
+  const site = useSiteContent();
   return (
     <div className="relative w-full overflow-x-hidden bg-background text-foreground">
 
@@ -76,10 +78,10 @@ const Index = () => {
           </div>
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] break-words">
-            FUEL{" "}
+            {site.hero.title}{" "}
             <span className="text-gradient-red inline-block">
               <TypewriterText
-                text="EVOLVED"
+                text={site.hero.highlight}
                 speed={120}
                 delay={400}
               />
@@ -87,8 +89,7 @@ const Index = () => {
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl px-2 text-sm text-foreground/90 sm:text-base md:text-xl">
-            Performance-focused nutrition engineered for your fitness goals.
-            Transparently dosed, made for evolution.
+            {site.hero.subtitle}
           </p>
 
           <div className="mx-auto mt-8 flex max-w-sm flex-col gap-3 px-4 sm:max-w-none sm:flex-row sm:justify-center sm:px-0">
@@ -97,8 +98,8 @@ const Index = () => {
               size="lg"
               className={`${buttonClass} bg-primary hover:bg-primary/90`}
             >
-              <Link to="/products">
-                Shop Now
+              <Link to={site.hero.ctaHref}>
+                {site.hero.ctaLabel}
                 <ChevronRight className="h-4 w-4 shrink-0" />
               </Link>
             </Button>
@@ -122,13 +123,13 @@ const Index = () => {
         <div className="container relative px-4">
           <ScrollReveal className="mx-auto mb-12 max-w-2xl text-center">
             <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-primary sm:text-xs">
-              BUILD YOUR STACK
+              {site.section_products.eyebrow}
             </p>
             <h2 className="text-3xl font-bold text-foreground md:text-5xl">
-              Engineered for every goal
+              {site.section_products.title}
             </h2>
             <p className="mt-4 text-sm text-muted-foreground md:text-base">
-              Every product is formulated for real results. Explore our collection.
+              {site.section_products.subtitle}
             </p>
           </ScrollReveal>
         </div>
@@ -235,13 +236,13 @@ const Index = () => {
         <div className="container relative z-10 px-4">
           <ScrollReveal className="mx-auto mb-12 max-w-2xl text-center">
             <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-primary sm:text-xs">
-              TECH ARSENAL
+              {site.section_ingredients.eyebrow}
             </p>
             <h2 className="text-3xl font-bold text-foreground md:text-5xl">
-              The science behind every scoop
+              {site.section_ingredients.title}
             </h2>
             <p className="mt-4 text-sm text-muted-foreground md:text-base">
-              A closer look at the key ingredients powering our formulations.
+              {site.section_ingredients.subtitle}
             </p>
           </ScrollReveal>
 
