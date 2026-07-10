@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { MediaLibrary, MediaPicker } from "@/components/MediaPicker";
+import { MediaGalleryEditor } from "@/components/MediaGalleryEditor";
+import { DEFAULTS as SITE_DEFAULTS } from "@/hooks/useSiteContent";
 import {
   Users,
   ShoppingCart,
@@ -30,7 +32,8 @@ import {
   PackageCheck,
   TrendingUp,
   Activity,
-  ArrowRight
+  ArrowRight,
+  FileText
 } from "lucide-react";
 
 const menu = [
@@ -38,6 +41,7 @@ const menu = [
   { id: "users", label: "Users", icon: Users },
   { id: "orders", label: "Orders", icon: ShoppingCart },
   { id: "products", label: "Products", icon: Package },
+  { id: "content", label: "Site Content", icon: FileText },
   { id: "reviews", label: "Reviews", icon: Star },
   { id: "media", label: "Media", icon: ImageIcon },
   { id: "messages", label: "Messages", icon: MessageSquare },
@@ -70,6 +74,13 @@ export default function Admin() {
   // Product editing
   const [editingProduct, setEditingProduct] = useState<any | null>(null);
 
+  // Review editing
+  const [editingReview, setEditingReview] = useState<any | null>(null);
+
+  // Site content editing
+  const [siteContent, setSiteContent] = useState<any>(SITE_DEFAULTS);
+  const [savingContent, setSavingContent] = useState(false);
+
   // Account credentials
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -77,13 +88,14 @@ export default function Admin() {
 
   const loadAll = async () => {
     try {
-      const [p, o, pr, m, s, rv] = await Promise.all([
+      const [p, o, pr, m, s, rv, sc] = await Promise.all([
         supabase.from("profiles").select("*").order("created_at", { ascending: false }),
         supabase.from("orders").select("*").order("created_at", { ascending: false }),
         supabase.from("products").select("*").order("created_at", { ascending: false }),
         supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
         supabase.from("admin_settings").select("*").eq("id", 1).maybeSingle(),
         supabase.from("reviews").select("*").order("created_at", { ascending: false }),
+        supabase.from("site_content").select("key,value"),
       ]);
       
       if (p.error) console.error("Profiles error:", p.error.message);
@@ -97,6 +109,16 @@ export default function Admin() {
       
       setNewOrderCount((o.data ?? []).filter((x: any) => !x.seen_by_admin).length);
       if (s.data) setSettings(s.data);
+
+      if (sc.data) {
+        const next: any = { ...SITE_DEFAULTS };
+        for (const row of sc.data as any[]) {
+          if (row.key in SITE_DEFAULTS) {
+            next[row.key] = { ...(SITE_DEFAULTS as any)[row.key], ...(row.value as any) };
+          }
+        }
+        setSiteContent(next);
+      }
     } catch (err) {
       toast({ title: "Sync Error", description: "Could not load complete dashboard data.", variant: "destructive" });
     }
@@ -169,6 +191,22 @@ export default function Admin() {
   const deleteReview = async (id: string) => {
     await supabase.from("reviews").delete().eq("id", id);
     loadAll();
+  };
+
+  const saveReview = async (id: string, patch: { title?: string; body?: string }) => {
+    const { error } = await supabase.from("reviews").update(patch).eq("id", id);
+    if (error) return toast({ title: "Review update failed", description: error.message, variant: "destructive" });
+    toast({ title: "Review updated" });
+    setEditingReview(null);
+    loadAll();
+  };
+
+  const saveSiteContent = async (key: string, value: any) => {
+    setSavingContent(true);
+    const { error } = await supabase.from("site_content").upsert({ key, value });
+    setSavingContent(false);
+    if (error) return toast({ title: "Save failed", description: error.message, variant: "destructive" });
+    toast({ title: "Content saved — live on site" });
   };
 
   const saveSettings = async () => {
@@ -600,6 +638,20 @@ export default function Admin() {
                                   <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Main Image</Label>
                                   <div className="mt-2 bg-white border border-zinc-200 rounded-xl p-4">
                                     <MediaPicker value={editingProduct.image ?? ""} onChange={(url) => setEditingProduct({ ...editingProduct, image: url })} />
+                                  </div>
+                                </div>
+                                <div>
+                                  <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Gallery (drag to reorder — first item is cover)</Label>
+                                  <div className="mt-2 bg-white border border-zinc-200 rounded-xl p-4">
+                                    <MediaGalleryEditor
+                                      value={Array.isArray(editingProduct.media) ? editingProduct.media : []}
+                                      onChange={(media) => setEditingProduct({ ...editingProduct, media })}
+                                    />
+                                  </div>
+                                  <div className="mt-3 flex justify-end">
+                                    <Button size="sm" className="bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg h-8" onClick={() => updateProduct(p.id, { media: editingProduct.media ?? [] })}>
+                                      <Save className="h-3.5 w-3.5 mr-1.5" /> Save gallery
+                                    </Button>
                                   </div>
                                 </div>
                               </td>
