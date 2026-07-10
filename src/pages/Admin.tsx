@@ -684,6 +684,24 @@ export default function Admin() {
                         </div>
                         {r.title && <div className="font-extrabold text-zinc-900 text-lg mb-1">{r.title}</div>}
                         <p className="text-sm text-zinc-600 leading-relaxed whitespace-pre-wrap">{r.body}</p>
+                        {editingReview?.id === r.id && (
+                          <div className="mt-4 space-y-3 p-4 bg-zinc-50 border border-zinc-200 rounded-xl">
+                            <div>
+                              <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Title</Label>
+                              <Input value={editingReview.title ?? ""} onChange={(e) => setEditingReview({ ...editingReview, title: e.target.value })} className="mt-2 bg-white border-zinc-200 rounded-lg h-9 text-sm" />
+                            </div>
+                            <div>
+                              <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Body</Label>
+                              <Textarea rows={4} value={editingReview.body ?? ""} onChange={(e) => setEditingReview({ ...editingReview, body: e.target.value })} className="mt-2 bg-white border-zinc-200 rounded-lg resize-none text-sm" />
+                            </div>
+                            <div className="flex gap-2 justify-end">
+                              <Button size="sm" variant="ghost" onClick={() => setEditingReview(null)} className="text-zinc-500 rounded-lg h-8">Cancel</Button>
+                              <Button size="sm" onClick={() => saveReview(r.id, { title: editingReview.title, body: editingReview.body })} className="bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg h-8">
+                                <Save className="h-3.5 w-3.5 mr-1.5" /> Save
+                              </Button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="flex flex-col gap-3 items-end">
                         <Badge variant="outline" className={`rounded-full px-3 py-1 font-bold text-[10px] tracking-wide border ${
@@ -692,6 +710,9 @@ export default function Admin() {
                           {r.approved ? "PUBLISHED" : "HIDDEN"}
                         </Badge>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button size="icon" variant="ghost" className="text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl h-8 w-8" onClick={() => setEditingReview(editingReview?.id === r.id ? null : r)}>
+                            <Pencil className="h-4 w-4" />
+                          </Button>
                           <Button size="icon" variant="ghost" className="text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl h-8 w-8" onClick={() => toggleReview(r.id, !r.approved)}>
                             {r.approved ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                           </Button>
@@ -706,6 +727,54 @@ export default function Admin() {
                 {!reviews.length && <div className="py-12 text-center text-zinc-400 text-sm font-medium">No customer feedback yet.</div>}
               </div>
             </Section>
+          )}
+
+          {activeTab === "content" && (
+            <div className="space-y-8 max-w-3xl">
+              {([
+                { key: "hero", label: "Homepage Hero", fields: ["title", "highlight", "subtitle", "ctaLabel", "ctaHref"] },
+                { key: "section_products", label: "Products Section", fields: ["eyebrow", "title", "subtitle"] },
+                { key: "section_ingredients", label: "Ingredients Section", fields: ["eyebrow", "title", "subtitle"] },
+              ] as const).map((block) => {
+                const current = siteContent[block.key] ?? {};
+                return (
+                  <Section key={block.key}>
+                    <h3 className="text-lg font-bold mb-6 text-zinc-900 tracking-tight flex items-center gap-2">
+                      <FileText className="h-5 w-5 text-zinc-400" /> {block.label}
+                    </h3>
+                    <div className="space-y-4">
+                      {block.fields.map((f) => {
+                        const isLong = f === "subtitle";
+                        return (
+                          <div key={f}>
+                            <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">{f}</Label>
+                            {isLong ? (
+                              <Textarea
+                                rows={3}
+                                value={current[f] ?? ""}
+                                onChange={(e) => setSiteContent({ ...siteContent, [block.key]: { ...current, [f]: e.target.value } })}
+                                className="mt-2 bg-zinc-50/50 border-zinc-200 rounded-xl resize-none p-4"
+                              />
+                            ) : (
+                              <Input
+                                value={current[f] ?? ""}
+                                onChange={(e) => setSiteContent({ ...siteContent, [block.key]: { ...current, [f]: e.target.value } })}
+                                className="mt-2 bg-zinc-50/50 border-zinc-200 rounded-xl h-11"
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
+                      <div className="flex justify-end pt-2">
+                        <Button disabled={savingContent} onClick={() => saveSiteContent(block.key, current)} className="bg-zinc-900 hover:bg-zinc-800 text-white h-11 rounded-xl px-6 font-bold">
+                          <Save className="h-4 w-4 mr-2" /> Publish live
+                        </Button>
+                      </div>
+                    </div>
+                  </Section>
+                );
+              })}
+            </div>
           )}
 
           {activeTab === "media" && (
