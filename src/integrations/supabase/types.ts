@@ -24,7 +24,7 @@ export type Database = {
         Insert: {
           admin_email?: string | null
           id?: number
-          secret_code?: string
+          secret_code: string
           updated_at?: string
         }
         Update: {
