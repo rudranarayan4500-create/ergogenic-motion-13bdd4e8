@@ -104,12 +104,6 @@ const Checkout = () => {
       const Razorpay = (window as any).Razorpay;
       if (!Razorpay) throw new Error("Razorpay SDK not loaded. Check your internet connection.");
 
-      const methodConfig: Record<string, any> = {
-        upi: { upi: true, card: false, netbanking: false, wallet: false, qr: true },
-        card: { upi: false, card: true, netbanking: false, wallet: false },
-        all: {},
-      };
-
       const options: Record<string, any> = {
         key: RAZORPAY_KEY,
         amount: total * 100,
@@ -124,9 +118,6 @@ const Checkout = () => {
         },
         notes: { order_id: order.id },
         theme: { color: "#2563EB" },
-        // Let Razorpay render its native UPI screen (which includes the
-        // "Scan QR" option on desktop) instead of forcing a custom block
-        // that hides the QR tab.
         handler: async (resp: any) => {
           await supabase.from("orders").update({
             status: "paid",
@@ -145,12 +136,16 @@ const Checkout = () => {
         },
       };
 
-      if (pay !== "all") {
-        // Only constrain methods for "card". For UPI we leave methods open
-        // so Razorpay shows UPI ID + QR scanner tabs natively.
-        if (pay === "card") {
-          options.method = methodConfig.card;
-        }
+      // Method routing:
+      //   - upi  → only UPI enabled. Razorpay auto-renders the "Scan QR"
+      //            tab on desktop and the UPI ID / intent apps on mobile.
+      //   - card → only card enabled.
+      //   - all  → let Razorpay show every supported method.
+      // COD is intentionally never offered.
+      if (pay === "upi") {
+        options.method = { upi: true };
+      } else if (pay === "card") {
+        options.method = { card: true };
       }
 
       const rzp = new Razorpay(options);
