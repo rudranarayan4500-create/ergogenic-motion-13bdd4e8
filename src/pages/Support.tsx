@@ -24,7 +24,7 @@ const Support = () => (
             {[
               ["Do you ship internationally?", "Currently we ship across India. International shipping is coming soon."],
               ["Can I track my order?", "Yes — once dispatched you'll receive a tracking link via SMS and email."],
-              ["What payment methods are supported?", "UPI, all major credit/debit cards, net banking, and cash on delivery."],
+              ["What payment methods are supported?", "UPI (Scan QR, GPay, PhonePe, Paytm), all major credit/debit cards, net banking, and popular wallets. Cash on Delivery is not offered — all orders are prepaid."],
               ["Are your products vegetarian?", "Most of our protein products are made with whey from vegetarian sources. Check individual product pages for specifics."],
             ].map(([q, a], i) => (
               <AccordionItem key={i} value={`s${i}`} className="bg-card border border-white/10 rounded-xl px-5">
