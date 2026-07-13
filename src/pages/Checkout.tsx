@@ -11,8 +11,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { getCart, setCart, type CartItem } from "@/lib/cart";
 
-const RAZORPAY_KEY = "rzp_live_mrY8DTan2XlmdQ";
-
 const Checkout = () => {
   const [pay, setPay] = useState("upi");
   const [busy, setBusy] = useState(false);
@@ -82,48 +80,48 @@ const Checkout = () => {
     fd.forEach((v, k) => { shipping[k] = String(v); });
 
     try {
-      const { data: order, error } = await supabase.from("orders").insert({
-        user_id: user.id,
-        total,
-        status: "created",
-        shipping,
-      }).select().single();
-
-      if (error) throw error;
-
-      await supabase.from("order_items").insert(
-        priced.map((i) => ({
-          order_id: order.id,
-          product_slug: i.slug,
-          name: i.name,
-          qty: i.qty,
-          price: i.price,
-        }))
-      );
+      // Create Razorpay order + local order server-side (prices re-validated on the server)
+      const { data: created, error: createErr } = await supabase.functions.invoke("razorpay-create-order", {
+        body: {
+          items: priced.map((i) => ({ slug: i.slug, qty: i.qty })),
+          shipping,
+        },
+      });
+      if (createErr) throw new Error(createErr.message || "Could not create order");
+      if (!created?.razorpay_order_id) throw new Error(created?.error || "Order creation failed");
 
       const Razorpay = (window as any).Razorpay;
       if (!Razorpay) throw new Error("Razorpay SDK not loaded. Check your internet connection.");
 
       const options: Record<string, any> = {
-        key: RAZORPAY_KEY,
-        amount: total * 100,
-        currency: "INR",
+        key: created.key_id,
+        amount: created.amount,
+        currency: created.currency,
+        order_id: created.razorpay_order_id,
         name: "Ergogenic Nutrients",
-        description: `Order #${order.id.slice(0, 8)}`,
+        description: `Order #${String(created.local_order_id).slice(0, 8)}`,
         image: "/favicon.png",
         prefill: {
           name: `${shipping.first_name ?? ""} ${shipping.last_name ?? ""}`.trim(),
           email: shipping.email ?? user.email ?? "",
           contact: shipping.phone ?? "",
         },
-        notes: { order_id: order.id },
+        notes: { local_order_id: created.local_order_id },
         theme: { color: "#2563EB" },
         handler: async (resp: any) => {
-          await supabase.from("orders").update({
-            status: "paid",
-            razorpay_payment_id: resp.razorpay_payment_id,
-          }).eq("id", order.id);
-
+          const { data: v, error: vErr } = await supabase.functions.invoke("razorpay-verify-payment", {
+            body: {
+              razorpay_order_id: resp.razorpay_order_id,
+              razorpay_payment_id: resp.razorpay_payment_id,
+              razorpay_signature: resp.razorpay_signature,
+              local_order_id: created.local_order_id,
+            },
+          });
+          if (vErr || !v?.ok) {
+            toast({ title: "Verification failed", description: v?.error || vErr?.message || "Please contact support with your payment ID.", variant: "destructive" });
+            setBusy(false);
+            return;
+          }
           setPaid(resp.razorpay_payment_id);
           setCart([]);
           toast({ title: "Payment successful", description: "Order confirmed." });
