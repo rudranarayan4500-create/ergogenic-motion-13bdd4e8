@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { getCart, updateQty as updateQtyLs, removeItem as removeItemLs, type CartItem } from "@/lib/cart";
+import { SafeImage } from "@/components/SafeImage";
 
 export const Cart = () => {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -128,10 +129,12 @@ export const Cart = () => {
                   key={item.slug} 
                   className="flex gap-4 p-5 bg-neutral-900/40 backdrop-blur-md border border-white/5 rounded-2xl items-center shadow-lg hover:border-white/10 transition-colors"
                 >
-                  <img 
-                    src={item.image} 
-                    alt={item.name} 
-                    className="h-20 w-20 md:h-24 md:w-24 rounded-xl object-cover border border-white/5 bg-black/40 select-none pointer-events-none" 
+                  <SafeImage
+                    src={item.image}
+                    alt={item.name}
+                    fallbackLabel={item.name}
+                    className="h-20 w-20 md:h-24 md:w-24 rounded-xl object-cover border border-white/5 bg-black/40 select-none pointer-events-none"
+                    containerClassName="h-20 w-20 md:h-24 md:w-24 rounded-xl border border-white/5"
                   />
                   
                   <div className="flex-1 min-w-0">
