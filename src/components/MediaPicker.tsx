@@ -1,28 +1,87 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { Image as ImageIcon, Trash2, Upload } from "lucide-react";
+import { Image as ImageIcon, Trash2, Upload, Link2 } from "lucide-react";
 
 type Asset = { id: string; name: string; url: string; path: string; kind: string };
 
+// Upload a single file to the media bucket and record it in media_assets. Returns public URL.
+export const uploadMediaFile = async (f: File): Promise<string> => {
+  const { data: u } = await supabase.auth.getUser();
+  const uid = u.user?.id;
+  const path = `${uid ?? "anon"}/${Date.now()}-${f.name.replace(/[^\w.-]+/g, "_")}`;
+  const { error: upErr } = await supabase.storage.from("media").upload(path, f, { upsert: false, contentType: f.type });
+  if (upErr) throw upErr;
+  const { data: pub } = supabase.storage.from("media").getPublicUrl(path);
+  const kind = f.type.startsWith("video") ? "video" : "image";
+  await supabase.from("media_assets").insert({ name: f.name, url: pub.publicUrl, path, kind, size_bytes: f.size, uploaded_by: uid ?? null });
+  return pub.publicUrl;
+};
+
 export const MediaPicker = ({ value, onChange }: { value?: string; onChange: (url: string) => void }) => {
   const [open, setOpen] = useState(false);
+  const [urlInput, setUrlInput] = useState("");
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setBusy(true);
+    try {
+      const url = await uploadMediaFile(files[0]);
+      onChange(url);
+      toast({ title: "Image uploaded" });
+    } catch (e: any) {
+      toast({ title: "Upload failed", description: e.message, variant: "destructive" });
+    } finally {
+      setBusy(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
   return (
     <>
-      <div className="flex gap-2 items-center">
-        {value ? (
-          <img src={value} alt="" className="h-10 w-10 object-cover rounded border border-white/10" />
-        ) : (
-          <div className="h-10 w-10 rounded border border-dashed border-white/15 grid place-items-center text-white/30">
-            <ImageIcon className="h-4 w-4" />
-          </div>
-        )}
-        <Button type="button" size="sm" variant="outline" className="border-white/15" onClick={() => setOpen(true)}>
-          {value ? "Change" : "Pick from library"}
-        </Button>
-        {value && <Button type="button" size="sm" variant="ghost" onClick={() => onChange("")}>Clear</Button>}
+      <div className="space-y-2">
+        <div className="flex gap-2 items-center flex-wrap">
+          {value ? (
+            <img src={value} alt="" className="h-12 w-12 object-cover rounded border border-zinc-200" />
+          ) : (
+            <div className="h-12 w-12 rounded border border-dashed border-zinc-300 grid place-items-center text-zinc-400">
+              <ImageIcon className="h-4 w-4" />
+            </div>
+          )}
+          <input ref={fileRef} type="file" accept="image/*,video/*" hidden onChange={(e) => handleFile(e.target.files)} />
+          <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => fileRef.current?.click()}>
+            <Upload className="h-3.5 w-3.5 mr-1.5" /> {busy ? "Uploading…" : "Upload"}
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => setOpen(true)}>
+            Library
+          </Button>
+          {value && <Button type="button" size="sm" variant="ghost" onClick={() => onChange("")}>Remove</Button>}
+        </div>
+        <div className="flex gap-2 items-center">
+          <Link2 className="h-3.5 w-3.5 text-zinc-400" />
+          <Input
+            placeholder="Or paste image URL and press Enter"
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && urlInput.trim()) {
+                onChange(urlInput.trim());
+                setUrlInput("");
+              }
+            }}
+            className="h-8 text-xs"
+          />
+          {urlInput.trim() && (
+            <Button type="button" size="sm" variant="secondary" onClick={() => { onChange(urlInput.trim()); setUrlInput(""); }}>
+              Set
+            </Button>
+          )}
+        </div>
       </div>
       <MediaLibrary
         open={open}
