@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { MediaLibrary, MediaPicker } from "@/components/MediaPicker";
 import { MediaGalleryEditor } from "@/components/MediaGalleryEditor";
 import { DEFAULTS as SITE_DEFAULTS } from "@/hooks/useSiteContent";
+import { products as staticProducts } from "@/data/products"; // Impport static catalog for fallback hydration
 import {
   Users,
   ShoppingCart,
@@ -105,10 +106,32 @@ export default function Admin() {
 
       setProfiles(p.data ?? []);
       setOrders(o.data ?? []);
-      setProducts(pr.data ?? []);
       setMessages(m.data ?? []);
       setReviews(rv.data ?? []);
       
+      // HYDRATION LOGIC: Merge DB Products with Static Fallbacks so they are easy to edit
+      const rawProducts = pr.data ?? [];
+      const hydratedProducts = rawProducts.map((dbProd: any) => {
+        const staticMatch = staticProducts.find((sp) => sp.id === dbProd.slug || sp.slug === dbProd.slug || sp.id === dbProd.id);
+        
+        let mediaArray = dbProd.media;
+        // If the DB doesn't have a media array yet, populate it from the hardcoded gallery
+        if (!mediaArray || (Array.isArray(mediaArray) && mediaArray.length === 0)) {
+          mediaArray = staticMatch?.gallery?.map((url: string) => ({ url, kind: 'image' })) || [];
+        }
+
+        return {
+          ...dbProd,
+          image: dbProd.image || staticMatch?.image || "",
+          media: mediaArray,
+          tagline: dbProd.tagline || staticMatch?.tagline || "",
+          description: dbProd.description || staticMatch?.description || "",
+          price: dbProd.price !== null ? dbProd.price : (staticMatch?.price || 0),
+          mrp: dbProd.mrp !== null ? dbProd.mrp : (staticMatch?.mrp || 0),
+        };
+      });
+
+      setProducts(hydratedProducts);
       setNewOrderCount((o.data ?? []).filter((x: any) => !x.seen_by_admin).length);
       if (s.data) setSettings(s.data);
 
@@ -232,7 +255,7 @@ export default function Admin() {
     const { error } = await supabase.from("products").update(sanitizedPatch).eq("id", id);
     if (error) return toast({ title: "Update failed", description: error.message, variant: "destructive" });
     
-    toast({ title: "Product updated successfully" });
+    toast({ title: "Product updated successfully", description: "Changes are now live on the site." });
     setEditingProduct(null);
     loadAll();
   };
