@@ -9,6 +9,7 @@ import { type MediaItem } from "@/components/ProductGallery";
 import { supabase } from "@/integrations/supabase/client";
 import { throttle, cn } from "@/lib/utils";
 import { addToCart } from "@/lib/cart";
+import { SafeImage } from "@/components/SafeImage";
 
 interface ScrollPosition {
   scale: number;
@@ -269,10 +270,12 @@ const ProductDetail = () => {
                 {currentMedia.kind === "video" ? (
                   <video src={currentMedia.url} autoPlay loop muted playsInline className="w-full h-full object-cover rounded-xl" />
                 ) : (
-                  <img
+                  <SafeImage
                     src={currentMedia.url}
                     alt={product.name}
+                    fallbackLabel={product.name}
                     className="w-full h-full object-contain mix-blend-multiply transition-all duration-500 hover:scale-[1.02]"
+                    containerClassName="w-full h-full"
                   />
                 )}
               </div>
@@ -293,7 +296,7 @@ const ProductDetail = () => {
                       {item.kind === "video" ? (
                         <video src={item.url} className="w-full h-full object-cover rounded-lg" />
                       ) : (
-                        <img src={item.url} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-contain mix-blend-multiply" />
+                        <SafeImage src={item.url} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-contain mix-blend-multiply" containerClassName="w-full h-full" />
                       )}
                     </button>
                   ))}
