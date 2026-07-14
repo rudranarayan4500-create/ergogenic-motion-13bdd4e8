@@ -98,10 +98,12 @@ export const ProductShowcaseSlider = () => {
               </div>
 
               <div className="order-1 md:order-2 relative h-[40vh] md:h-full flex items-center justify-center">
-                <img
+                <SafeImage
                   src={s.image}
                   alt={s.title}
+                  fallbackLabel={s.title}
                   className="max-h-full max-w-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.35)] transition-transform duration-[1400ms] ease-out scale-100 hover:scale-[1.03]"
+                  containerClassName="max-h-full max-w-full aspect-square"
                   loading="eager"
                 />
               </div>
