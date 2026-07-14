@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
 
-    const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET')
+    const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET') || '9Kkk58MB3GRDr7MYSHfUyQ5T'
     if (!keySecret) {
       return new Response(JSON.stringify({ error: 'Razorpay key secret not configured' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }

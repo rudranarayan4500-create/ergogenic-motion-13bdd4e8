@@ -68,8 +68,8 @@ Deno.serve(async (req) => {
       priced.map((i) => ({ order_id: order.id, product_slug: i.slug, name: i.name, qty: i.qty, price: i.price }))
     )
 
-    const keyId = Deno.env.get('RAZORPAY_KEY_ID')
-    const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET')
+    const keyId = Deno.env.get('RAZORPAY_KEY_ID') || 'rzp_live_TC4xHUHMg0DbIq'
+    const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET') || '9Kkk58MB3GRDr7MYSHfUyQ5T'
     if (!keyId || !keySecret) {
       return new Response(JSON.stringify({ error: 'Razorpay keys not configured' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
