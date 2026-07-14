@@ -69,7 +69,7 @@ export interface Product {
   rating: number;
   reviews: number;
   gallery?: string[];
-  flavours?: string[]; // Added flavours array specifically for your product variations
+  flavours?: string[];
 }
 
 export const products: Product[] = [
