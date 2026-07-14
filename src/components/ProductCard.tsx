@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { Product } from "@/data/products";
 import { addToCart } from "@/lib/cart";
 import { toast } from "@/hooks/use-toast";
+import { SafeImage } from "@/components/SafeImage";
 
 export const ProductCard = ({ p }: { p: Product }) => {
   const dynamicSlugRoute = p.slug || p.id;
@@ -17,14 +18,13 @@ export const ProductCard = ({ p }: { p: Product }) => {
               Out of stock
             </span>
           )}
-          <img
+          <SafeImage
             src={p.image}
             alt={p.name}
+            fallbackLabel={p.name}
             className={`h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105 select-none pointer-events-none ${outOfStock ? "opacity-50 grayscale" : ""}`}
+            containerClassName="h-full w-full"
             loading="lazy"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
-            }}
           />
         </Link>
         <div className="p-5 text-left space-y-1">

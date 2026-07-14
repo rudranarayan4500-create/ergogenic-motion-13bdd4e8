@@ -1,5 +1,6 @@
 import { useState, type MouseEvent } from "react";
 import { ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
+import { SafeImage } from "@/components/SafeImage";
 
 export type MediaItem = { url: string; kind?: "image" | "video" };
 
@@ -39,11 +40,13 @@ export const ProductGallery = ({ items, alt }: { items: MediaItem[]; alt: string
         {kind === "video" ? (
           <video key={active.url} src={active.url} controls className="h-full w-full object-cover bg-black" />
         ) : (
-          <img
+          <SafeImage
             key={active.url}
             src={active.url}
             alt={alt}
+            fallbackLabel={alt}
             className="h-full w-full object-cover animate-fade-in cursor-zoom-in transition-transform duration-200 ease-out will-change-transform"
+            containerClassName="h-full w-full"
             style={{
               transform: isZoomed ? "scale(1.9)" : "scale(1)",
               transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
@@ -82,7 +85,7 @@ export const ProductGallery = ({ items, alt }: { items: MediaItem[]; alt: string
                     <PlayCircle className="h-5 w-5 text-white absolute inset-0 m-auto drop-shadow" />
                   </>
                 ) : (
-                  <img src={m.url} alt="" className="h-full w-full object-cover" />
+                  <SafeImage src={m.url} alt="" className="h-full w-full object-cover" containerClassName="h-full w-full" />
                 )}
               </button>
             );
