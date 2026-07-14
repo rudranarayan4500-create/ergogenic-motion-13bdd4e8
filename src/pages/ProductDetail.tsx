@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star, ShieldCheck, Check, Activity, Loader2 } from "lucide-react";
+import { CircleCheck as CheckCircle2, ChevronRight, Minus, Plus, Star, ShieldCheck, Check, Activity, Loader2, PackageX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
@@ -38,92 +38,25 @@ const ProductDetail = () => {
     setSelectedFlavour(null);
   }, [id]);
 
-  const product = useMemo(() => {
-    const found = products.find((p) => p.id === id || p.slug === id);
-    if (dbProduct) {
-      const base: any = found ?? {
-        id: dbProduct.slug || dbProduct.id, 
-        slug: dbProduct.slug || dbProduct.id,
-        category: dbProduct.category,
-        benefits: dbProduct.benefits ?? [],
-        howToUse: dbProduct.how_to_use ?? "",
-        ingredients: dbProduct.ingredients ?? [],
-        gallery: undefined,
-      };
-
-      const normalName = (dbProduct.name || "").toLowerCase().trim();
-      // Admin-controlled: image comes straight from the DB (falls back to static catalog only if DB has none)
-      const targetedImage = dbProduct.image || base.image;
-
-      return {
-        ...base,
-        name: dbProduct.name ?? base.name,
-        tagline: dbProduct.tagline ?? base.tagline ?? "",
-        description: dbProduct.description ?? base.description ?? "",
-        price: dbProduct.price !== null && dbProduct.price !== undefined ? Number(dbProduct.price) : base.price,
-        mrp: dbProduct.mrp !== null && dbProduct.mrp !== undefined ? Number(dbProduct.mrp) : base.mrp,
-        category: dbProduct.category || base.category,
-        image: targetedImage,
-        rating: dbProduct.rating !== null && dbProduct.rating !== undefined ? Number(dbProduct.rating) : (base.rating || 4.8),
-        reviews: dbProduct.reviews !== null && dbProduct.reviews !== undefined ? Number(dbProduct.reviews) : (base.reviews || 0),
-        benefits: (dbProduct.benefits?.length ? dbProduct.benefits : base.benefits) ?? [],
-        ingredients: (dbProduct.ingredients?.length ? dbProduct.ingredients : base.ingredients) ?? [],
-        howToUse: dbProduct.how_to_use || base.howToUse,
-      };
-    }
-    
-    if (!found) {
-      if (id === "micro-power-creatine") {
-        return {
-          id: "micro-power-creatine", slug: "micro-power-creatine", name: "Micro Power Creatin", category: "Fitness",
-          rating: 4.9, reviews: 1750, price: 1299, mrp: 1599,
-          tagline: "Pure micronized formulation designed to support explosive power and muscle hydration.",
-          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg",
-          ingredients: ["Creatine Monohydrate", "Creatine Ethyl Ester", "Creatine Nitrate"]
-        };
-      }
-      if (id === "ginseng-shot") {
-        return {
-          id: "ginseng-shot", slug: "ginseng-shot", name: "GINSENG SHOT", category: "Energy",
-          rating: 4.9, reviews: 14, price: 1499, mrp: 1999,
-          tagline: "Super Concentrated Red Ginseng Extract",
-          description: "Super Concentrated Red Ginseng Extract designed to enhance Cognitive function, Energy, Immunity, and Vitality.",
-          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//ff08da06-8ca4-4ef9-a90c-37a6c4593542.png",
-          benefits: ["Cognitive", "Energy", "Immunity", "Vitality"],
-          ingredients: ["Super Concentrated Red Ginseng Extract"]
-        };
-      }
-      if (id === "carnitine-shot") {
-        return {
-          id: "carnitine-shot", slug: "carnitine-shot", name: "CARNITINE SHOT", category: "Essentials",
-          rating: 4.8, reviews: 12, price: 1299, mrp: 1799,
-          tagline: "Ultra Potent Fat Burning Formula",
-          description: "Ultra Potent Fat Burning Formula designed to support Recovery, Fat Loss, Energy, and Lean Muscle.",
-          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//c2159502-6e32-4550-bbcf-a7620d036014.png",
-          benefits: ["Recovery", "Fat Loss", "Energy", "Lean Muscle"],
-          ingredients: ["L-Carnitine Base Formula"]
-        };
-      }
-    }
-    return found;
-  }, [id, dbProduct]);
-
+  // Fetch Live Data from Supabase Admin Panel
   useEffect(() => {
     if (!id) return;
 
     const fetchLiveProduct = async () => {
       setIsLoading(true); 
 
+      // 1. Try fetching by exact slug
       let { data } = await supabase.from("products").select("*").eq("slug", id).maybeSingle();
       
+      // 2. Fallback to fetching by ID
       if (!data) {
         try {
           const { data: idData } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
           if (idData) data = idData;
-        } catch (e) {
-        }
+        } catch (e) {}
       }
 
+      // 3. Fallback to fuzzy search
       if (!data) {
         const searchTerm = id.replace(/-/g, ' '); 
         const { data: fuzzyData } = await supabase
@@ -139,8 +72,9 @@ const ProductDetail = () => {
 
       if (data) {
         setDbProduct(data);
+        // Connect the media gallery from the Admin Panel
         const m = (data?.media as any[]) ?? [];
-        setExtraMedia(m.filter((x) => x?.url).map((x) => ({ url: x.url, kind: x.kind })));
+        setExtraMedia(m.filter((x) => x?.url).map((x) => ({ url: x.url, kind: x.kind || 'image' })));
       } else {
         setDbProduct(null);
       }
@@ -151,6 +85,51 @@ const ProductDetail = () => {
     fetchLiveProduct();
   }, [id]);
 
+  // Merge Live DB Data with static catalog fallbacks
+  const product = useMemo(() => {
+    const found = products.find((p) => p.id === id || p.slug === id);
+    
+    // If Admin Panel data exists, it overrides everything else
+    if (dbProduct) {
+      const base: any = found ?? {};
+      return {
+        id: dbProduct.id, 
+        slug: dbProduct.slug,
+        name: dbProduct.name,
+        tagline: dbProduct.tagline || base.tagline || "",
+        description: dbProduct.description || base.description || "",
+        price: Number(dbProduct.price),
+        mrp: Number(dbProduct.mrp),
+        category: dbProduct.category || base.category,
+        image: dbProduct.image || base.image,
+        rating: Number(dbProduct.rating || base.rating || 4.8),
+        reviews: Number(dbProduct.reviews || base.reviews || 0),
+        benefits: (dbProduct.benefits?.length ? dbProduct.benefits : base.benefits) ?? [],
+        ingredients: (dbProduct.ingredients?.length ? dbProduct.ingredients : base.ingredients) ?? [],
+        howToUse: dbProduct.how_to_use || base.howToUse,
+        inStock: dbProduct.in_stock ?? true, // Connects to Admin Panel Stock Toggle
+      };
+    }
+    
+    // Keep your hardcoded fallbacks here if the DB fetch fails...
+    if (!found) {
+      if (id === "micro-power-creatine") {
+        return {
+          id: "micro-power-creatine", slug: "micro-power-creatine", name: "Micro Power Creatin", category: "Fitness",
+          rating: 4.9, reviews: 1750, price: 1299, mrp: 1599, inStock: true,
+          tagline: "Pure micronized formulation designed to support explosive power and muscle hydration.",
+          image: "https://rjsmqpneamauasuoqzct.supabase.co/storage/v1/object/public/review-photos//WhatsApp Image 2026-06-07 at 4.34.42 PM.jpeg",
+          ingredients: ["Creatine Monohydrate", "Creatine Ethyl Ester", "Creatine Nitrate"]
+        };
+      }
+      // Add other fallbacks as needed...
+    }
+    
+    return { ...found, inStock: true };
+  }, [id, dbProduct]);
+
+
+  // Scroll Animation Logic
   useEffect(() => {
     const handleScroll = () => {
       const elements = document.querySelectorAll("[data-scroll-section]");
@@ -166,20 +145,22 @@ const ProductDetail = () => {
     return () => { if (scrollHandlerRef.current) window.removeEventListener("scroll", scrollHandlerRef.current); };
   }, []);
 
+  // Connects Admin Panel Media array to the frontend gallery
   const gallery: MediaItem[] = useMemo(() => {
-    if (extraMedia.length) return extraMedia.slice(0, 6);
-
+    if (extraMedia.length > 0) return extraMedia; // Uses Admin Panel Media First
     if (!product) return [];
+    
     const g = (product as any).gallery as string[] | undefined;
-    if (g && g.length) return g.slice(0, 6).map((url) => ({ url, kind: "image" as const }));
+    if (g && g.length > 0) return g.map((url) => ({ url, kind: "image" as const }));
+    
     return [{ url: product.image, kind: "image" }];
   }, [extraMedia, product]);
 
   const currentMedia = gallery[activeImageIndex] || gallery[0] || { url: product?.image, kind: 'image' };
 
-  // FIX: Moved the `related` calculation hook ABOVE the early returns!
+  // Generate Related Products
   const related = useMemo(() => {
-    if (!product) return []; // Safeguard if product isn't loaded yet
+    if (!product) return []; 
     const hiddenCatalogItems = [
       "super whey 2kg", "plasma mass 3kg", "amino shot caplets", 
       "pure creatin", "pure creatine", "lean shot thermogenic",
@@ -193,7 +174,6 @@ const ProductDetail = () => {
     }).slice(0, 4);
   }, [product?.id]);
 
-  // ALL HOOKS ARE FINISHED. NOW WE CAN SAFELY RENDER EARLY RETURNS!
 
   if (isLoading) {
     return (
@@ -207,6 +187,7 @@ const ProductDetail = () => {
   if (!product && !isLoading) return <Navigate to="/products" replace />;
 
   const add = () => {
+    if (!product.inStock) return toast({ title: "Out of Stock", description: "This product is currently unavailable.", variant: "destructive" });
     addToCart({ slug: (product as any).slug || product.id, name: product.name, price: product.price, image: product.image }, qty);
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
   };
@@ -221,26 +202,7 @@ const ProductDetail = () => {
   }
 
   const activeFlavour = selectedFlavour || productFlavours[0];
-
-  let productIngredients = (product as any).mainIngredients || (product as any).ingredients;
-  
-  if (!Array.isArray(productIngredients)) {
-    productIngredients = [];
-  }
-
-  const isCreatineProduct = 
-    normalNameCheck.includes("micro power") || 
-    normalNameCheck.includes("creatin") || 
-    idCheck.includes("creatin") || 
-    idCheck.includes("micro-power") ||
-    slugCheck.includes("creatin");
-
-  if (isCreatineProduct) {
-    productIngredients = ["Creatine Monohydrate", "Creatine Ethyl Ester", "Creatine Nitrate"];
-  } else if (productIngredients.length === 0) {
-    productIngredients = ["Formula Specific Compounds"];
-  }
-
+  let productIngredients = (product as any).mainIngredients || (product as any).ingredients || ["Formula Specific Compounds"];
   const productBenefits = (product as any).keyBenefits || (product as any).benefits || ["Supports Performance Output", "Promotes Cellular Hydration", "Assists Structured Recovery"];
 
   return (
@@ -323,15 +285,21 @@ const ProductDetail = () => {
                   <span className="text-lg line-through font-bold text-slate-400 font-mono">
                     ₹{product.mrp.toLocaleString()}
                   </span>
-                  <span className="text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider border text-emerald-700 bg-emerald-50 border-emerald-200 transform -translate-y-1">
-                    Save {product.mrp > product.price ? Math.round((1 - product.price / product.mrp) * 100) : 0}%
-                  </span>
+                  {product.mrp > product.price && (
+                    <span className="text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider border text-emerald-700 bg-emerald-50 border-emerald-200 transform -translate-y-1">
+                      Save {Math.round((1 - product.price / product.mrp) * 100)}%
+                    </span>
+                  )}
                 </div>
                 <p className="text-xs text-slate-400 font-medium">Taxes included. Free shipping available.</p>
               </div>
 
               <div className="space-y-3 pt-2">
-                <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-lg mb-4">{product.tagline} {product.description}</p>
+                {/* Dynamically loads tagline & description from Admin Panel */}
+                <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-lg mb-4 whitespace-pre-wrap">
+                  <span className="font-bold text-slate-900 block mb-1">{product.tagline}</span>
+                  {product.description}
+                </p>
                 {productBenefits.slice(0, 4).map((benefit: string, i: number) => (
                   <div key={i} className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" strokeWidth={3} />
@@ -340,7 +308,7 @@ const ProductDetail = () => {
                 ))}
               </div>
 
-              {/* Flavor Options Matrix - Now Interactive */}
+              {/* Flavor Options Matrix */}
               <div className="space-y-3 pt-6 border-t border-slate-100">
                 <span className="text-[10px] uppercase font-black tracking-[0.15em] text-slate-400 block">Select Flavour</span>
                 <div className="flex flex-wrap gap-2.5">
@@ -368,23 +336,32 @@ const ProductDetail = () => {
               <div className="pt-6 space-y-4">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex items-center justify-between border rounded-xl p-1 shrink-0 h-14 border-slate-300 bg-white w-full sm:w-32 shadow-sm">
-                    <button onClick={() => setQty(Math.max(1, qty - 1))} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+                    <button onClick={() => setQty(Math.max(1, qty - 1))} disabled={!product.inStock} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors disabled:opacity-50">
                       <Minus className="h-4 w-4" />
                     </button>
                     <span className="w-8 text-center font-mono font-black text-base text-slate-900">{qty}</span>
-                    <button onClick={() => setQty(qty + 1)} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+                    <button onClick={() => setQty(qty + 1)} disabled={!product.inStock} className="p-3 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors disabled:opacity-50">
                       <Plus className="h-4 w-4" />
                     </button>
                   </div>
 
-                  <Button onClick={add} size="lg" className="bg-orange-600 hover:bg-orange-700 text-white flex-1 font-black uppercase tracking-widest text-xs h-14 rounded-xl shadow-lg shadow-orange-600/20 transition-all">
-                    Add to Cart — ₹{(product.price * qty).toLocaleString()}
-                  </Button>
+                  {/* Dynamic Button based on Admin Panel Stock Status */}
+                  {product.inStock ? (
+                    <Button onClick={add} size="lg" className="bg-orange-600 hover:bg-orange-700 text-white flex-1 font-black uppercase tracking-widest text-xs h-14 rounded-xl shadow-lg shadow-orange-600/20 transition-all">
+                      Add to Cart — ₹{(product.price * qty).toLocaleString()}
+                    </Button>
+                  ) : (
+                    <Button disabled size="lg" className="bg-zinc-200 text-zinc-500 flex-1 font-black uppercase tracking-widest text-xs h-14 rounded-xl cursor-not-allowed">
+                      <PackageX className="h-4 w-4 mr-2" /> Sold Out
+                    </Button>
+                  )}
                 </div>
                 
-                <Button asChild variant="outline" size="lg" className="w-full font-black uppercase tracking-wider text-xs h-14 rounded-xl border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-900 shadow-sm transition-all">
-                  <Link to="/checkout">Proceed to Checkout</Link>
-                </Button>
+                {product.inStock && (
+                  <Button asChild variant="outline" size="lg" className="w-full font-black uppercase tracking-wider text-xs h-14 rounded-xl border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-900 shadow-sm transition-all">
+                    <Link to="/checkout">Proceed to Checkout</Link>
+                  </Button>
+                )}
 
                 <div className="flex items-center justify-center gap-2 pt-2 text-xs font-bold text-slate-500 bg-slate-50 py-3 rounded-xl border border-slate-200">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" /> Backed By Our 100% Purity Guarantee
@@ -396,11 +373,9 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      {/* Info Sections Below */}
+      {/* Ingredients & Protocol */}
       <section className="py-20 bg-slate-50/50 relative border-t border-slate-200">
         <div className="container max-w-6xl mx-auto px-4 space-y-24">
-
-          {/* Ingredients Breakdown */}
           {productIngredients.length > 0 && (
             <div data-scroll-section data-scroll-index="1" className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               <div className="lg:col-span-7 space-y-6 order-2 lg:order-1">
@@ -430,7 +405,6 @@ const ProductDetail = () => {
               </div>
             </div>
           )}
-
         </div>
       </section>
 
@@ -452,9 +426,15 @@ const ProductDetail = () => {
           <span className="text-[10px] uppercase tracking-widest block font-bold text-slate-400">Total Price</span>
           <p className="font-black text-xl text-slate-900 font-mono">₹{(product.price * qty).toLocaleString()}</p>
         </div>
-        <Button onClick={add} className="bg-orange-600 hover:bg-orange-700 text-white font-black uppercase tracking-wider text-xs h-12 px-8 rounded-xl shadow-md">
-          Add to Cart
-        </Button>
+        {product.inStock ? (
+          <Button onClick={add} className="bg-orange-600 hover:bg-orange-700 text-white font-black uppercase tracking-wider text-xs h-12 px-8 rounded-xl shadow-md">
+            Add to Cart
+          </Button>
+        ) : (
+          <Button disabled className="bg-zinc-200 text-zinc-500 font-black uppercase tracking-wider text-xs h-12 px-8 rounded-xl shadow-md">
+            Sold Out
+          </Button>
+        )}
       </div>
     </div>
   );
