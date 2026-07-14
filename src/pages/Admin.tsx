@@ -33,7 +33,9 @@ import {
   TrendingUp,
   Activity,
   ArrowRight,
-  FileText
+  ArrowLeft,
+  FileText,
+  ImagePlus
 } from "lucide-react";
 
 const menu = [
@@ -230,13 +232,28 @@ export default function Admin() {
     const { error } = await supabase.from("products").update(sanitizedPatch).eq("id", id);
     if (error) return toast({ title: "Update failed", description: error.message, variant: "destructive" });
     
-    toast({ title: "Product updated" });
+    toast({ title: "Product updated successfully" });
     setEditingProduct(null);
     loadAll();
   };
 
+  const handleSaveEditProduct = async () => {
+    if (!editingProduct) return;
+    await updateProduct(editingProduct.id, {
+      name: editingProduct.name,
+      slug: editingProduct.slug,
+      category: editingProduct.category,
+      price: editingProduct.price,
+      mrp: editingProduct.mrp,
+      tagline: editingProduct.tagline,
+      description: editingProduct.description,
+      image: editingProduct.image,
+      media: editingProduct.media ?? []
+    });
+  };
+
   const deleteProduct = async (id: string) => {
-    if (!confirm("Delete this product?")) return;
+    if (!confirm("Are you sure you want to completely delete this product? This action cannot be undone.")) return;
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) return toast({ title: "Delete failed", description: error.message, variant: "destructive" });
     toast({ title: "Product deleted" });
@@ -333,6 +350,7 @@ export default function Admin() {
                 onClick={() => {
                   setActiveTab(item.id);
                   setIsSidebarOpen(false);
+                  setEditingProduct(null); // Reset edit state when changing tabs
                   if (item.id === "orders") markOrdersSeen();
                 }}
                 className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 font-medium group ${
@@ -369,14 +387,17 @@ export default function Admin() {
       {/* Main Content Area */}
       <main className="flex-1 p-6 md:p-12 w-full overflow-x-hidden relative">
         
-        <div className="mb-10 animate-in fade-in slide-in-from-top-4 duration-700 ease-out">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-zinc-900 tracking-tight capitalize">
-            {activeTab.replace('-', ' ')}
-          </h1>
-          <p className="text-zinc-500 mt-2 text-sm md:text-base font-medium tracking-wide">
-            Manage your high-performance store and monitor operations.
-          </p>
-        </div>
+        {/* Only show default header if not editing a product */}
+        {!editingProduct && (
+          <div className="mb-10 animate-in fade-in slide-in-from-top-4 duration-700 ease-out">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-zinc-900 tracking-tight capitalize">
+              {activeTab.replace('-', ' ')}
+            </h1>
+            <p className="text-zinc-500 mt-2 text-sm md:text-base font-medium tracking-wide">
+              Manage your high-performance store and monitor operations.
+            </p>
+          </div>
+        )}
 
         {/* Tab Content Wrapper for smooth transitions */}
         <div key={activeTab} className="animate-in fade-in zoom-in-[0.98] duration-500 ease-out fill-mode-both">
@@ -488,183 +509,241 @@ export default function Admin() {
           )}
 
           {activeTab === "products" && (
-            <div className="space-y-8">
-              <Section>
-                <h3 className="text-lg font-bold mb-6 text-zinc-900 tracking-tight flex items-center gap-2">
-                  <Package className="h-5 w-5 text-zinc-400" /> Add New Formula
-                </h3>
-                <form onSubmit={saveProduct} className="space-y-5 text-sm">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {["name", "slug", "tagline", "category"].map((k) => (
-                      <div key={k}>
-                        <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">{k}</Label>
-                        <Input name={k} required={k === "slug" || k === "name" || k === "category"} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 h-11" placeholder={`Enter ${k}...`} />
+            <div className="space-y-8 animate-in fade-in duration-500">
+              
+              {/* === PREMIUM EDIT PORTAL === */}
+              {editingProduct ? (
+                <div className="space-y-6">
+                  {/* Edit Header */}
+                  <div className="flex flex-col md:flex-row md:items-center justify-between bg-white p-6 rounded-3xl border border-zinc-200 shadow-sm gap-4">
+                    <div className="flex items-center gap-4">
+                      <Button variant="ghost" size="icon" onClick={() => setEditingProduct(null)} className="h-10 w-10 rounded-full bg-zinc-50 hover:bg-zinc-100 text-zinc-500">
+                        <ArrowLeft className="h-5 w-5" />
+                      </Button>
+                      <div>
+                        <h2 className="text-2xl font-black text-zinc-900 tracking-tight">Editing: {editingProduct.name}</h2>
+                        <p className="text-sm text-zinc-500 font-medium">Update inventory details, pricing, and media gallery directly.</p>
                       </div>
-                    ))}
-                  </div>
-                  <div>
-                    <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Product Image</Label>
-                    <div className="mt-2 bg-zinc-50/50 border border-zinc-200 rounded-xl p-4">
-                      <MediaPicker value={productImage} onChange={setProductImage} />
+                    </div>
+                    <div className="flex gap-3">
+                      <Button variant="outline" onClick={() => setEditingProduct(null)} className="rounded-xl h-12 px-6 font-bold text-zinc-600 border-zinc-200">
+                        Discard Changes
+                      </Button>
+                      <Button onClick={handleSaveEditProduct} className="bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl h-12 px-8 font-bold shadow-lg shadow-zinc-900/20">
+                        <Save className="h-4 w-4 mr-2" /> Save All Updates
+                      </Button>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Price (₹)</Label>
-                      <Input name="price" type="number" required className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 h-11 tabular-nums" placeholder="0.00" />
-                    </div>
-                    <div>
-                      <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">MRP (₹)</Label>
-                      <Input name="mrp" type="number" className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 h-11 tabular-nums" placeholder="0.00" />
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Detailed Description</Label>
-                    <Textarea name="description" rows={4} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 resize-none p-4" placeholder="Enter full product details..." />
-                  </div>
-                  <Button type="submit" className="bg-zinc-900 hover:bg-zinc-800 text-white w-full mt-4 h-12 rounded-xl text-sm font-bold tracking-wide shadow-lg shadow-zinc-900/20 transition-all hover:-translate-y-0.5">
-                    Launch Product <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </form>
-              </Section>
 
-              <Section>
-                <h3 className="text-lg font-bold mb-6 text-zinc-900 tracking-tight flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-zinc-400" /> Live Inventory ({products.length})
-                </h3>
-                <div className="overflow-x-auto custom-scrollbar">
-                  <table className="w-full text-sm">
-                    <thead className="text-zinc-400 text-left border-b border-zinc-100">
-                      <tr>
-                        <th className="pb-4 font-semibold uppercase tracking-wider text-[10px]">Product Name</th>
-                        <th className="pb-4 font-semibold uppercase tracking-wider text-[10px]">Category</th>
-                        <th className="pb-4 font-semibold uppercase tracking-wider text-[10px]">Pricing</th>
-                        <th className="pb-4 font-semibold uppercase tracking-wider text-[10px]">Status</th>
-                        <th className="pb-4"></th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-zinc-50">
-                      {products.map((p) => {
-                        const isEditing = editingProduct?.id === p.id;
-                        return (
-                          <React.Fragment key={p.id}>
-                          <tr className="hover:bg-zinc-50/50 transition-colors group">
-                            <td className="py-4">
-                              {isEditing ? (
-                                <Input value={editingProduct.name ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })} className="bg-white border-zinc-200 rounded-lg h-9 text-xs" />
-                              ) : (
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Left Column: Data & Text Details */}
+                    <div className="lg:col-span-2 space-y-6">
+                      <Section className="p-8">
+                        <h3 className="text-lg font-bold mb-6 text-zinc-900 tracking-tight border-b border-zinc-100 pb-4">Basic Information</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                          <div>
+                            <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Product Name</Label>
+                            <Input value={editingProduct.name ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl h-11 focus-visible:ring-zinc-900 font-semibold" />
+                          </div>
+                          <div>
+                            <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">URL Slug</Label>
+                            <Input value={editingProduct.slug ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, slug: e.target.value })} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-500 rounded-xl h-11 font-mono text-sm" />
+                          </div>
+                          <div className="md:col-span-2">
+                            <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Category</Label>
+                            <Input value={editingProduct.category ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl h-11 focus-visible:ring-zinc-900" />
+                          </div>
+                          <div className="md:col-span-2">
+                            <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Tagline (Short Intro)</Label>
+                            <Input value={editingProduct.tagline ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, tagline: e.target.value })} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl h-11 focus-visible:ring-zinc-900" />
+                          </div>
+                        </div>
+                      </Section>
+
+                      <Section className="p-8">
+                        <h3 className="text-lg font-bold mb-6 text-zinc-900 tracking-tight border-b border-zinc-100 pb-4 flex items-center justify-between">
+                          Pricing Configuration
+                        </h3>
+                        <div className="grid grid-cols-2 gap-5">
+                          <div>
+                            <Label className="uppercase tracking-wider text-[10px] font-bold text-emerald-600">Selling Price (₹)</Label>
+                            <Input type="number" value={editingProduct.price ?? 0} onChange={(e) => setEditingProduct({ ...editingProduct, price: Number(e.target.value) })} className="mt-2 bg-emerald-50/30 border-emerald-200 text-emerald-900 rounded-xl h-12 font-black tabular-nums text-lg focus-visible:ring-emerald-600" />
+                          </div>
+                          <div>
+                            <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">MRP / Crossed Price (₹)</Label>
+                            <Input type="number" value={editingProduct.mrp ?? 0} onChange={(e) => setEditingProduct({ ...editingProduct, mrp: Number(e.target.value) })} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-500 rounded-xl h-12 font-bold tabular-nums text-lg line-through focus-visible:ring-zinc-900" />
+                          </div>
+                        </div>
+                      </Section>
+
+                      <Section className="p-8">
+                        <h3 className="text-lg font-bold mb-6 text-zinc-900 tracking-tight border-b border-zinc-100 pb-4">Detailed Description</h3>
+                        <div>
+                          <Textarea 
+                            rows={8} 
+                            value={editingProduct.description ?? ""} 
+                            onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })} 
+                            className="bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 resize-none p-5 leading-relaxed" 
+                            placeholder="Enter comprehensive product details, benefits, and usage instructions here..." 
+                          />
+                        </div>
+                      </Section>
+                    </div>
+
+                    {/* Right Column: Media Management */}
+                    <div className="space-y-6">
+                      <Section className="p-8 bg-zinc-50/50 border-2 border-dashed border-zinc-200">
+                        <div className="flex items-center gap-2 mb-4">
+                          <ImagePlus className="h-5 w-5 text-zinc-400" />
+                          <h3 className="text-lg font-bold text-zinc-900 tracking-tight">Primary Cover</h3>
+                        </div>
+                        <p className="text-[11px] text-zinc-500 font-medium mb-4 uppercase tracking-wider">Thumbnail used on product lists</p>
+                        <div className="bg-white border border-zinc-200 rounded-2xl p-2 shadow-sm">
+                          <MediaPicker 
+                            value={editingProduct.image ?? ""} 
+                            onChange={(url) => setEditingProduct({ ...editingProduct, image: url })} 
+                          />
+                        </div>
+                      </Section>
+
+                      <Section className="p-8">
+                        <div className="flex items-center gap-2 mb-2">
+                          <ImageIcon className="h-5 w-5 text-zinc-400" />
+                          <h3 className="text-lg font-bold text-zinc-900 tracking-tight">Sequential Gallery</h3>
+                        </div>
+                        <p className="text-xs text-zinc-500 font-medium mb-6 leading-relaxed">
+                          Add multiple images (Front, Back, Nutritional Labels) one by one. Drag to reorder. The user will see these in sequence.
+                        </p>
+                        <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-4 shadow-inner min-h-[300px]">
+                          <MediaGalleryEditor
+                            value={Array.isArray(editingProduct.media) ? editingProduct.media : []}
+                            onChange={(media) => setEditingProduct({ ...editingProduct, media })}
+                          />
+                        </div>
+                      </Section>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* === DEFAULT PRODUCTS VIEW (Add & Table) === */
+                <>
+                  <Section>
+                    <h3 className="text-lg font-bold mb-6 text-zinc-900 tracking-tight flex items-center gap-2">
+                      <Package className="h-5 w-5 text-zinc-400" /> Add New Formula
+                    </h3>
+                    <form onSubmit={saveProduct} className="space-y-5 text-sm">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        {["name", "slug", "tagline", "category"].map((k) => (
+                          <div key={k}>
+                            <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">{k}</Label>
+                            <Input name={k} required={k === "slug" || k === "name" || k === "category"} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 h-11" placeholder={`Enter ${k}...`} />
+                          </div>
+                        ))}
+                      </div>
+                      <div>
+                        <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Product Image</Label>
+                        <div className="mt-2 bg-zinc-50/50 border border-zinc-200 rounded-xl p-4">
+                          <MediaPicker value={productImage} onChange={setProductImage} />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-5">
+                        <div>
+                          <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Price (₹)</Label>
+                          <Input name="price" type="number" required className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 h-11 tabular-nums" placeholder="0.00" />
+                        </div>
+                        <div>
+                          <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">MRP (₹)</Label>
+                          <Input name="mrp" type="number" className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 h-11 tabular-nums" placeholder="0.00" />
+                        </div>
+                      </div>
+                      <div>
+                        <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Detailed Description</Label>
+                        <Textarea name="description" rows={4} className="mt-2 bg-zinc-50/50 border-zinc-200 text-zinc-900 rounded-xl focus-visible:ring-zinc-900 resize-none p-4" placeholder="Enter full product details..." />
+                      </div>
+                      <Button type="submit" className="bg-zinc-900 hover:bg-zinc-800 text-white w-full mt-4 h-12 rounded-xl text-sm font-bold tracking-wide shadow-lg shadow-zinc-900/20 transition-all hover:-translate-y-0.5">
+                        Launch Product <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </form>
+                  </Section>
+
+                  <Section>
+                    <h3 className="text-lg font-bold mb-6 text-zinc-900 tracking-tight flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5 text-zinc-400" /> Live Inventory ({products.length})
+                    </h3>
+                    <div className="overflow-x-auto custom-scrollbar">
+                      <table className="w-full text-sm">
+                        <thead className="text-zinc-400 text-left border-b border-zinc-100">
+                          <tr>
+                            <th className="pb-4 font-semibold uppercase tracking-wider text-[10px]">Product Name</th>
+                            <th className="pb-4 font-semibold uppercase tracking-wider text-[10px]">Category</th>
+                            <th className="pb-4 font-semibold uppercase tracking-wider text-[10px]">Pricing</th>
+                            <th className="pb-4 font-semibold uppercase tracking-wider text-[10px]">Status</th>
+                            <th className="pb-4 text-right pr-4 font-semibold uppercase tracking-wider text-[10px]">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-zinc-50">
+                          {products.map((p) => (
+                            <tr key={p.id} className="hover:bg-zinc-50/50 transition-colors group">
+                              <td className="py-5">
                                 <div>
-                                  <span className="font-bold text-zinc-900">{p.name}</span>
+                                  <span className="font-bold text-zinc-900 text-base">{p.name}</span>
                                   <div className="text-zinc-400 font-mono text-[10px] mt-0.5">{p.slug}</div>
                                 </div>
-                              )}
-                            </td>
-                            <td>
-                              {isEditing ? (
-                                <Input value={editingProduct.category ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })} className="bg-white border-zinc-200 rounded-lg h-9 text-xs" />
-                              ) : (
-                                <span className="text-zinc-500 font-medium">{p.category}</span>
-                              )}
-                            </td>
-                            <td>
-                              {isEditing ? (
-                                <div className="flex gap-2">
-                                  <Input type="number" value={editingProduct.price ?? 0} onChange={(e) => setEditingProduct({ ...editingProduct, price: Number(e.target.value) })} className="bg-white border-zinc-200 rounded-lg h-9 w-20 text-xs" />
-                                  <Input type="number" value={editingProduct.mrp ?? 0} onChange={(e) => setEditingProduct({ ...editingProduct, mrp: Number(e.target.value) })} className="bg-white border-zinc-200 rounded-lg h-9 w-20 text-xs" />
-                                </div>
-                              ) : (
+                              </td>
+                              <td>
+                                <Badge variant="secondary" className="bg-zinc-100 text-zinc-600 font-bold tracking-wide hover:bg-zinc-200 border-none shadow-none text-[10px] px-2 py-0.5">
+                                  {p.category}
+                                </Badge>
+                              </td>
+                              <td>
                                 <div>
-                                  <span className="text-zinc-900 font-bold tabular-nums">₹{Number(p.price).toLocaleString()}</span>
-                                  {p.mrp && <span className="text-zinc-400 line-through text-xs ml-2 tabular-nums">₹{Number(p.mrp).toLocaleString()}</span>}
+                                  <span className="text-zinc-900 font-black tabular-nums text-sm">₹{Number(p.price).toLocaleString()}</span>
+                                  {p.mrp && <span className="text-zinc-400 line-through text-[11px] ml-2 tabular-nums font-bold">₹{Number(p.mrp).toLocaleString()}</span>}
                                 </div>
-                              )}
-                            </td>
-                            <td>
-                              <div className="flex flex-col gap-1.5 items-start">
-                                <button
-                                  onClick={() => toggleStock(p.id, !(p.in_stock ?? true))}
-                                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide transition-colors border ${
-                                    (p.in_stock ?? true)
-                                      ? "bg-emerald-50/50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
-                                      : "bg-red-50/50 text-red-700 border-red-200 hover:bg-red-100"
-                                  }`}
-                                >
-                                  {(p.in_stock ?? true) ? (<><PackageCheck className="h-3 w-3" /> IN STOCK</>) : (<><PackageX className="h-3 w-3" /> SOLD OUT</>)}
-                                </button>
-                                <button
-                                  onClick={() => toggleActive(p.id, !(p.active ?? true))}
-                                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide transition-colors border ${
-                                    (p.active ?? true)
-                                      ? "bg-zinc-50 text-zinc-700 border-zinc-200 hover:bg-zinc-100"
-                                      : "bg-zinc-100 text-zinc-400 border-zinc-200 hover:bg-zinc-200"
-                                  }`}
-                                >
-                                  {(p.active ?? true) ? "VISIBLE" : "HIDDEN"}
-                                </button>
-                              </div>
-                            </td>
-                            <td className="text-right space-x-1 whitespace-nowrap">
-                              {isEditing ? (
-                                <>
-                                  <Button size="sm" className="bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg h-8" onClick={() => updateProduct(p.id, { name: editingProduct.name, category: editingProduct.category, price: editingProduct.price, mrp: editingProduct.mrp, tagline: editingProduct.tagline, description: editingProduct.description, image: editingProduct.image })}>
-                                    <Save className="h-3.5 w-3.5 mr-1.5" /> Save
+                              </td>
+                              <td>
+                                <div className="flex flex-col gap-2 items-start">
+                                  <button
+                                    onClick={() => toggleStock(p.id, !(p.in_stock ?? true))}
+                                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide transition-colors border ${
+                                      (p.in_stock ?? true)
+                                        ? "bg-emerald-50/80 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                                        : "bg-red-50/80 text-red-700 border-red-200 hover:bg-red-100"
+                                    }`}
+                                  >
+                                    {(p.in_stock ?? true) ? (<><PackageCheck className="h-3 w-3" /> IN STOCK</>) : (<><PackageX className="h-3 w-3" /> SOLD OUT</>)}
+                                  </button>
+                                  <button
+                                    onClick={() => toggleActive(p.id, !(p.active ?? true))}
+                                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide transition-colors border ${
+                                      (p.active ?? true)
+                                        ? "bg-zinc-50 text-zinc-700 border-zinc-200 hover:bg-zinc-100"
+                                        : "bg-zinc-100 text-zinc-400 border-zinc-200 hover:bg-zinc-200"
+                                    }`}
+                                  >
+                                    {(p.active ?? true) ? "VISIBLE ON SITE" : "HIDDEN"}
+                                  </button>
+                                </div>
+                              </td>
+                              <td className="text-right whitespace-nowrap align-middle pr-2">
+                                <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                  <Button size="sm" variant="outline" className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 border-zinc-200 rounded-xl h-9 px-4 font-bold text-xs shadow-sm" onClick={() => setEditingProduct(p)}>
+                                    <Pencil className="h-3.5 w-3.5 mr-2" /> Edit Details
                                   </Button>
-                                  <Button size="sm" variant="ghost" className="text-zinc-500 rounded-lg h-8" onClick={() => setEditingProduct(null)}>Cancel</Button>
-                                </>
-                              ) : (
-                                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <Button size="icon" variant="ghost" className="text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl h-8 w-8" onClick={() => setEditingProduct(p)}>
-                                    <Pencil className="h-3.5 w-3.5" />
+                                  <Button size="icon" variant="outline" className="text-zinc-400 hover:text-red-600 hover:bg-red-50 border-zinc-200 rounded-xl h-9 w-9 shadow-sm" onClick={() => deleteProduct(p.id)}>
+                                    <Trash2 className="h-4 w-4" />
                                   </Button>
-                                  <Button size="icon" variant="ghost" className="text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-xl h-8 w-8" onClick={() => deleteProduct(p.id)}>
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                  </Button>
-                                </div>
-                              )}
-                            </td>
-                          </tr>
-                          {isEditing && (
-                            <tr className="border-b border-zinc-100 bg-zinc-50/80">
-                              <td colSpan={5} className="p-6 space-y-4 rounded-b-xl shadow-inner">
-                                <div>
-                                  <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Tagline</Label>
-                                  <Input value={editingProduct.tagline ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, tagline: e.target.value })} className="mt-2 bg-white border-zinc-200 rounded-lg" />
-                                </div>
-                                <div>
-                                  <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Description</Label>
-                                  <Textarea rows={4} value={editingProduct.description ?? ""} onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })} className="mt-2 bg-white border-zinc-200 rounded-lg resize-none" />
-                                </div>
-                                <div>
-                                  <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Main Image</Label>
-                                  <div className="mt-2 bg-white border border-zinc-200 rounded-xl p-4">
-                                    <MediaPicker value={editingProduct.image ?? ""} onChange={(url) => setEditingProduct({ ...editingProduct, image: url })} />
-                                  </div>
-                                </div>
-                                <div>
-                                  <Label className="uppercase tracking-wider text-[10px] font-bold text-zinc-500">Gallery (drag to reorder — first item is cover)</Label>
-                                  <div className="mt-2 bg-white border border-zinc-200 rounded-xl p-4">
-                                    <MediaGalleryEditor
-                                      value={Array.isArray(editingProduct.media) ? editingProduct.media : []}
-                                      onChange={(media) => setEditingProduct({ ...editingProduct, media })}
-                                    />
-                                  </div>
-                                  <div className="mt-3 flex justify-end">
-                                    <Button size="sm" className="bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg h-8" onClick={() => updateProduct(p.id, { media: editingProduct.media ?? [] })}>
-                                      <Save className="h-3.5 w-3.5 mr-1.5" /> Save gallery
-                                    </Button>
-                                  </div>
                                 </div>
                               </td>
                             </tr>
-                          )}
-                          </React.Fragment>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                  {!products.length && <div className="py-12 text-center text-zinc-400 text-sm font-medium">No formulas crafted yet.</div>}
-                </div>
-              </Section>
+                          ))}
+                        </tbody>
+                      </table>
+                      {!products.length && <div className="py-16 text-center text-zinc-400 text-sm font-medium border-2 border-dashed border-zinc-100 rounded-2xl mt-4">No formulas crafted yet. Add one above.</div>}
+                    </div>
+                  </Section>
+                </>
+              )}
             </div>
           )}
 
