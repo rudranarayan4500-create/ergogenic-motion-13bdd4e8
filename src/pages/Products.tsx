@@ -111,7 +111,7 @@ const Products = () => {
       const rawName = d.name || "";
       const normalName = String(rawName).toLowerCase().trim();
       
-      // FIX: Smart Matcher. If the slug from the DB is a UUID and doesn't match the hardcoded map,
+      // Smart Matcher. If the slug from the DB is a UUID and doesn't match the hardcoded map,
       // it will search the map by product name to ensure it overwrites the old prices properly.
       let matchedKey = liveKey;
       let fallbackObj = uniqueProductMatrix.get(liveKey);
@@ -128,15 +128,20 @@ const Products = () => {
          }
       }
 
-      let productFeaturedImage = d.image || "";
-      let structuredGallery: string[] = Array.isArray(d.media)
-        ? d.media.map((m: any) => m?.url).filter(Boolean)
-        : [];
-
-      // Admin panel now drives all imagery — DB `image` + `media` are the source of truth.
-
-      if (!productFeaturedImage || productFeaturedImage === "/placeholder.svg") {
+      // --- FIX 1: MAIN COVER IMAGE ---
+      // Only fallback to the hardcoded image if the DB field is strictly null, undefined, or the placeholder.
+      // If it is an empty string "", we respect the admin's choice to delete the image.
+      let productFeaturedImage = d.image;
+      if (productFeaturedImage === null || productFeaturedImage === undefined || productFeaturedImage === "/placeholder.svg") {
         productFeaturedImage = fallbackObj?.image || "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80";
+      }
+
+      // --- FIX 2: GALLERY ARRAY ---
+      // Default to the fallback gallery. BUT if the database provides a media array (even an empty one []), 
+      // override the fallback and use the database's array.
+      let structuredGallery = fallbackObj?.gallery || [];
+      if (Array.isArray(d.media)) {
+        structuredGallery = d.media.map((m: any) => m?.url).filter(Boolean);
       }
 
       uniqueProductMatrix.set(matchedKey, {
@@ -144,7 +149,6 @@ const Products = () => {
         slug: d.slug || fallbackObj?.slug, 
         name: d.name,
         tagline: d.tagline ?? fallbackObj?.tagline ?? "",
-        // FIX: Strictly override fallback pricing with Database Live Pricing
         price: d.price !== null && d.price !== undefined ? Number(d.price) : (fallbackObj?.price || 0),
         mrp: d.mrp !== null && d.mrp !== undefined ? Number(d.mrp) : (fallbackObj?.mrp || 0),
         category: d.category || fallbackObj?.category || "Muscle",
@@ -153,7 +157,7 @@ const Products = () => {
         benefits: d.benefits?.length ? d.benefits : (fallbackObj?.benefits ?? []),
         rating: Number(d.rating) || fallbackObj?.rating || 4.8,
         reviews: Number(d.reviews) || fallbackObj?.reviews || 0,
-        gallery: structuredGallery.length > 0 ? structuredGallery : fallbackObj?.gallery,
+        gallery: structuredGallery,
         in_stock: d.in_stock !== false,
       });
     });
